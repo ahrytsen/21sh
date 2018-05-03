@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 20:08:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 19:51:21 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:23:36 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 void		ft_dquote_slash(t_buf **cur, char **line)
 {

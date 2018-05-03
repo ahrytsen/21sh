@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 16:37:14 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/13 15:56:59 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:21:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 static void	parse_dollar(t_buf **cur, char **line)
 {

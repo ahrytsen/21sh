@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/17 15:13:47 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/17 17:36:43 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:22:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 static char	*ft_cd_getpath(char **av)
 {

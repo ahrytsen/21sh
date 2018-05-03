@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 15:02:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 19:35:02 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:20:44 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 int		ft_echo(char **av)
 {

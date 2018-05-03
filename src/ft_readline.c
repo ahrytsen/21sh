@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 20:14:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:22:59 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 /*
 **#ifdef unix

@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 14:56:32 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/13 15:57:50 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:23:10 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 static void	slash(t_buf **cur, char **line)
 {

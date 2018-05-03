@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/16 12:35:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/16 21:59:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:21:17 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 int		cmdline_addch(t_cmdline *cmdline, char ch)
 {

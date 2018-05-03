@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 11:02:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 20:01:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:20:53 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 void	ft_prompt(void)
 {

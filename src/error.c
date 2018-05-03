@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 18:04:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/14 21:30:16 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:21:45 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 void	malloc_fail(void)
 {

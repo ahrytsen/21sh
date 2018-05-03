@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 19:54:49 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/02/19 17:03:12 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/04/27 12:08:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct	s_arg
 
 int				ft_printf(const char *format, ...);
 int				ft_dprintf(int fd, const char *format, ...);
+void			ft_fatal(int st, void (*exit_f)(int), const char *format, ...);
 /*
 **int				ft_asprintf(char *str, const char *format, ...);
 */

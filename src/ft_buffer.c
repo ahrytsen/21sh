@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 19:01:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 18:03:23 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:22:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 static size_t	ft_getbufsize(t_buf *buf)
 {

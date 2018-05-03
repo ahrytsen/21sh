@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   21sh.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/02 17:32:57 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 15:49:22 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/05/03 13:24:28 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MSH_H
+# define MSH_H
 
 # include <libft.h>
 # include <sys/stat.h>

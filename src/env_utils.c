@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/19 15:44:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/22 14:11:40 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/03 13:21:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <21sh.h>
 
 static char	*ft_new_env_str(const char *name, const char *value)
 {
