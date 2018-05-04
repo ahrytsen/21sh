@@ -6,34 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:22:59 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/04 14:01:51 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <21sh.h>
 
 /*
-**#ifdef unix
-**static char term_buffer[2048];
-**#else
-**#define term_buffer 0
-**#endif
-**
-**void	init_terminal_data()
-**{
-**  char	*termtype = getenv ("TERM");
-**  int 	success;
-**
-**  if (termtype == 0)
-**	  ft_dprintf(2, "Specify a terminal type with `setenv TERM <yourtype>'.\n");
-**  success = tgetent (term_buffer, termtype);
-**  if (success < 0)
-**    ft_dprintf(2, "Could not access the termcap data base.\n");
-**  if (success == 0)
-**    ft_dprintf(2, "Terminal type `%s' is not defined.\n", termtype);
-**}
-**
-**
 **static char	*ft_search_files(char	*line)
 **{
 **	DIR				*dirp;

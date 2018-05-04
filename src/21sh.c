@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 11:02:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:20:53 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/04 14:00:52 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,41 +18,6 @@ void	ft_prompt(void)
 
 	isatty(0) ? ft_dprintf(2, "\033[33m%s \033[32m$>\033[0m ",
 						getcwd(pwd, MAXPATHLEN)) : 0;
-}
-
-void	sig_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		cmdline_free(msh_get_environ()->cursor);
-		if (isatty(0) && !msh_get_environ()->pid)
-		{
-			ft_dprintf(2, "\n");
-			ft_prompt();
-		}
-	}
-	return ;
-}
-
-void	msh_init(void)
-{
-	extern char	**environ;
-	int			shlvl;
-	char		*tmp;
-
-	msh_get_environ()->env = ft_strdup_arr(environ);
-	msh_get_environ()->cursor = ft_memalloc(sizeof(t_cmdline));
-	tmp = ft_getenv("SHLVL");
-	shlvl = tmp ? ft_atoi(tmp) : 0;
-	tmp = ft_itoa(shlvl + 1);
-	ft_setenv("SHLVL", tmp, 1);
-	free(tmp);
-	ft_setenv("PATH", "/usr/bin:/bin", 0);
-	signal(SIGINT, sig_handler);
-	signal(SIGWINCH, SIG_IGN);
-	signal(SIGINFO, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 }
 
 int		main_loop(void)

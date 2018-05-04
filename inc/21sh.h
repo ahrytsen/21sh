@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:24:28 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/04 16:56:44 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <libft.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 # include <sys/param.h>
 # include <sys/types.h>
 # include <sys/dir.h>
@@ -75,6 +76,16 @@ typedef struct	s_buf
 **	struct s_cmd	*prev;
 **}				t_cmd;
 */
+
+/*
+**				21sh.c
+*/
+void			ft_prompt(void);
+int				main_loop(void);
+/*
+**				init.c
+*/
+
 /*
 **				Builtins
 */
@@ -87,7 +98,6 @@ int				ft_exit(char **av);
 /*
 **				msh
 */
-int				main_loop(void);
 int				ft_exec(char **cmd, char *altpath);
 t_env			*msh_get_environ(void);
 void			ft_env_op(int p);
