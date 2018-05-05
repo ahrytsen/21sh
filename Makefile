@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/05/03 13:20:13 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/05/05 16:39:20 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -17,10 +17,10 @@ INCLUDE		=	-I./inc/ -I./libft/
 SUB_MAKE	=	./libft/
 SUB_OBJ		=	libftprintf.a
 INC_LIB		=	-L./libft -lftprintf -ltermcap
-SRC			=	21sh.c builtins.c env_builtin.c env_utils.c exec.c error.c		\
-				cmd_parser.c ft_buffer.c msh_splitsemicolon.c ft_cd.c			\
-				msh_splitwhitespaces.c quote_helper.c line_parser.c cmdline.c	\
-				ft_readline.c
+SRC			=	21sh.c init.c builtins.c env_builtin.c env_utils.c exec.c		\
+				error.c	ft_autocomplit.c cmd_parser.c ft_buffer.c					\
+				msh_splitsemicolon.c ft_cd.c msh_splitwhitespaces.c				\
+				quote_helper.c line_parser.c cmdline.c ft_readline.c
 HDR			=	inc/21sh.h
 LIBFT		=	libft/libftprintf.a
 OBJ			=	$(addprefix $(DIROBJ), $(SRC:.c=.o))

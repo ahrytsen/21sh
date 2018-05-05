@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 11:02:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/04 14:00:52 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/05 16:23:56 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ int		main_loop(void)
 
 int		main(void)
 {
-	msh_init();
+	ft_init();
 	return (main_loop());
 }

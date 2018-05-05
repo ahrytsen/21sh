@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/04 16:56:44 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/05 18:45:20 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,21 @@ typedef struct	s_env
 	int			st;
 	t_cmdline	*cursor;
 	pid_t		pid;
+	char		*clear;
+	char		*curmov;
+	char		*cm_left;
+	char		*cm_right;
+	char		*undln_on;
+	char		*undln_off;
+	char		*iv_on;
+	char		*iv_off;
+	char		*im_on;
+	char		*im_off;
+	char		*del_ch;
+	char		*dm_on;
+	char		*dm_off;
+	int			height;
+	int			width;
 }				t_env;
 
 typedef struct	s_builtins
@@ -85,6 +100,12 @@ int				main_loop(void);
 /*
 **				init.c
 */
+void			ft_init(void);
+void			ft_init_terminal(int mod);
+/*
+**				ft_autocomplit.c
+*/
+void			ft_autocomplit(t_cmdline *cursor);
 
 /*
 **				Builtins

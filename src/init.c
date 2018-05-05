@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/04 16:56:41 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/05 19:17:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,7 @@ static void	ft_init_signal(void)
 	signal(SIGQUIT, sig_handler);
 }
 
-void	ft_init(void)
-{
-	extern char	**environ;
-	int			shlvl;
-	char		*tmp;
-
-	ft_init_signal();
-	msh_get_environ()->env = ft_strdup_arr(environ);
-	msh_get_environ()->cursor = ft_memalloc(sizeof(t_cmdline));
-	tmp = ft_getenv("SHLVL");
-	shlvl = tmp ? ft_atoi(tmp) : 0;
-	tmp = ft_itoa(shlvl + 1);
-	ft_setenv("SHLVL", tmp, 1);
-	free(tmp);
-	ft_setenv("PATH", "/usr/bin:/bin", 0);
-}
-
-void		ft_init_termcap(void)
+static void	ft_init_termcap(void)
 {
 	char	*termtype;
 	int		success;
@@ -68,38 +51,57 @@ void		ft_init_termcap(void)
 		ft_fatal(1, exit, "Could not access the termcap data base.\n");
 	else if (!success)
 		ft_fatal(1, exit, "Terminal type `%s' is not defined.\n", termtype);
-	g_term.clear = tgetstr("cl", NULL);
-	g_term.curmov = tgetstr("cm", NULL);
-	g_term.undln_on = tgetstr("us", NULL);
-	g_term.undln_off = tgetstr("ue", NULL);
-	g_term.iv_on = tgetstr("mr", NULL);
-	g_term.iv_off = tgetstr("me", NULL);
-	g_term.height = tgetnum("li");
-	g_term.width = tgetnum("co");
+	msh_get_environ()->clear = tgetstr("cl", NULL);
+	msh_get_environ()->curmov = tgetstr("cm", NULL);
+	msh_get_environ()->cm_left = tgetstr("le", NULL);
+	msh_get_environ()->cm_right = tgetstr("nd", NULL);
+	msh_get_environ()->undln_on = tgetstr("us", NULL);
+	msh_get_environ()->undln_off = tgetstr("ue", NULL);
+	msh_get_environ()->iv_on = tgetstr("mr", NULL);
+	msh_get_environ()->iv_off = tgetstr("me", NULL);
+	msh_get_environ()->im_on = tgetstr("im", NULL);
+	msh_get_environ()->im_off = tgetstr("ei", NULL);
+	msh_get_environ()->del_ch = tgetstr("DC", NULL);
+	msh_get_environ()->dm_on = tgetstr("dm", NULL);
+	msh_get_environ()->dm_off = tgetstr("ed", NULL);
+	msh_get_environ()->height = tgetnum("li");
+	msh_get_environ()->width = tgetnum("co");
 }
 
 void		ft_init_terminal(int mod)
 {
-	static struct termios	savetty;
+	static struct termios	*savetty = NULL;
 	static struct termios	tty;
 
 	if (!isatty(0))
-		ft_fatal(1, exit, "ft_select: fd isn't valid terminal type device.\n");
-	if (!mod)
+		ft_fatal(1, exit, "21sh: fd isn't valid terminal type device.\n");
+	else if (mod && !savetty)
 	{
-		tputs(tgetstr("ve", NULL), 1, term_print);
-		tputs(tgetstr("te", NULL), 1, term_print);
-	}
-	else if (mod == 1)
-	{
-		tcgetattr(0, &tty);
-		savetty = tty;
+		if (!(savetty = malloc(sizeof(struct termios))))
+			ft_fatal(1, exit, "21sh: malloc fail!\n");
+		tcgetattr(0, savetty);
+		tty = *savetty;
 		tty.c_lflag &= ~(ICANON | ECHO);
 		tty.c_cc[VMIN] = 1;
 		tty.c_cc[VTIME] = 0;
 	}
-	mod ? ft_init_signal() : 0;
-	mod ? tputs(tgetstr("vi", NULL), 1, term_print) : 0;
-	mod ? tputs(tgetstr("ti", NULL), 1, term_print) : 0;
-	tcsetattr(0, TCSAFLUSH, mod ? &tty : &savetty);
+	tcsetattr(0, TCSAFLUSH, mod ? &tty : savetty);
+}
+
+void	ft_init(void)
+{
+	extern char	**environ;
+	int			shlvl;
+	char		*tmp;
+
+	ft_init_signal();
+	ft_init_termcap();
+	msh_get_environ()->env = ft_strdup_arr(environ);
+	msh_get_environ()->cursor = ft_memalloc(sizeof(t_cmdline));
+	tmp = ft_getenv("SHLVL");
+	shlvl = tmp ? ft_atoi(tmp) : 0;
+	tmp = ft_itoa(shlvl + 1);
+	ft_setenv("SHLVL", tmp, 1);
+	free(tmp);
+	ft_setenv("PATH", "/usr/bin:/bin", 0);
 }

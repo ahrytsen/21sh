@@ -6,135 +6,60 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/04 14:01:51 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/05 19:30:39 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <21sh.h>
 
-/*
-**static char	*ft_search_files(char	*line)
-**{
-**	DIR				*dirp;
-**	struct dirent	*dp;
-**	int				len;
-**	char			*path;
-**
-**	if (!line || (path = NULL))
-**		return (NULL);
-**	if (ft_strchr(line, '/'))
-**	{
-**		path = ft_strsub(line, 0, ft_strrchr(line, '/') - line + 1);
-**		line = ft_strrchr(line, '/') + 1;
-**	}
-**	if (*path != '/' && ft_strncmp(path, "./", 2))
-**		path = ft_strextend(ft_strdup("./"), path);
-**	len = ft_strlen(line);
-**	dirp = opendir(path);
-**	while (dirp && (dp = readdir(dirp)))
-**		if (!ft_strncmp(dp->d_name, line, len) && !closedir(dirp))
-**		{
-**			free(path);
-**			return (ft_strdup(dp->d_name));
-**		}
-**	closedir(dirp);
-**	free(path);
-**	return (NULL);
-**}
-*/
-
-static char	*ft_search_builtin(char *line)
+int			term_print(int c)
 {
-	int					i;
-	int					len;
-	const static char	*builtins[] = {"echo", "cd", "setenv", "unsetenv",
-									"env", "exit", NULL};
-
-	i = 0;
-	if (!line)
-		return (NULL);
-	len = ft_strlen(line);
-	while (builtins[i] && ft_strncmp(line, builtins[i], len))
-		i++;
-	return (builtins[i] ? ft_strdup(builtins[i]) : NULL);
+	return (write(0, &c, 1));
 }
 
-static char	*ft_searchcmd(char *line)
+static int	ft_action(uint64_t buf)
 {
-	DIR				*dirp;
-	struct dirent	*dp;
-	int				len;
-	int				i;
-	char			**path;
-
-	if (!line || !(path = ft_strsplit(ft_getenv("PATH"), ':')))
-		return (NULL);
-	i = 0;
-	len = ft_strlen(line);
-	while (path[i])
+	if (buf == '\n' && ft_dprintf(0, "\n"))
+		return (1);
+	else if (buf == '\t')
+		ft_autocomplit(msh_get_environ()->cursor);
+	else if (buf == 127 && !cmdline_bs(msh_get_environ()->cursor))
 	{
-		dirp = opendir(path[i++]);
-		while (dirp && (dp = readdir(dirp)))
-			if (ft_strncmp(dp->d_name, line, len) == 0)
-			{
-				closedir(dirp);
-				ft_strarr_free(path);
-				return (ft_strdup(dp->d_name));
-			}
-		closedir(dirp);
+		tputs(msh_get_environ()->cm_left, 1, term_print);
+		tputs(tparm(msh_get_environ()->del_ch, 1), 1, term_print);
 	}
-	ft_strarr_free(path);
-	return (NULL);
-}
-
-void		ft_autocomplit(t_cmdline *cursor)
-{
-	char	*line;
-	char	*res;
-	char	*tmp;
-
-	line = cmdline_tostr(cursor, 0);
-	res = ft_search_builtin(line);
-	(!res) ? res = ft_searchcmd(line) : 0;
-	if (res)
+	else if (buf == 0X445B1B && msh_get_environ()->cursor->prev)
 	{
-		tmp = res + ft_strlen(line);
-		while (*tmp && ft_printf("%c", *tmp))
-			cmdline_addch(cursor, *tmp++);
-		ft_printf(" ");
-		cmdline_addch(cursor, ' ');
+		tputs(msh_get_environ()->cm_left, 1, term_print);
+		msh_get_environ()->cursor = msh_get_environ()->cursor->prev;
 	}
-	else
-		ft_printf("\a");
-	free(res);
-	free(line);
+	else if (buf == 0X435B1B && msh_get_environ()->cursor->next)
+	{
+		tputs(msh_get_environ()->cm_right, 1, term_print);
+		msh_get_environ()->cursor = msh_get_environ()->cursor->next;
+	}
+	else if (buf == 0X415B1B || buf == 0X425B1B || buf == 0X435B1B
+			|| buf == 0X445B1B)
+		ft_dprintf(0, "\a");
+	else if (buf != 127 && (buf > 31 || ft_iswhitespace(buf)))
+	{
+		tputs(msh_get_environ()->im_on, 1, term_print);
+		ft_dprintf(0, "%s", &buf);
+		cmdline_add(msh_get_environ()->cursor, buf);
+		tputs(msh_get_environ()->im_off, 1, term_print);
+	}
+	return (0);
 }
 
 int			ft_readline(char **line)
 {
-	struct termios	savetty;
-	struct termios	tty;
 	uint64_t		buf;
 
-	tcgetattr(0, &tty);
-	savetty = tty;
-	tty.c_lflag &= ~(ICANON | ECHO);
-	tty.c_cc[VMIN] = 1;
-	tcsetattr(0, TCSAFLUSH, &tty);
+	ft_init_terminal(1);
 	while (!(buf = 0) && read(0, &buf, 8) > 0 && buf != 4)
-		if (buf == '\n' && ft_dprintf(0, "\n"))
+		if (ft_action(buf))
 			break ;
-		else if (buf == '\t')
-			ft_autocomplit(msh_get_environ()->cursor);
-		else if (buf == 127 && !cmdline_bs(msh_get_environ()->cursor))
-			ft_dprintf(0, "%c\033[0J", 8);
-		else if (buf == 0X445B1B || buf == 0X435B1B
-				|| buf == 0X415B1B || buf == 0X425B1B)
-			ft_dprintf(0, "\a");
-		else if (buf != 127 && ft_dprintf(0, "%s", &buf)
-				&& (buf > 31 || ft_iswhitespace(buf)))
-			cmdline_add(msh_get_environ()->cursor, buf);
-	tcsetattr(0, TCSANOW, &savetty);
+	ft_init_terminal(0);
 	*line = cmdline_tostr(msh_get_environ()->cursor, 1);
 	return (buf == '\n' ? 1 : 0);
 }
