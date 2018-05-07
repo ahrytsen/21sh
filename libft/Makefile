@@ -6,11 +6,16 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/03 20:19:57 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/03/16 19:00:06 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/05/07 14:44:57 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME 	= libftprintf.a
+
+DIROBJ	= ./obj/
+
+INCLUDE	= -I./includes/
+
 SRC		= ft_lstpush_back.c ft_putstr.c ft_strmapi.c ft_lstpush_front.c		\
 		ft_putstr_fd.c ft_strncat.c ft_atoi.c ft_lstsplit.c ft_strcat.c		\
 		ft_strncmp.c ft_bzero.c ft_memalloc.c ft_strchr.c ft_strncpy.c		\
@@ -24,34 +29,46 @@ SRC		= ft_lstpush_back.c ft_putstr.c ft_strmapi.c ft_lstpush_front.c		\
 		ft_tolower.c ft_lstdelone.c ft_putendl.c ft_strlcat.c ft_toupper.c	\
 		ft_lstiter.c ft_putendl_fd.c ft_strlen.c ft_lstmap.c ft_putnbr.c	\
 		ft_strlen_c.c ft_lstnew.c ft_putnbr_fd.c ft_strmap.c get_next_line.c\
-		ft_printf.c ft_strextend.c ft_phendler.c ft_ultoa_base.c ft_pbuf.c	\
-		ft_strulen.c ft_atol.c ft_ltoa.c ft_wcharlen.c ft_phelper.c			\
-		ft_pfloat.c ft_dtoa.c ft_ldtoa.c ft_dtoea.c ft_ldtoea.c				\
+		ft_strextend.c ft_ultoa_base.c ft_strulen.c ft_atol.c ft_ltoa.c		\
+		ft_wcharlen.c ft_dtoa.c ft_ldtoa.c ft_dtoea.c ft_ldtoea.c			\
 		ft_sort_params.c ft_strdup_arr.c ft_isalnum_str.c ft_isalpha_str.c	\
 		ft_isnumeric_str.c ft_isascii_str.c ft_isprint_str.c				\
-		ft_iswhitespace.c ft_atoi_base.c ft_atol_base.c ft_strarr_free.c
-OBJ		= $(SRC:.c=.o)
-HDR		= libft.h ft_printf.h
+		ft_iswhitespace.c ft_atoi_base.c ft_atol_base.c ft_strarr_free.c	\
+		\
+		ft_printf/ft_printf.c ft_printf/ft_phendler.c ft_printf/ft_pbuf.c	\
+		ft_printf/ft_pfloat.c ft_printf/ft_phelper.c
 
-all: $(SRC) $(NAME)
+HDR		= includes/libft.h includes/ft_printf.h #includes/ft_readline.h
 
-$(NAME): $(OBJ) $(HDR)
+OBJ		= $(addprefix $(DIROBJ), $(SRC:.c=.o))
+
+CC		= gcc
+
+CFLAGS	= -Wall -Wextra -Werror
+
+all: $(NAME)
+
+$(NAME): $(DIROBJ) $(OBJ)
 	@ar rc $(NAME) $(OBJ);
 	@ranlib $(NAME);
 	@echo "\033[31m> \033[32mlibftprintf: Compiled\033[0m"
 
-.c.o:
-	@gcc -Wall -Wextra -Werror -Ofast -c $<
-	@echo ".\c"
+$(OBJ)	:		$(DIROBJ)%.o : $(DIRSRC)%.c $(HDR)
+				@$(CC) $(INCLUDE) $(CFLAGS) -Ofast -flto=thin -o $@ -c $<
+				@echo ".\c"
 
 clean:
-	@rm -f $(OBJ)
-	@echo "\033[31m> \033[33mlibftprintf: Directory cleaned\033[0m"
+				@rm -rf $(DIROBJ)
+				@echo "\033[31m> \033[33mlibftprintf: Directory cleaned\033[0m"
 
 fclean: clean
-	@rm -f $(NAME)
-	@echo "\033[31m> \033[33mRemove libftprintf.a\033[0m"
+				@rm -f $(NAME)
+				@echo "\033[31m> \033[33mRemove libftprintf.a\033[0m"
 
 re: fclean all
+
+$(DIROBJ):
+				@mkdir -p $(DIROBJ)
+				@mkdir -p $(DIROBJ)/ft_printf
 
 .NOTEPARALLEL: all $(NAME) re

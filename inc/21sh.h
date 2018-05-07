@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/05 18:45:20 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/07 17:02:02 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@
 # include <sys/dir.h>
 # include <dirent.h>
 # include <signal.h>
-# include <term.h>
-# include <fcntl.h>
-# include <termios.h>
+//# include <fcntl.h>
+
 
 # define ENV_PRINT 0
 # define ENV_CLEAR 1
@@ -103,19 +102,20 @@ int				main_loop(void);
 void			ft_init(void);
 void			ft_init_terminal(int mod);
 /*
-**				ft_autocomplit.c
-*/
-void			ft_autocomplit(t_cmdline *cursor);
-
-/*
-**				Builtins
+**				builtins/builtins.c
 */
 int				ft_echo(char **av);
-int				ft_cd(char **av);
-int				ft_env(char **av);
 int				ft_setenv_builtin(char **av);
 int				ft_unsetenv_builtin(char **av);
 int				ft_exit(char **av);
+/*
+**				builtins/ft_cd.c
+*/
+int				ft_cd(char **av);
+/*
+**				builtins/env_builtin.c
+*/
+int				ft_env(char **av);
 /*
 **				msh
 */
@@ -135,12 +135,6 @@ void			ft_bquote_slash(t_buf **cur, char **line);
 void			ft_dquote_slash(t_buf **cur, char **line);
 void			ft_bquote_helper(t_buf **cur, char *str);
 /*
-**				error
-*/
-void			malloc_fail(void);
-void			quotes_error(char q);
-void			syntax_error(void);
-/*
 **				buffer
 */
 t_buf			*ft_new_mshbuf(void);
@@ -149,13 +143,8 @@ void			ft_putchar_mshbuf(t_buf **buf, char c);
 char			*ft_buftostr(t_buf *buf_head);
 void			*ft_free_mshbuf(t_buf *buf);
 /*
-**				cmdline
+**				ft_readline/
 */
 int				ft_readline(char **line);
-char			*cmdline_tostr(t_cmdline *cmdline, int mod);
-int				cmdline_bs(t_cmdline *cmdline);
-int				cmdline_add(t_cmdline *cmdline, uint64_t buf);
-int				cmdline_addch(t_cmdline *cmdline, char ch);
-void			cmdline_free(t_cmdline *cmdline);
 
 #endif

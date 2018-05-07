@@ -6,22 +6,20 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/05 19:30:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/07 16:42:31 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <21sh.h>
+#include <ft_readline.h>
 
 int			term_print(int c)
 {
 	return (write(0, &c, 1));
 }
 
-static int	ft_action(uint64_t buf)
+static void	ft_action(uint64_t buf)
 {
-	if (buf == '\n' && ft_dprintf(0, "\n"))
-		return (1);
-	else if (buf == '\t')
+	if (buf == '\t')
 		ft_autocomplit(msh_get_environ()->cursor);
 	else if (buf == 127 && !cmdline_bs(msh_get_environ()->cursor))
 	{
@@ -48,7 +46,6 @@ static int	ft_action(uint64_t buf)
 		cmdline_add(msh_get_environ()->cursor, buf);
 		tputs(msh_get_environ()->im_off, 1, term_print);
 	}
-	return (0);
 }
 
 int			ft_readline(char **line)
@@ -57,8 +54,10 @@ int			ft_readline(char **line)
 
 	ft_init_terminal(1);
 	while (!(buf = 0) && read(0, &buf, 8) > 0 && buf != 4)
-		if (ft_action(buf))
+		if (buf == '\n' && ft_dprintf(0, "\n"))
 			break ;
+		else
+			ft_action(buf);
 	ft_init_terminal(0);
 	*line = cmdline_tostr(msh_get_environ()->cursor, 1);
 	return (buf == '\n' ? 1 : 0);

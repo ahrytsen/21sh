@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 16:19:38 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/05 16:20:21 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/07 16:42:33 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <21sh.h>
+#include <ft_readline.h>
 
 /*
 **static char	*ft_search_files(char	*line)

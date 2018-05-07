@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmdline.c                                          :+:      :+:    :+:   */
+/*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/16 12:35:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:21:17 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/05/07 16:25:08 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/05/07 16:27:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <21sh.h>
 
-int		cmdline_addch(t_cmdline *cmdline, char ch)
+int		line_addch(t_cmdline *cmdline, char ch)
 {
 	t_cmdline	*new_ch;
 	t_cmdline	*tmp;
