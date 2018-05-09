@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 16:19:38 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/07 16:42:33 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:16:13 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_readline.h>
+#include <21sh.h>
 
 /*
 **static char	*ft_search_files(char	*line)
@@ -87,22 +87,22 @@ static char	*ft_searchcmd(char *line)
 	return (NULL);
 }
 
-void		ft_autocomplit(t_cmdline *cursor)
+void		ft_autocomplit(t_line *cursor)
 {
 	char	*line;
 	char	*res;
 	char	*tmp;
 
-	line = cmdline_tostr(cursor, 0);
+	line = line_tostr(&cursor, 0);
 	res = ft_search_builtin(line);
 	(!res) ? res = ft_searchcmd(line) : 0;
 	if (res)
 	{
 		tmp = res + ft_strlen(line);
 		while (*tmp && ft_printf("%c", *tmp))
-			cmdline_addch(cursor, *tmp++);
+			line_add(cursor, *tmp++);
 		ft_printf(" ");
-		cmdline_addch(cursor, ' ');
+		line_add(cursor, ' ');
 	}
 	else
 		ft_printf("\a");

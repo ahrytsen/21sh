@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 16:37:14 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:21:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:06:54 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	ft_quote(t_buf **cur, char **line)
 	while (**line != '\'')
 	{
 		if (!**line)
-			quotes_error('\'');
+			ft_fatal(1, exit, "21sh: unmatched \'\n");
 		(*line)++;
 	}
 	ft_putstr_mshbuf(cur, st, *line - st);
@@ -56,11 +56,12 @@ void		ft_bquote(t_buf **cur, char **line)
 	t_buf	*tmp;
 	char	*str;
 
-	(!(head = ft_memalloc(sizeof(t_buf))) || !line) ? malloc_fail() : 0;
+	if (!(head = ft_memalloc(sizeof(t_buf))) || !line)
+		ft_fatal(1, exit, "21sh: malloc error\n");
 	tmp = head;
 	while (**line != '`')
 		if (!**line)
-			quotes_error('`');
+			ft_fatal(1, exit, "21sh: unmatched `\n");
 		else if (**line == '\\' && (*line)++)
 			ft_bquote_slash(&tmp, line);
 		else
@@ -76,7 +77,7 @@ static void	ft_dquote(t_buf **cur, char **line)
 {
 	while (**line != '"')
 		if (!**line)
-			quotes_error('"');
+			ft_fatal(1, exit, "21sh: unmatched \"\n");
 		else if (**line == '\\' && (*line)++)
 			ft_dquote_slash(cur, line);
 		else if (**line == '$' && (*line)++)
@@ -95,7 +96,8 @@ char		*parse_argv(char *line)
 	t_buf	*cur;
 
 	tmp = line;
-	(!(head = ft_memalloc(sizeof(t_buf))) || !line) ? malloc_fail() : 0;
+	if (!(head = ft_memalloc(sizeof(t_buf))) || !line)
+		ft_fatal(1, exit, "21sh: malloc error\n");
 	cur = head;
 	while (*line)
 		if (*line == '\\' && line++)

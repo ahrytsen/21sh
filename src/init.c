@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/05 19:17:38 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 18:04:13 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static void	sig_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
-		cmdline_free(msh_get_environ()->cursor);
-		if (isatty(0) && !msh_get_environ()->pid)
+		line_tostr(&get_term()->cursor, 2);
+		if (isatty(0) && !get_environ()->pid)
 		{
 			ft_dprintf(2, "\n");
 			ft_prompt();
@@ -51,21 +51,21 @@ static void	ft_init_termcap(void)
 		ft_fatal(1, exit, "Could not access the termcap data base.\n");
 	else if (!success)
 		ft_fatal(1, exit, "Terminal type `%s' is not defined.\n", termtype);
-	msh_get_environ()->clear = tgetstr("cl", NULL);
-	msh_get_environ()->curmov = tgetstr("cm", NULL);
-	msh_get_environ()->cm_left = tgetstr("le", NULL);
-	msh_get_environ()->cm_right = tgetstr("nd", NULL);
-	msh_get_environ()->undln_on = tgetstr("us", NULL);
-	msh_get_environ()->undln_off = tgetstr("ue", NULL);
-	msh_get_environ()->iv_on = tgetstr("mr", NULL);
-	msh_get_environ()->iv_off = tgetstr("me", NULL);
-	msh_get_environ()->im_on = tgetstr("im", NULL);
-	msh_get_environ()->im_off = tgetstr("ei", NULL);
-	msh_get_environ()->del_ch = tgetstr("DC", NULL);
-	msh_get_environ()->dm_on = tgetstr("dm", NULL);
-	msh_get_environ()->dm_off = tgetstr("ed", NULL);
-	msh_get_environ()->height = tgetnum("li");
-	msh_get_environ()->width = tgetnum("co");
+	get_term()->clear = tgetstr("cl", NULL);
+	get_term()->curmov = tgetstr("cm", NULL);
+	get_term()->cm_left = tgetstr("le", NULL);
+	get_term()->cm_right = tgetstr("nd", NULL);
+	get_term()->undln_on = tgetstr("us", NULL);
+	get_term()->undln_off = tgetstr("ue", NULL);
+	get_term()->iv_on = tgetstr("mr", NULL);
+	get_term()->iv_off = tgetstr("me", NULL);
+	get_term()->im_on = tgetstr("im", NULL);
+	get_term()->im_off = tgetstr("ei", NULL);
+	get_term()->del_ch = tgetstr("DC", NULL);
+	get_term()->dm_on = tgetstr("dm", NULL);
+	get_term()->dm_off = tgetstr("ed", NULL);
+	get_term()->height = tgetnum("li");
+	get_term()->width = tgetnum("co");
 }
 
 void		ft_init_terminal(int mod)
@@ -96,8 +96,8 @@ void	ft_init(void)
 
 	ft_init_signal();
 	ft_init_termcap();
-	msh_get_environ()->env = ft_strdup_arr(environ);
-	msh_get_environ()->cursor = ft_memalloc(sizeof(t_cmdline));
+	get_term()->cursor = ft_memalloc(sizeof(t_line));
+	get_environ()->env = ft_strdup_arr(environ);
 	tmp = ft_getenv("SHLVL");
 	shlvl = tmp ? ft_atoi(tmp) : 0;
 	tmp = ft_itoa(shlvl + 1);

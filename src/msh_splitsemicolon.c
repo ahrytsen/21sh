@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 18:39:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:23:19 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:09:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		ft_skip_qoutes(char **s)
 	q = *(*s)++;
 	while (**s != q)
 		if (!**s)
-			quotes_error(q);
+			ft_fatal(1, exit, "21sh: unmatched %c", q);
 		else if (q == '"' && **s == '`')
 			ft_skip_qoutes(s);
 		else if (q != '\'' && **s == '\\' && (*s)++)

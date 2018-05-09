@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 11:02:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/05 16:23:56 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 16:40:00 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int		main_loop(void)
 	while (1)
 	{
 		ft_prompt();
-		i = !isatty(0) ? get_next_line(0, &cmds) : ft_readline(&cmds);
+		i = !isatty(0) ? get_next_line(0, &cmds) : ft_readline(0, &cmds);
 		if (!i || i == -1)
-			return (!i ? msh_get_environ()->st : 1);
+			return (!i ? get_environ()->st : 1);
 		i = 0;
 		cmd = msh_splitsemicolon(cmds);
 		while (cmd && cmd[i])
 		{
-			msh_get_environ()->st = ft_exec(msh_splitwhitespaces(cmd[i]), NULL);
+			get_environ()->st = ft_exec(msh_splitwhitespaces(cmd[i]), NULL);
 			free(cmd[i++]);
 		}
 		free(cmd);

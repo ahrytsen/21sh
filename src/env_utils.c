@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/19 15:44:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:21:35 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:22:33 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*ft_new_env_str(const char *name, const char *value)
 	return (new_env);
 }
 
-t_env		*msh_get_environ(void)
+t_env		*get_environ(void)
 {
 	static t_env	env;
 
@@ -41,7 +41,7 @@ char		*ft_getenv(const char *name)
 {
 	char	**env;
 
-	env = msh_get_environ()->env;
+	env = get_environ()->env;
 	if (!name || !env)
 		return (NULL);
 	while (*env)
@@ -61,7 +61,7 @@ int			ft_setenv(const char *name, const char *value, int overwrite)
 
 	i = -1;
 	if (!(tmp = ft_new_env_str(name, value))
-		|| !(env = msh_get_environ()->env))
+		|| !(env = get_environ()->env))
 		return (-1);
 	while (env[++i])
 		if (ft_strcmp(env[i], name) == '=')
@@ -76,17 +76,17 @@ int			ft_setenv(const char *name, const char *value, int overwrite)
 		}
 	if (!(env = ft_memalloc(sizeof(char*) * (i + 2))))
 		return (-1);
-	ft_memcpy(env, msh_get_environ()->env, sizeof(char*) * i);
+	ft_memcpy(env, get_environ()->env, sizeof(char*) * i);
 	env[i] = tmp;
-	free(msh_get_environ()->env);
-	return ((msh_get_environ()->env = env) ? 0 : -1);
+	free(get_environ()->env);
+	return ((get_environ()->env = env) ? 0 : -1);
 }
 
 int			ft_unsetenv(const char *name)
 {
 	char	**env;
 
-	env = msh_get_environ()->env;
+	env = get_environ()->env;
 	if (!env || !name || ft_strchr(name, '='))
 		return (-1);
 	while (*env && ft_strcmp(*env, name) != '=')

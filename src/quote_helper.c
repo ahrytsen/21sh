@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 20:08:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:23:36 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:11:26 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,19 @@ static void	ft_bquote_child(int fd_get[2], char *cmds)
 	char	**cmd;
 
 	i = 0;
-	msh_get_environ()->pid = 1;
+	get_environ()->pid = 1;
 	close(fd_get[0]);
 	dup2(fd_get[1], 1);
 	cmd = cmds ? msh_splitsemicolon(cmds) : NULL;
 	while (cmd && cmd[i])
 	{
-		msh_get_environ()->st = ft_exec(msh_splitwhitespaces(cmd[i]), NULL);
+		get_environ()->st = ft_exec(msh_splitwhitespaces(cmd[i]), NULL);
 		free(cmd[i++]);
 	}
 	free(cmd);
 	free(cmds);
 	close(fd_get[1]);
-	exit(msh_get_environ()->st);
+	exit(get_environ()->st);
 }
 
 void		ft_bquote_helper(t_buf **cur, char *str)
@@ -92,7 +92,7 @@ void		ft_bquote_helper(t_buf **cur, char *str)
 
 	i = 0;
 	pipe(fd_get);
-	if ((msh_get_environ()->pid = fork()))
+	if ((get_environ()->pid = fork()))
 	{
 		close(fd_get[1]);
 		while (get_next_line(fd_get[0], &line) > 0)
@@ -102,7 +102,7 @@ void		ft_bquote_helper(t_buf **cur, char *str)
 			free(line);
 		}
 		close(fd_get[0]);
-		msh_get_environ()->pid = 0;
+		get_environ()->pid = 0;
 	}
 	else
 		ft_bquote_child(fd_get, str);

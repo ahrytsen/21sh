@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 19:01:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:22:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:08:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char			*ft_buftostr(t_buf *buf_head)
 	if (!buf_head)
 		return (ft_strdup(""));
 	if (!(str = ft_memalloc(sizeof(char) * (b_size + 1))))
-		malloc_fail();
+		ft_fatal(1, exit, "21sh: malloc error\n");
 	while (buf_head)
 	{
 		tmp = buf_head->next;
@@ -53,7 +53,7 @@ void			ft_putchar_mshbuf(t_buf **buf, char c)
 	if ((*buf)->len == BUFF_SIZE)
 	{
 		if (!((*buf)->next = ft_memalloc(sizeof(t_buf))))
-			malloc_fail();
+			ft_fatal(1, exit, "21sh: malloc error\n");
 		(*buf)->next->id = (*buf)->id + 1;
 		*buf = (*buf)->next;
 	}

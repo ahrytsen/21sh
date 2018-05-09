@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 14:56:32 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:23:10 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:12:28 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ char		*parse_line(char *line)
 	t_buf	*cur;
 
 	tmp = line;
-	(!(head = ft_memalloc(sizeof(t_buf))) || !line) ? malloc_fail() : 0;
+	if (!(head = ft_memalloc(sizeof(t_buf))) || !line)
+		ft_fatal(1, exit, "21sh: malloc error\n");
 	cur = head;
 	while (*line)
 		if (*line == '\\')

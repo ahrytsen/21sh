@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/03 13:21:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:00:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static int	ft_exec_bypath(char **cmd, char *path)
 	st = 0;
 	if (path && !access(path, X_OK))
 	{
-		if (!msh_get_environ()->pid && (msh_get_environ()->pid = fork()))
-			wait4(msh_get_environ()->pid, &st, 0, 0);
-		else if ((st = execve(path, cmd, msh_get_environ()->env)))
+		if (!get_environ()->pid && (get_environ()->pid = fork()))
+			wait4(get_environ()->pid, &st, 0, 0);
+		else if ((st = execve(path, cmd, get_environ()->env)))
 		{
 			if (stat(path, &tmp) || !S_ISREG(tmp.st_mode)
 				|| dup2(open(path, O_RDONLY), 0) == -1)
@@ -115,7 +115,7 @@ int			ft_exec(char **cmd, char *altpath)
 		bin_path = ft_search_bin(*cmd, altpath);
 		st = ft_exec_bypath(cmd, bin_path);
 	}
-	msh_get_environ()->pid = 0;
+	get_environ()->pid = 0;
 	i = 0;
 	while (cmd[i])
 		free(cmd[i++]);

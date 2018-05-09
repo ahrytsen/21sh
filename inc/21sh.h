@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/07 17:02:02 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:01:04 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,37 @@
 # include <sys/dir.h>
 # include <dirent.h>
 # include <signal.h>
-//# include <fcntl.h>
+# include <fcntl.h>
+# include <termios.h>
+# include <term.h>
 
+typedef struct	s_line
+{
+	uint64_t		ch;
+	struct s_line	*next;
+	struct s_line	*prev;
+}				t_line;
+
+typedef struct	s_term
+{
+	t_line	*cursor;
+	int		curpos;
+	char	*clear;
+	char	*curmov;
+	char	*cm_left;
+	char	*cm_right;
+	char	*undln_on;
+	char	*undln_off;
+	char	*iv_on;
+	char	*iv_off;
+	char	*im_on;
+	char	*im_off;
+	char	*del_ch;
+	char	*dm_on;
+	char	*dm_off;
+	int		height;
+	int		width;
+}				t_term;
 
 # define ENV_PRINT 0
 # define ENV_CLEAR 1
@@ -36,34 +65,11 @@ typedef struct	s_op
 	char	**exec;
 }				t_op;
 
-typedef struct	s_cmdline
-{
-	char				ch;
-	struct s_cmdline	*next;
-	struct s_cmdline	*prev;
-}				t_cmdline;
-
 typedef struct	s_env
 {
 	char		**env;
 	int			st;
-	t_cmdline	*cursor;
 	pid_t		pid;
-	char		*clear;
-	char		*curmov;
-	char		*cm_left;
-	char		*cm_right;
-	char		*undln_on;
-	char		*undln_off;
-	char		*iv_on;
-	char		*iv_off;
-	char		*im_on;
-	char		*im_off;
-	char		*del_ch;
-	char		*dm_on;
-	char		*dm_off;
-	int			height;
-	int			width;
 }				t_env;
 
 typedef struct	s_builtins
@@ -120,7 +126,7 @@ int				ft_env(char **av);
 **				msh
 */
 int				ft_exec(char **cmd, char *altpath);
-t_env			*msh_get_environ(void);
+t_env			*get_environ(void);
 void			ft_env_op(int p);
 char			*ft_getenv(const char *name);
 int				ft_setenv(const char *name, const char *value, int overwrite);
@@ -143,8 +149,19 @@ void			ft_putchar_mshbuf(t_buf **buf, char c);
 char			*ft_buftostr(t_buf *buf_head);
 void			*ft_free_mshbuf(t_buf *buf);
 /*
-**				ft_readline/
+**				ft_readline/ft_readline.c
 */
-int				ft_readline(char **line);
+t_term			*get_term(void);
+int				ft_readline(const int fd, char **line);
+/*
+**				ft_readline/line.c
+*/
+char			*line_tostr(t_line **cursor, int mod);
+int				line_bs(t_line *cursor);
+int				line_add(t_line *cursor, uint64_t ch);
+/*
+**				ft_readline/ft_autocomplit.c
+*/
+void			ft_autocomplit(t_line *cursor);
 
 #endif

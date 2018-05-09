@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/05/07 18:17:02 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/05/09 16:29:56 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -27,7 +27,7 @@ SRC			=	21sh.c init.c env_utils.c exec.c cmd_parser.c ft_buffer.c	\
 				ft_readline/ft_autocomplit.c ft_readline/ft_readline.c		\
 				ft_readline/ft_readline_action.c ft_readline/line.c
 
-HDR			=	inc/21sh.h inc/ft_readline.h
+HDR			=	inc/21sh.h
 LIBFT		=	libft/libftprintf.a
 OBJ			=	$(addprefix $(DIROBJ), $(SRC:.c=.o))
 
