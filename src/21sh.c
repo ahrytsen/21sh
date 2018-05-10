@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 11:02:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 16:40:00 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/10 20:23:25 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ void	ft_prompt(void)
 {
 	char	pwd[MAXPATHLEN];
 
-	isatty(0) ? ft_dprintf(2, "\033[33m%s \033[32m$>\033[0m ",
-						getcwd(pwd, MAXPATHLEN)) : 0;
+	if (isatty(0))
+	{
+		getcwd(pwd, MAXPATHLEN);
+		get_term()->curpos = ft_strlen(pwd) + 4;
+		ft_dprintf(2, "\033[33m%s \033[32m$>\033[0m ", getcwd(pwd, MAXPATHLEN));
+	}
 }
 
 int		main_loop(void)

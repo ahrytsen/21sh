@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 19:16:52 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/10 14:28:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,13 @@ static void	ft_action(uint64_t buf)
 {
 	if (buf == '\t')
 		ft_autocomplit(get_term()->cursor);
-	else if (buf == 127 && !line_bs(get_term()->cursor))
-	{
-		tputs(get_term()->cm_left, 1, term_print);
-		tputs(tparm(get_term()->del_ch, 1), 1, term_print);
-	}
-	else if (buf == 0X445B1B && get_term()->cursor->prev)
-	{
-		tputs(get_term()->cm_left, 1, term_print);
-		get_term()->cursor = get_term()->cursor->prev;
-	}
-	else if (buf == 0X435B1B && get_term()->cursor->next)
-	{
-		tputs(get_term()->cm_right, 1, term_print);
-		get_term()->cursor = get_term()->cursor->next;
-	}
+	else if (buf == 127)
+		ft_back_space();
 	else if (buf == 0X415B1B || buf == 0X425B1B || buf == 0X435B1B
 			|| buf == 0X445B1B)
-		ft_dprintf(0, "\a");
-	else if (buf != 127 && (buf > 31 || ft_iswhitespace(buf)))
-	{
-		tputs(get_term()->im_on, 1, term_print);
-		ft_dprintf(0, "%s", &buf);
-		line_add(get_term()->cursor, buf);
-		tputs(get_term()->im_off, 1, term_print);
-	}
+		ft_move(buf);
+	else
+		ft_add(buf);
 }
 
 int			ft_readline(const int fd, char **line)

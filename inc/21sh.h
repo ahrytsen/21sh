@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 17:01:04 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/10 15:44:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,15 @@ void			*ft_free_mshbuf(t_buf *buf);
 /*
 **				ft_readline/ft_readline.c
 */
+int				term_print(int c);
 t_term			*get_term(void);
 int				ft_readline(const int fd, char **line);
+/*
+**				ft_readline/ft_readline_action.c
+*/
+void			ft_back_space(void);
+void			ft_move(uint64_t buf);
+void			ft_add(uint64_t buf);
 /*
 **				ft_readline/line.c
 */
