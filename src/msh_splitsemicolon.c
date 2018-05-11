@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 18:39:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 17:09:49 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:18:43 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <21sh.h>
+#include <twenty_one_sh.h>
 
 static void		ft_skip_slash(char **s)
 {

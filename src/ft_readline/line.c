@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 16:25:08 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 18:08:35 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:17:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <21sh.h>
+#include <twenty_one_sh.h>
 
 char	*line_tostr(t_line **cursor, int mod)
 {
@@ -37,10 +37,10 @@ char	*line_tostr(t_line **cursor, int mod)
 		mod ? ft_memdel((void**)&tmp->prev) : 0;
 	}
 	mod ? *cursor = tmp : 0;
-	return(line);
+	return (line);
 }
 
-int	line_bs(t_line *cursor)
+int		line_bs(t_line *cursor)
 {
 	t_line	*tmp;
 
@@ -53,7 +53,7 @@ int	line_bs(t_line *cursor)
 	return (0);
 }
 
-int	line_add(t_line *cursor, uint64_t ch)
+int		line_add(t_line *cursor, uint64_t ch)
 {
 	t_line	*tmp;
 	t_line	*new_ch;

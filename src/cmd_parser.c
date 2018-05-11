@@ -6,11 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 16:37:14 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 17:06:54 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:12:53 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <21sh.h>
+#include <twenty_one_sh.h>
 
 static void	parse_dollar(t_buf **cur, char **line)
 {
@@ -96,8 +96,7 @@ char		*parse_argv(char *line)
 	t_buf	*cur;
 
 	tmp = line;
-	if (!(head = ft_memalloc(sizeof(t_buf))) || !line)
-		ft_fatal(1, exit, "21sh: malloc error\n");
+	!(head = ft_memalloc(sizeof(t_buf))) ? ft_fatal(1, exit, "mall err\n") : 0;
 	cur = head;
 	while (*line)
 		if (*line == '\\' && line++)

@@ -6,14 +6,16 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/09 18:04:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:20:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <21sh.h>
+#include <twenty_one_sh.h>
 
 static void	sig_handler(int signo)
 {
+	struct winsize	w;
+
 	if (signo == SIGINT)
 	{
 		line_tostr(&get_term()->cursor, 2);
@@ -22,6 +24,12 @@ static void	sig_handler(int signo)
 			ft_dprintf(2, "\n");
 			ft_prompt();
 		}
+	}
+	else if (signo == SIGWINCH)
+	{
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+		get_term()->height = w.ws_row;
+		get_term()->width = w.ws_col;
 	}
 	return ;
 }
@@ -51,8 +59,7 @@ static void	ft_init_termcap(void)
 		ft_fatal(1, exit, "Could not access the termcap data base.\n");
 	else if (!success)
 		ft_fatal(1, exit, "Terminal type `%s' is not defined.\n", termtype);
-	get_term()->clear = tgetstr("cl", NULL);
-	get_term()->curmov = tgetstr("cm", NULL);
+	get_term()->clear = tgetstr("ce", NULL);
 	get_term()->cm_left = tgetstr("le", NULL);
 	get_term()->cm_right = tgetstr("nd", NULL);
 	get_term()->undln_on = tgetstr("us", NULL);
@@ -62,8 +69,6 @@ static void	ft_init_termcap(void)
 	get_term()->im_on = tgetstr("im", NULL);
 	get_term()->im_off = tgetstr("ei", NULL);
 	get_term()->del_ch = tgetstr("DC", NULL);
-	get_term()->dm_on = tgetstr("dm", NULL);
-	get_term()->dm_off = tgetstr("ed", NULL);
 	get_term()->height = tgetnum("li");
 	get_term()->width = tgetnum("co");
 }
@@ -85,10 +90,10 @@ void		ft_init_terminal(int mod)
 		tty.c_cc[VMIN] = 1;
 		tty.c_cc[VTIME] = 0;
 	}
-	tcsetattr(0, TCSAFLUSH, mod ? &tty : savetty);
+	tcsetattr(0, mod ? TCSAFLUSH : TCSANOW, mod ? &tty : savetty);
 }
 
-void	ft_init(void)
+void		ft_init(void)
 {
 	extern char	**environ;
 	int			shlvl;

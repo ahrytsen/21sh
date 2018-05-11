@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   21sh.h                                             :+:      :+:    :+:   */
+/*   twenty_one_sh.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/02 18:57:34 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/10 15:44:12 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/05/11 20:22:43 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MSH_H
-# define MSH_H
+#ifndef TWENTY_ONE_SH_H
+# define TWENTY_ONE_SH_H
 
 # include <libft.h>
 # include <sys/stat.h>
@@ -35,7 +35,8 @@ typedef struct	s_line
 typedef struct	s_term
 {
 	t_line	*cursor;
-	int		curpos;
+	int		curx;
+	int		cury;
 	char	*clear;
 	char	*curmov;
 	char	*cm_left;
@@ -160,6 +161,13 @@ int				ft_readline(const int fd, char **line);
 void			ft_back_space(void);
 void			ft_move(uint64_t buf);
 void			ft_add(uint64_t buf);
+/*
+**				ft_readline/ft_cursor.cx
+*/
+void			ft_print_tail(t_line *cursor);
+void			ft_curleft(int mod);
+void			ft_curright(int mod);
+void			ft_curnleft(int mod, int n);
 /*
 **				ft_readline/line.c
 */
