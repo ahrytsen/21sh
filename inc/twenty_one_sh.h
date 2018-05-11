@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:22:43 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:50:05 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ int				ft_readline(const int fd, char **line);
 void			ft_back_space(void);
 void			ft_move(uint64_t buf);
 void			ft_add(uint64_t buf);
+int				ft_del(void);
 /*
 **				ft_readline/ft_cursor.cx
 */

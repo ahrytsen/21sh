@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:17:18 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 21:02:06 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,22 @@ int			ft_readline(const int fd, char **line)
 	uint64_t		buf;
 
 	ft_init_terminal(1);
-	while (!(buf = 0) && read(fd, &buf, 8) > 0 && buf != 4)
-		if (buf == '\n' && ft_dprintf(0, "\n"))
+	while (!(buf = 0) && read(fd, &buf, 8) > 0)
+		if (buf == '\n')
+		{
+			while (get_term()->cursor->next)
+			{
+				get_term()->cursor = get_term()->cursor->next;
+				ft_curright(1);
+			}
+			ft_dprintf(0, "\n");
 			break ;
+		}
+		else if (buf == 4)
+		{
+			if (ft_del())
+				break;
+		}
 		else
 			ft_action(buf);
 	ft_init_terminal(0);

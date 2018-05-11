@@ -6,11 +6,26 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 12:20:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:13:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:54:39 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+int		ft_del(void)
+{
+	if (!get_term()->cursor->next && !get_term()->cursor->prev)
+		return (1);
+	else if (get_term()->cursor->next)
+	{
+		get_term()->cursor = get_term()->cursor->next;
+		ft_curright(1);
+		ft_back_space();
+	}
+	else
+		ft_dprintf(0, "\a");
+	return (0);
+}
 
 void	ft_back_space(void)
 {

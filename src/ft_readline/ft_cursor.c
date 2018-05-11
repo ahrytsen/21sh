@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:38:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:17:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 20:29:27 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ void	ft_curleft(int mod)
 		get_term()->curx = get_term()->width - 1;
 		get_term()->cury--;
 		tputs(tgetstr("up", NULL), 1, term_print);
-		tputs(tgoto(tgetstr("ch", NULL), 1, get_term()->width), 1, term_print);
+		tputs(tgoto(tgetstr("ch", NULL), 1, get_term()->width - mod),
+			1, term_print);
 	}
 	else if (get_term()->cury >= 0)
+	{
 		get_term()->curx--;
-	mod ? tputs(tgoto(get_term()->cm_left, 1, 1), 1, term_print) : 0;
+		mod ? tputs(tgoto(get_term()->cm_left, 1, 1), 1, term_print) : 0;
+	}
 }
 
 void	ft_curright(int mod)
