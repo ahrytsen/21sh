@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 21:02:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/11 21:05:51 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			ft_readline(const int fd, char **line)
 		else if (buf == 4)
 		{
 			if (ft_del())
-				break;
+				break ;
 		}
 		else
 			ft_action(buf);
