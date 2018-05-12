@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:50:05 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/12 18:11:06 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,35 @@
 # include <termios.h>
 # include <term.h>
 
+/*
+**	KEY BINDINGS
+*/
+# define K_UP 0X415B1B
+# define K_AUP 0X41393B315B1B
+# define K_DOWN 0X425B1B
+# define K_ADOWN 0X42393B315B1B
+# define K_LEFT 0X445B1B
+# define K_ALEFT 0X621B
+# define K_RIGHT 0X435B1B
+# define K_ARIGHT 0X661B
+# define K_HOME 0X485B1B
+# define K_END 0X465B1B
+# define K_BS 0X7F
+# define K_ABS 0X7F1B
+# define K_DEL 0X4
+# define K_ADEL 0X641B
+# define K_SPC 0X20
+# define K_RET 0XA
+# define K_SRCH 0X6
+# define K_ESC 0X1B
+# define K_TAB 0X9
+/*
+**	MODS
+*/
+# define T_INIT 1
+# define T_RESTORE 0
+# define W_NEXT 1
+# define W_PREV 0
 typedef struct	s_line
 {
 	uint64_t		ch;
@@ -107,7 +136,7 @@ int				main_loop(void);
 **				init.c
 */
 void			ft_init(void);
-void			ft_init_terminal(int mod);
+void			ft_terminal(int mod);
 /*
 **				builtins/builtins.c
 */
@@ -162,13 +191,20 @@ void			ft_back_space(void);
 void			ft_move(uint64_t buf);
 void			ft_add(uint64_t buf);
 int				ft_del(void);
+void			ft_word_action(uint64_t buf);
 /*
-**				ft_readline/ft_cursor.cx
+**				ft_readline/ft_readline_helper.c
 */
 void			ft_print_tail(t_line *cursor);
+void			ft_redraw_line(void);
+/*
+**				ft_readline/ft_cursor.c
+*/
 void			ft_curleft(int mod);
 void			ft_curright(int mod);
 void			ft_curnleft(int mod, int n);
+void			ft_curnright(int mod, int n);
+void			ft_curhome(void);
 /*
 **				ft_readline/line.c
 */

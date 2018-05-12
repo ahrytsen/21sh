@@ -6,26 +6,18 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:38:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:29:27 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/12 18:23:31 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-void	ft_print_tail(t_line *cursor)
+void	ft_curhome(void)
 {
-	int	count;
-
-	count = 0;
-	while (cursor->next)
-	{
-		ft_dprintf(0, "%s", &cursor->ch);
-		ft_curright(0);
-		cursor = cursor->next;
-		count++;
-	}
-	tputs(get_term()->clear, 1, term_print);
-	ft_curnleft(1, count);
+	while (get_term()->cursor->prev)
+		ft_move(K_LEFT);
+	while (get_term()->curx || get_term()->cury)
+		ft_curleft(1);
 }
 
 void	ft_curleft(int mod)
@@ -66,4 +58,10 @@ void	ft_curnleft(int mod, int n)
 {
 	while (n--)
 		ft_curleft(mod);
+}
+
+void	ft_curnright(int mod, int n)
+{
+	while (n--)
+		ft_curright(mod);
 }

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 12:20:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:54:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/12 17:20:25 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,46 @@ void	ft_back_space(void)
 
 void	ft_move(uint64_t buf)
 {
-	if (buf == 0X445B1B && get_term()->cursor->prev)
-	{
-		ft_curleft(1);
-		get_term()->cursor = get_term()->cursor->prev;
-	}
-	else if (buf == 0X435B1B && get_term()->cursor->next)
-	{
-		ft_curright(1);
-		get_term()->cursor = get_term()->cursor->next;
-	}
+	int	i;
+
+	i = (buf == K_LEFT || buf == K_RIGHT) ? get_term()->width - 1 : 0;
+	if ((buf == K_LEFT || buf == K_AUP || buf == K_HOME)
+		&& get_term()->cursor->prev)
+		while (i < get_term()->width && get_term()->cursor->prev)
+		{
+			buf == K_HOME ? 0 : i++;
+			ft_curleft(1);
+			get_term()->cursor = get_term()->cursor->prev;
+		}
+	else if ((buf == K_RIGHT || buf == K_ADOWN || buf == K_END)
+			&& get_term()->cursor->next)
+		while (i < get_term()->width && get_term()->cursor->next)
+		{
+			buf == K_END ? 0 : i++;
+			ft_curright(1);
+			get_term()->cursor = get_term()->cursor->next;
+		}
 	else
 		ft_dprintf(0, "\a");
+}
+
+void	ft_word_action(uint64_t buf)
+{
+	int		flag;
+	t_line	*cursor;
+
+	flag = 0;
+	while ((cursor = (buf == K_ARIGHT || buf == K_ADEL)
+			? get_term()->cursor : get_term()->cursor->prev)
+		   && (buf == K_ALEFT || buf == K_ABS || cursor->next)
+		   && !(ft_iswhitespace(cursor->ch) && flag))
+	{
+		if (buf == K_ALEFT || buf == K_ARIGHT)
+			ft_move(buf == K_ALEFT ? K_LEFT : K_RIGHT);
+		else
+			buf == K_ABS ? ft_back_space() : ft_del();
+		!ft_iswhitespace(cursor->ch) ? flag = 1 : 0;
+	}
 }
 
 void	ft_add(uint64_t buf)
