@@ -6,11 +6,20 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/12 17:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/12 18:10:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/14 16:13:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+int		ft_readline_ret(void)
+{
+	while (get_term()->cursor->next
+			&& (get_term()->cursor = get_term()->cursor->next))
+		ft_curright(1);
+	ft_dprintf(0, "\n");
+	return (1);
+}
 
 void	ft_redraw_line(void)
 {

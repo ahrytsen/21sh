@@ -6,18 +6,19 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:38:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/12 18:23:31 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/14 16:27:40 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-void	ft_curhome(void)
+void	ft_curhome(int mod)
 {
 	while (get_term()->cursor->prev)
 		ft_move(K_LEFT);
-	while (get_term()->curx || get_term()->cury)
-		ft_curleft(1);
+	if (mod)
+		while (get_term()->curx || get_term()->cury)
+			ft_curleft(1);
 }
 
 void	ft_curleft(int mod)

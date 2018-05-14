@@ -6,11 +6,28 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 16:25:08 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:48:45 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/14 20:14:32 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+t_line	*copy_line(t_line *line)
+{
+	t_line	*copy;
+
+	if (!(copy = ft_memalloc(sizeof(*copy))))
+		return (NULL);
+	while (line->prev)
+		line = line->prev;
+	while (line->next)
+	{
+		if (line_add(copy, line->ch) == -1)
+			return ((t_line*)line_tostr(&copy, 2));
+		line = line->next;
+	}
+	return (copy);
+}
 
 char	*line_tostr(t_line **cursor, int mod)
 {
@@ -59,7 +76,7 @@ int		line_add(t_line *cursor, uint64_t ch)
 	t_line	*new_ch;
 
 	if (!(new_ch = ft_memalloc(sizeof(*new_ch))))
-		return (1);
+		return (-1);
 	new_ch->ch = ch;
 	tmp = cursor->prev;
 	cursor->prev = new_ch;
@@ -67,5 +84,5 @@ int		line_add(t_line *cursor, uint64_t ch)
 	new_ch->prev = tmp;
 	if (tmp)
 		tmp->next = new_ch;
-	return (0);
+	return (1);
 }

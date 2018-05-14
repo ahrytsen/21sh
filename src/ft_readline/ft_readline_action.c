@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 12:20:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/12 17:20:25 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/14 16:41:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		ft_del(void)
 {
 	if (!get_term()->cursor->next && !get_term()->cursor->prev)
-		return (1);
+		return (0);
 	else if (get_term()->cursor->next)
 	{
 		get_term()->cursor = get_term()->cursor->next;
@@ -24,7 +24,7 @@ int		ft_del(void)
 	}
 	else
 		ft_dprintf(0, "\a");
-	return (0);
+	return (1);
 }
 
 void	ft_back_space(void)
@@ -72,8 +72,8 @@ void	ft_word_action(uint64_t buf)
 	flag = 0;
 	while ((cursor = (buf == K_ARIGHT || buf == K_ADEL)
 			? get_term()->cursor : get_term()->cursor->prev)
-		   && (buf == K_ALEFT || buf == K_ABS || cursor->next)
-		   && !(ft_iswhitespace(cursor->ch) && flag))
+			&& (buf == K_ALEFT || buf == K_ABS || cursor->next)
+			&& !(ft_iswhitespace(cursor->ch) && flag))
 	{
 		if (buf == K_ALEFT || buf == K_ARIGHT)
 			ft_move(buf == K_ALEFT ? K_LEFT : K_RIGHT);
@@ -83,15 +83,19 @@ void	ft_word_action(uint64_t buf)
 	}
 }
 
-void	ft_add(uint64_t buf)
+int		ft_add(uint64_t buf)
 {
+	int	ret;
+
+	ret = 1;
 	if ((buf > 31 && buf < 127) || ft_iswhitespace(buf))
 	{
 		ft_dprintf(0, "%s", &buf);
 		ft_curright(0);
-		line_add(get_term()->cursor, buf);
+		ret = line_add(get_term()->cursor, buf);
 		get_term()->cursor->ch ? ft_print_tail(get_term()->cursor) : 0;
 	}
 	else
 		ft_dprintf(0, "\a");
+	return (ret);
 }

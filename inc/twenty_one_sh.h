@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/12 18:11:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/14 20:56:48 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define K_SRCH 0X6
 # define K_ESC 0X1B
 # define K_TAB 0X9
+
 /*
 **	MODS
 */
@@ -54,6 +55,7 @@
 # define T_RESTORE 0
 # define W_NEXT 1
 # define W_PREV 0
+
 typedef struct	s_line
 {
 	uint64_t		ch;
@@ -61,9 +63,18 @@ typedef struct	s_line
 	struct s_line	*prev;
 }				t_line;
 
+typedef struct	s_hist
+{
+	t_line			*line;
+	t_line			*tmp;
+	struct s_hist	*next;
+	struct s_hist	*prev;
+}				t_hist;
+
 typedef struct	s_term
 {
 	t_line	*cursor;
+	t_hist	*hist;
 	int		curx;
 	int		cury;
 	char	*clear;
@@ -189,14 +200,16 @@ int				ft_readline(const int fd, char **line);
 */
 void			ft_back_space(void);
 void			ft_move(uint64_t buf);
-void			ft_add(uint64_t buf);
+int				ft_add(uint64_t buf);
 int				ft_del(void);
 void			ft_word_action(uint64_t buf);
 /*
 **				ft_readline/ft_readline_helper.c
 */
+int				ft_readline_ret(void);
 void			ft_print_tail(t_line *cursor);
 void			ft_redraw_line(void);
+
 /*
 **				ft_readline/ft_cursor.c
 */
@@ -204,10 +217,11 @@ void			ft_curleft(int mod);
 void			ft_curright(int mod);
 void			ft_curnleft(int mod, int n);
 void			ft_curnright(int mod, int n);
-void			ft_curhome(void);
+void			ft_curhome(int mod);
 /*
 **				ft_readline/line.c
 */
+t_line			*copy_line(t_line *line);
 char			*line_tostr(t_line **cursor, int mod);
 int				line_bs(t_line *cursor);
 int				line_add(t_line *cursor, uint64_t ch);
@@ -215,5 +229,11 @@ int				line_add(t_line *cursor, uint64_t ch);
 **				ft_readline/ft_autocomplit.c
 */
 void			ft_autocomplit(t_line *cursor);
+/*
+**				ft_readline/line.c
+*/
+int				hist_init(void);
+void			hist_move(uint64_t buf);
+void			hist_commit(int st);
 
 #endif

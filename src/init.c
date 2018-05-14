@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/12 18:36:28 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/14 20:29:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	sig_handler(int signo)
 	}
 	else if (signo == SIGWINCH)
 	{
-		ft_curhome();
+		ft_curhome(1);
 		ft_dprintf(0, "\r");
 		tputs(tgetstr("cd", NULL), 1, term_print);
 		ft_prompt();
@@ -107,6 +107,7 @@ void		ft_init(void)
 	ft_init_signal();
 	ft_init_termcap();
 	get_term()->cursor = ft_memalloc(sizeof(t_line));
+	get_term()->hist = NULL;
 	get_environ()->env = ft_strdup_arr(environ);
 	tmp = ft_getenv("SHLVL");
 	shlvl = tmp ? ft_atoi(tmp) : 0;
