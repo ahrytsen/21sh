@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:14:34 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 20:21:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	ft_prompt(void)
 		tmp = ft_strlen(pwd) + 4;
 		get_term()->cury = tmp / get_term()->width;
 		get_term()->curx = tmp % get_term()->width;
-		ft_dprintf(2, "\033[33m%s \033[32m$>\033[0m ", getcwd(pwd, MAXPATHLEN));
+		ft_dprintf(2, "\r\033[33m%s \033[32m$>\033[0m ",
+					getcwd(pwd, MAXPATHLEN));
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/14 19:05:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 21:23:52 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 20:10:21 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,24 @@ int		hist_init(void)
 {
 	t_hist	*new_hist;
 
-	if (!(new_hist = ft_memalloc(sizeof(t_hist))))
-		return (-1);
-	if (!get_term()->hist)
-		get_term()->hist = new_hist;
-	else
+	if (!get_term()->hist || get_term()->hist->line)
 	{
-		get_term()->hist->next = new_hist;
-		new_hist->prev = get_term()->hist;
-		get_term()->hist = new_hist;
+		if (!(new_hist = ft_memalloc(sizeof(t_hist)))
+			|| !(new_hist->tmp = ft_memalloc(sizeof(t_line))))
+			return (-1);
+		if (!get_term()->hist)
+			get_term()->hist = new_hist;
+		else
+		{
+			get_term()->hist->next = new_hist;
+			new_hist->prev = get_term()->hist;
+			get_term()->hist = new_hist;
+		}
 	}
-	get_term()->hist->tmp = get_term()->cursor;
+	else if (!get_term()->hist->tmp)
+		if (!(get_term()->hist->tmp = ft_memalloc(sizeof(t_line))))
+			return (-1);
+	get_term()->cursor = get_term()->hist->tmp;
 	return (1);
 }
 
@@ -48,22 +55,28 @@ void	hist_move(uint64_t buf)
 		ft_dprintf(0, "\a");
 }
 
+void	clean_hist(void)
+{
+	while (get_term()->hist->prev)
+		get_term()->hist = get_term()->hist->prev;
+	while (1)
+	{
+		get_term()->hist->tmp ? line_tostr(&get_term()->hist->tmp, 2) : 0;
+		if (!get_term()->hist->next)
+			return ;
+		get_term()->hist = get_term()->hist->next;
+	}
+}
+
 void	hist_commit(int st)
 {
 	t_line	*to_save;
 
-	to_save = get_term()->cursor;
+	to_save = get_term()->hist->tmp;
 	get_term()->hist->tmp = NULL;
-	while (get_term()->hist->prev)
-		get_term()->hist = get_term()->hist->prev;
-	while (get_term()->hist->next)
-	{
-		if (get_term()->hist->tmp)
-			line_tostr(&get_term()->hist->tmp, 2);
-		get_term()->hist = get_term()->hist->next;
-	}
-	if (get_term()->hist->tmp)
-			line_tostr(&get_term()->hist->tmp, 2);
-	get_term()->cursor = ft_memalloc(sizeof(t_line));
-	get_term()->hist->line = to_save;
+	clean_hist();
+	if (to_save->prev && st != -1)
+		get_term()->hist->line = to_save;
+	else
+		line_tostr(&to_save, 2);
 }

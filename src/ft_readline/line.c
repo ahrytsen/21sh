@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 16:25:08 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 20:14:32 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 19:51:14 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_line	*copy_line(t_line *line)
 {
 	t_line	*copy;
 
-	if (!(copy = ft_memalloc(sizeof(*copy))))
+	if (!(copy = ft_memalloc(sizeof(t_line))))
 		return (NULL);
 	while (line->prev)
 		line = line->prev;
@@ -53,7 +53,8 @@ char	*line_tostr(t_line **cursor, int mod)
 		tmp = tmp->next;
 		mod ? ft_memdel((void**)&tmp->prev) : 0;
 	}
-	mod ? *cursor = tmp : 0;
+	mod == 2 ? ft_memdel((void**)&tmp) : 0;
+	mod == 2 ? *cursor = NULL : 0;
 	return (line);
 }
 

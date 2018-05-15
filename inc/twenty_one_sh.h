@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 20:56:48 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 20:18:16 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,10 +230,11 @@ int				line_add(t_line *cursor, uint64_t ch);
 */
 void			ft_autocomplit(t_line *cursor);
 /*
-**				ft_readline/line.c
+**				ft_readline/ft_history.c
 */
 int				hist_init(void);
 void			hist_move(uint64_t buf);
+void			clean_hist(void);
 void			hist_commit(int st);
 
 #endif

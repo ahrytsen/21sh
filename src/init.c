@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 20:29:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 20:07:03 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ static void	sig_handler(int signo)
 
 	if (signo == SIGINT)
 	{
-		line_tostr(&get_term()->cursor, 2);
+		clean_hist();
+		hist_init();
+		free(line_tostr(&get_term()->cursor, 1));
 		if (isatty(0) && !get_environ()->pid)
 		{
 			ft_dprintf(2, "\n");
@@ -106,7 +108,7 @@ void		ft_init(void)
 
 	ft_init_signal();
 	ft_init_termcap();
-	get_term()->cursor = ft_memalloc(sizeof(t_line));
+	get_term()->cursor = NULL;
 	get_term()->hist = NULL;
 	get_environ()->env = ft_strdup_arr(environ);
 	tmp = ft_getenv("SHLVL");

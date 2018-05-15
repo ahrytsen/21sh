@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/12 17:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 16:13:35 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 16:50:19 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	ft_redraw_line(void)
 		ft_curright(0);
 		get_term()->cursor = get_term()->cursor->next;
 	}
+	tputs(get_term()->clear, 1, term_print);
 }
 
 void	ft_print_tail(t_line *cursor)

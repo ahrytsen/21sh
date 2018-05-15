@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 21:23:12 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/15 16:58:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int			ft_readline(const int fd, char **line)
 		if ((ret = ft_action(buf)) <= 0 || buf == K_RET)
 			break ;
 	ft_terminal(T_RESTORE);
-	hist_commit(ret);
 	*line = line_tostr(&get_term()->cursor, ret == -1 ? 2 : 0);
+	hist_commit(ret);
 	return (ret);
 }
