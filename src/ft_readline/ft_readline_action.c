@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 12:20:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/14 16:41:41 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/17 19:23:10 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,14 @@ int		ft_add(uint64_t buf)
 	int	ret;
 
 	ret = 1;
-	if ((buf > 31 && buf < 127) || ft_iswhitespace(buf))
-	{
+//	if ((buf > 31 && buf < 127) || ft_iswhitespace(buf))
+//	{
 		ft_dprintf(0, "%s", &buf);
 		ft_curright(0);
 		ret = line_add(get_term()->cursor, buf);
 		get_term()->cursor->ch ? ft_print_tail(get_term()->cursor) : 0;
-	}
-	else
-		ft_dprintf(0, "\a");
+//	}
+//	else
+//		ft_dprintf(0, "\a");
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/15 20:18:16 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/17 21:20:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,18 @@
 */
 # define K_UP 0X415B1B
 # define K_AUP 0X41393B315B1B
+# define K_SUP 0X41323B315B1B
 # define K_DOWN 0X425B1B
 # define K_ADOWN 0X42393B315B1B
+# define K_SDOWN 0X42323B315B1B
 # define K_LEFT 0X445B1B
 # define K_ALEFT 0X621B
+# define K_SLEFT 0X44323B315B1B
+# define K_ASLEFT 0X4430313B315B1B
 # define K_RIGHT 0X435B1B
 # define K_ARIGHT 0X661B
+# define K_SRIGHT 0X43323B315B1B
+# define K_ASRIGHT 0X4330313B315B1B
 # define K_HOME 0X485B1B
 # define K_END 0X465B1B
 # define K_BS 0X7F
@@ -75,6 +81,8 @@ typedef struct	s_term
 {
 	t_line	*cursor;
 	t_hist	*hist;
+	t_line	*st_sel;
+	t_line	*end_sel;
 	int		curx;
 	int		cury;
 	char	*clear;
@@ -236,5 +244,10 @@ int				hist_init(void);
 void			hist_move(uint64_t buf);
 void			clean_hist(void);
 void			hist_commit(int st);
+/*
+**				ft_readline/ft_highlight.c
+*/
+void			ft_highlight(uint64_t buf);
+void			ft_highlight_helper(uint64_t buf);
 
 #endif

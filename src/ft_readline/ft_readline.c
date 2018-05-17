@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/15 16:58:12 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/17 21:21:15 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,14 @@ static int	ft_action(uint64_t buf)
 		ft_word_action(buf);
 	else if (buf == K_UP || buf == K_DOWN)
 		hist_move(buf);
-	else
+	else if (buf  == K_SLEFT || buf == K_SUP || buf == K_ASLEFT
+			|| buf == K_SRIGHT || buf == K_SDOWN || buf == K_ASRIGHT)
+		ft_highlight(buf);
+	else if (((char*)&buf)[0] != 27)
 		buf = ft_add(buf);
+	else
+		ft_dprintf(0, "\a");
+	ft_highlight_helper(buf);
 	return (buf);
 }
 
