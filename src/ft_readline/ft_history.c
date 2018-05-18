@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/14 19:05:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/17 14:40:10 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/18 18:28:42 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ void	hist_move(uint64_t buf)
 		get_term()->hist = tmp;
 		if (!get_term()->hist->tmp)
 			get_term()->hist->tmp = copy_line(get_term()->hist->line);
-		ft_curhome(0);
+		ft_curhome(1);
 		get_term()->hist->tmp ? get_term()->cursor = get_term()->hist->tmp : 0;
+		ft_prompt();
 		ft_redraw_line();
 	}
 	else

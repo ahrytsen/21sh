@@ -21,19 +21,17 @@ static void	ft_highlight_redraw(void)
 	cursor = get_term()->cursor;
 	f = 0;
 	count = 0;
-	while (cursor->prev && (cursor = cursor->prev) && (--count))
-		ft_curleft(1);
+	ft_prompt();
+	while (cursor->prev && (cursor = cursor->prev))
+		--count;
 	while (cursor->next)
 	{
 		if (cursor == get_term()->st_sel || cursor == get_term()->end_sel)
 		{
-			f ? ft_dprintf(0, "%s", &cursor->ch) : 0;
 			tputs(!f ? get_term()->iv_on : get_term()->iv_off, 1, term_print);
-			!f ? ft_dprintf(0, "%s", &cursor->ch) : 0;
 			f = !f;
 		}
-		else
-			ft_dprintf(0, "%s", &cursor->ch);
+		ft_dprintf(0, "%s", &cursor->ch);
 		ft_curright(0);
 		cursor = cursor->next;
 		count++;
@@ -45,7 +43,8 @@ static void	ft_highlight_redraw(void)
 void		ft_highlight_helper(uint64_t buf)
 {
 	if (buf != K_SLEFT && buf != K_SRIGHT && buf != K_SUP
-		&& buf != K_SDOWN && buf != K_ASLEFT && buf != K_ASRIGHT)
+		&& buf != K_SDOWN && buf != K_ASLEFT && buf != K_ASRIGHT
+		&& (get_term()->st_sel || get_term()->end_sel))
 	{
 		get_term()->st_sel = NULL;
 		get_term()->end_sel = NULL;

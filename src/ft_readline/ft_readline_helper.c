@@ -6,11 +6,23 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/12 17:35:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/17 14:56:53 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/18 12:24:53 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+int			term_print(int c)
+{
+	return (write(0, &c, 1));
+}
+
+t_term		*get_term(void)
+{
+	static t_term	term;
+
+	return (&term);
+}
 
 int		ft_readline_ret(void)
 {

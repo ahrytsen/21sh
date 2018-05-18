@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/17 21:20:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/18 18:47:31 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@
 # define K_SRCH 0X6
 # define K_ESC 0X1B
 # define K_TAB 0X9
+# define K_CUTE 0X781B
+# define K_COPY 0X631B
+# define K_PASTE 0X761B
+# define K_MOVE 1
+# define K_WORD_MOVE 2
+# define K_SELECT 3
 
 /*
 **	MODS
@@ -83,6 +89,7 @@ typedef struct	s_term
 	t_hist	*hist;
 	t_line	*st_sel;
 	t_line	*end_sel;
+	t_line	*buffer;
 	int		curx;
 	int		cury;
 	char	*clear;
@@ -200,8 +207,6 @@ void			*ft_free_mshbuf(t_buf *buf);
 /*
 **				ft_readline/ft_readline.c
 */
-int				term_print(int c);
-t_term			*get_term(void);
 int				ft_readline(const int fd, char **line);
 /*
 **				ft_readline/ft_readline_action.c
@@ -214,6 +219,8 @@ void			ft_word_action(uint64_t buf);
 /*
 **				ft_readline/ft_readline_helper.c
 */
+int				term_print(int c);
+t_term			*get_term(void);
 int				ft_readline_ret(void);
 void			ft_print_tail(t_line *cursor);
 void			ft_redraw_line(void);
@@ -234,6 +241,12 @@ char			*line_tostr(t_line **cursor, int mod);
 int				line_bs(t_line *cursor);
 int				line_add(t_line *cursor, uint64_t ch);
 /*
+**				ft_readline/line_edit.c
+*/
+void			line_cute(void);
+int				line_copy(void);
+void			line_paste(void);
+/*
 **				ft_readline/ft_autocomplit.c
 */
 void			ft_autocomplit(t_line *cursor);
@@ -249,5 +262,10 @@ void			hist_commit(int st);
 */
 void			ft_highlight(uint64_t buf);
 void			ft_highlight_helper(uint64_t buf);
+/*
+**				ft_readline/ft_copy_paste.c
+*/
+int				ft_copy_paste(uint64_t buf);
+
 
 #endif

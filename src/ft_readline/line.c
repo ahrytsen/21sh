@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 16:25:08 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/15 19:51:14 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/18 18:08:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*line_tostr(t_line **cursor, int mod)
 	}
 	if (mod != 2 && !(line = ft_memalloc(sizeof(char) * size)))
 		return (NULL);
-	while (tmp->ch)
+	while (tmp->next)
 	{
 		mod != 2 ? ft_strcat(line, (char*)&tmp->ch) : 0;
 		tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/17 19:28:52 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/18 18:02:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void		ft_init(void)
 	get_term()->hist = NULL;
 	get_term()->st_sel = NULL;
 	get_term()->end_sel = NULL;
+	get_term()->buffer = NULL;
 	get_environ()->env = ft_strdup_arr(environ);
 	tmp = ft_getenv("SHLVL");
 	shlvl = tmp ? ft_atoi(tmp) : 0;
