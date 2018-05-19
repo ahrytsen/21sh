@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/05/18 13:32:30 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/05/19 18:45:31 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,7 +28,7 @@ SRC			=	main.c init.c env_utils.c exec.c cmd_parser.c ft_buffer.c	\
 				ft_readline/ft_readline_action.c ft_readline/line.c			\
 				ft_readline/ft_cursor.c ft_readline/ft_readline_helper.c	\
 				ft_readline/ft_history.c ft_readline/ft_highlight.c			\
-				ft_readline/line_edit.c ft_readline/ft_copy_paste.c
+				ft_readline/line_edit.c
 
 HDR			=	inc/twenty_one_sh.h
 LIBFT		=	libft/libftprintf.a

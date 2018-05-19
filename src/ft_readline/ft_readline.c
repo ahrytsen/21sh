@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/18 18:45:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/19 18:31:32 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	ft_check_key(uint64_t buf)
 		return (K_MOVE);
 	else if (buf == K_ALEFT || buf == K_ARIGHT || buf == K_ABS || buf == K_ADEL)
 		return (K_WORD_MOVE);
-	else if (buf  == K_SLEFT || buf == K_SUP || buf == K_ASLEFT
+	else if (buf == K_SLEFT || buf == K_SUP || buf == K_ASLEFT
 			|| buf == K_SRIGHT || buf == K_SDOWN || buf == K_ASRIGHT)
 		return (K_SELECT);
 	return (0);

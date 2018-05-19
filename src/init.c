@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/18 18:02:23 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/19 18:19:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ static void	sig_handler(int signo)
 	}
 	else if (signo == SIGWINCH)
 	{
-		ft_curhome(1);
-		ft_dprintf(0, "\r");
-		tputs(tgetstr("cd", NULL), 1, term_print);
-		ft_prompt();
+		ft_curhome();
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 		get_term()->height = w.ws_row;
 		get_term()->width = w.ws_col;

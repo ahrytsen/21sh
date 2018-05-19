@@ -5,50 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/17 14:15:10 by ahrytsen          #+#    #+#             */
-
+/*   Created: 2018/05/19 18:31:00 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/05/19 18:31:05 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-static void	ft_highlight_redraw(void)
-{
-	t_line	*cursor;
-	uint8_t	f;
-	int		count;
-
-	cursor = get_term()->cursor;
-	f = 0;
-	count = 0;
-	ft_prompt();
-	while (cursor->prev && (cursor = cursor->prev))
-		--count;
-	while (cursor->next)
-	{
-		if (cursor == get_term()->st_sel || cursor == get_term()->end_sel)
-		{
-			tputs(!f ? get_term()->iv_on : get_term()->iv_off, 1, term_print);
-			f = !f;
-		}
-		ft_dprintf(0, "%s", &cursor->ch);
-		ft_curright(0);
-		cursor = cursor->next;
-		count++;
-	}
-	ft_curnleft(1, count);
-	f ? tputs(get_term()->iv_off, 1, term_print) : 0;
-}
-
 void		ft_highlight_helper(uint64_t buf)
 {
-	if (buf != K_SLEFT && buf != K_SRIGHT && buf != K_SUP
+	if ((buf != K_SLEFT && buf != K_SRIGHT && buf != K_SUP
 		&& buf != K_SDOWN && buf != K_ASLEFT && buf != K_ASRIGHT
-		&& (get_term()->st_sel || get_term()->end_sel))
+		&& (get_term()->st_sel || get_term()->end_sel)) || buf == K_PASTE)
 	{
 		get_term()->st_sel = NULL;
 		get_term()->end_sel = NULL;
-		ft_highlight_redraw();
+		ft_redraw_line();
 	}
 }
 
@@ -68,5 +40,5 @@ void		ft_highlight(uint64_t buf)
 		get_term()->st_sel = NULL;
 		get_term()->end_sel = NULL;
 	}
-	ft_highlight_redraw();
+	ft_redraw_line();
 }

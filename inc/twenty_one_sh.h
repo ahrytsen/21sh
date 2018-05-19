@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/18 18:47:31 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/19 18:44:27 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void			ft_curleft(int mod);
 void			ft_curright(int mod);
 void			ft_curnleft(int mod, int n);
 void			ft_curnright(int mod, int n);
-void			ft_curhome(int mod);
+void			ft_curhome(void);
 /*
 **				ft_readline/line.c
 */
@@ -246,6 +246,7 @@ int				line_add(t_line *cursor, uint64_t ch);
 void			line_cute(void);
 int				line_copy(void);
 void			line_paste(void);
+int				ft_copy_paste(uint64_t buf);
 /*
 **				ft_readline/ft_autocomplit.c
 */
@@ -262,10 +263,5 @@ void			hist_commit(int st);
 */
 void			ft_highlight(uint64_t buf);
 void			ft_highlight_helper(uint64_t buf);
-/*
-**				ft_readline/ft_copy_paste.c
-*/
-int				ft_copy_paste(uint64_t buf);
-
 
 #endif

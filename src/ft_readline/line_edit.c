@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/18 12:54:32 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/18 19:26:12 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/19 19:08:26 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void		line_cute(void)
 	t_line	*tmp;
 
 	swap_points();
+	ft_curhome();
 	get_term()->buffer ? line_tostr(&get_term()->buffer, 2) : 0;
 	st = get_term()->st_sel;
 	end = get_term()->end_sel;
@@ -77,16 +78,29 @@ int			line_copy(void)
 
 void		line_paste(void)
 {
-	t_line	*tmp;
+	t_line	*buffer;
 
-	tmp = get_term()->cursor->prev;
-	tmp ? tmp->next = get_term()->buffer : 0;
-	get_term()->buffer->prev = tmp;
-	while (get_term()->buffer->next)
-		get_term()->buffer = get_term()->buffer->next;
-	get_term()->buffer->next = get_term()->cursor;
-	get_term()->cursor->prev = get_term()->buffer;
-	get_term()->st_sel = get_term()->buffer;
-	get_term()->end_sel = get_term()->buffer;
-	get_term()->buffer = NULL;
+	ft_curhome();
+	buffer = get_term()->buffer;
+	while (buffer)
+	{
+		if (line_add(get_term()->cursor, buffer->ch) == -1)
+			return ;
+		buffer = buffer->next;
+	}
+}
+
+int			ft_copy_paste(uint64_t buf)
+{
+	if ((buf != K_PASTE && (!get_term()->st_sel || !get_term()->end_sel
+							|| get_term()->st_sel == get_term()->end_sel))
+		|| (buf == K_PASTE && !get_term()->buffer))
+		return (ft_dprintf(0, "\a"));
+	if (buf == K_CUTE)
+		line_cute();
+	else if (buf == K_PASTE)
+		line_paste();
+	else if (line_copy() == -1)
+		return (-1);
+	return (buf);
 }
