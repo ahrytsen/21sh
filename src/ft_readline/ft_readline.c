@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/19 18:31:32 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 14:46:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	ft_action(uint64_t buf)
 		ft_highlight(buf);
 	else if (buf == K_COPY || buf == K_CUTE || buf == K_PASTE)
 		buf = ft_copy_paste(buf);
-	else if (((char*)&buf)[0] != 27)
+	else if (((char*)&buf)[0] != 27 && (buf > 31 || ft_iswhitespace(buf)))
 		buf = ft_add(buf);
 	else
 		ft_dprintf(0, "\a");

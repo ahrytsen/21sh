@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 10:54:42 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/03/12 18:17:56 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 14:22:14 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_iswhitespace(int c)
 {
-	if (c == 32 || (c > 8 && c < 14))
+	if (c == 32 || c == 13 || (c > 8 && c < 12))
 		return (1);
 	else
 		return (0);

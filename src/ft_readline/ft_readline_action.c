@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 12:20:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/19 18:33:31 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 16:19:40 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ void	ft_word_action(uint64_t buf)
 			&& (buf == K_ALEFT || buf == K_ABS || cursor->next)
 			&& !(ft_iswhitespace(cursor->ch) && flag))
 	{
+		!ft_iswhitespace(cursor->ch) ? flag = 1 : 0;
 		if (buf == K_ALEFT || buf == K_ARIGHT)
 			ft_move(buf == K_ALEFT ? K_LEFT : K_RIGHT);
 		else
 			buf == K_ABS ? ft_back_space() : ft_del();
-		!ft_iswhitespace(cursor->ch) ? flag = 1 : 0;
 	}
 }
 

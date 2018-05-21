@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/18 12:54:32 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/19 19:08:26 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 16:51:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,20 @@ int			line_copy(void)
 void		line_paste(void)
 {
 	t_line	*buffer;
+	t_line	*tmp;
 
 	ft_curhome();
+	if (get_term()->st_sel && get_term()->end_sel)
+	{
+		swap_points();
+		get_term()->cursor = get_term()->end_sel;
+		get_term()->end_sel->prev->next = NULL;
+		tmp = get_term()->st_sel->prev;
+		get_term()->st_sel->prev = NULL;
+		get_term()->cursor->prev = tmp;
+		tmp ? tmp->next = get_term()->cursor : 0;
+		line_tostr(&get_term()->st_sel, 2);
+	}
 	buffer = get_term()->buffer;
 	while (buffer)
 	{
