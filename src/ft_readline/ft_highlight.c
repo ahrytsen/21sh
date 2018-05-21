@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 18:31:00 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/19 18:31:05 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 19:07:08 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-void		ft_highlight_helper(uint64_t buf)
+uint64_t	ft_highlight_helper(uint64_t buf)
 {
 	if ((buf != K_SLEFT && buf != K_SRIGHT && buf != K_SUP
 		&& buf != K_SDOWN && buf != K_ASLEFT && buf != K_ASRIGHT
@@ -20,8 +20,9 @@ void		ft_highlight_helper(uint64_t buf)
 	{
 		get_term()->st_sel = NULL;
 		get_term()->end_sel = NULL;
-		ft_redraw_line();
+		buf != K_RET ? ft_redraw_line() : 0;
 	}
+	return (buf);
 }
 
 void		ft_highlight(uint64_t buf)

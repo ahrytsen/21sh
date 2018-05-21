@@ -6,11 +6,18 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/21 14:46:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 19:06:24 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+static int	ft_clearscreen(void)
+{
+	tputs(tgetstr("cl", NULL), 1, term_print);
+	ft_redraw_line();
+	return (1);
+}
 
 static int	ft_check_key(uint64_t buf)
 {
@@ -28,7 +35,7 @@ static int	ft_check_key(uint64_t buf)
 static int	ft_action(uint64_t buf)
 {
 	if (buf == K_RET)
-		return (ft_readline_ret());
+		ft_readline_ret();
 	else if (buf == 4)
 		buf = ft_del();
 	else if (buf == K_TAB)
@@ -45,12 +52,13 @@ static int	ft_action(uint64_t buf)
 		ft_highlight(buf);
 	else if (buf == K_COPY || buf == K_CUTE || buf == K_PASTE)
 		buf = ft_copy_paste(buf);
+	else if (buf == 12)
+		return (ft_clearscreen());
 	else if (((char*)&buf)[0] != 27 && (buf > 31 || ft_iswhitespace(buf)))
 		buf = ft_add(buf);
 	else
 		ft_dprintf(0, "\a");
-	ft_highlight_helper(buf);
-	return (buf);
+	return (ft_highlight_helper(buf));
 }
 
 int			ft_readline(const int fd, char **line)

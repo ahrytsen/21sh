@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/21 18:09:01 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/21 19:06:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ void			ft_word_action(uint64_t buf);
 */
 int				term_print(int c);
 t_term			*get_term(void);
-int				ft_readline_ret(void);
+void			ft_readline_ret(void);
 void			ft_print_tail(t_line *cursor);
 void			ft_redraw_line(void);
 
@@ -262,6 +262,6 @@ void			hist_commit(int st);
 **				ft_readline/ft_highlight.c
 */
 void			ft_highlight(uint64_t buf);
-void			ft_highlight_helper(uint64_t buf);
+uint64_t		ft_highlight_helper(uint64_t buf);
 
 #endif
