@@ -6,29 +6,11 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/18 18:03:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/22 15:03:20 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
-
-void	ft_prompt(void)
-{
-	int		tmp;
-	char	pwd[MAXPATHLEN];
-
-	if (isatty(0))
-	{
-		getcwd(pwd, MAXPATHLEN);
-		tmp = ft_strlen(pwd) + 4;
-		get_term()->cury = tmp / get_term()->width;
-		get_term()->curx = tmp % get_term()->width;
-		ft_dprintf(2, "\r");
-		tputs(tgetstr("cd", NULL), 1, term_print);
-		ft_dprintf(2, "\033[33m%s \033[32m$>\033[0m ",
-					getcwd(pwd, MAXPATHLEN));
-	}
-}
 
 int		main_loop(void)
 {

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/21 19:06:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/22 15:04:02 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,8 @@ typedef struct	s_buf
 */
 
 /*
-**				21sh.c
+**				main.c
 */
-void			ft_prompt(void);
 int				main_loop(void);
 /*
 **				init.c
@@ -263,5 +262,9 @@ void			hist_commit(int st);
 */
 void			ft_highlight(uint64_t buf);
 uint64_t		ft_highlight_helper(uint64_t buf);
+/*
+**				ft_prompt.c
+*/
+void			ft_prompt(void);
 
 #endif
