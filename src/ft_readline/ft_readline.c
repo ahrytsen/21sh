@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/21 19:06:24 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/24 13:48:56 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ int			ft_readline(const int fd, char **line)
 	int				ret;
 	uint64_t		buf;
 
+	ft_prompt();
+	if (!isatty(0))
+		return (get_next_line(0, line));
 	hist_init();
 	ft_terminal(T_INIT);
 	while (!(buf = 0)

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/22 15:03:20 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/24 13:45:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ int		main_loop(void)
 
 	while (1)
 	{
-		ft_prompt();
-		i = !isatty(0) ? get_next_line(0, &cmds) : ft_readline(0, &cmds);
+		i = ft_readline(0, &cmds);
 		if (!i || i == -1)
 			return (!i ? get_environ()->st : 1);
 		i = 0;

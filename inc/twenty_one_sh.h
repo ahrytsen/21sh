@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/22 15:04:02 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/24 14:37:46 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,16 @@
 */
 # define T_INIT 1
 # define T_RESTORE 0
-# define W_NEXT 1
-# define W_PREV 0
+
+/*
+**	PROMPT
+*/
+# define P_USER 0
+# define P_QUOTE 1
+# define P_BQUOTE 2
+# define P_DQUOTE 3
+# define P_HEREDOC 4
+# define P_BSLASH 5
 
 typedef struct	s_line
 {
