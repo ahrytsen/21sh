@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/24 13:48:56 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/25 16:44:19 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,31 @@ static int	ft_action(uint64_t buf)
 	return (ft_highlight_helper(buf));
 }
 
+/*int			ft_readline_toread(const int fd, char **line)
+{
+
+}*/
+
 int			ft_readline(const int fd, char **line)
 {
 	int				ret;
 	uint64_t		buf;
 
+	//while ()
 	ft_prompt();
 	if (!isatty(0))
-		return (get_next_line(0, line));
-	hist_init();
-	ft_terminal(T_INIT);
-	while (!(buf = 0)
-			&& (ret = read(fd, &buf, 8)) > 0)
-		if ((ret = ft_action(buf)) <= 0 || buf == K_RET)
-			break ;
-	ft_terminal(T_RESTORE);
-	*line = line_tostr(&get_term()->cursor, ret == -1 ? 2 : 0);
-	hist_commit(ret);
+		ret = get_next_line(0, line);
+	else
+	{
+		hist_init();
+		ft_terminal(T_INIT);
+		while (!(buf = 0)
+				&& (ret = read(fd, &buf, 8)) > 0)
+			if ((ret = ft_action(buf)) <= 0 || buf == K_RET)
+				break ;
+		ft_terminal(T_RESTORE);
+		*line = line_tostr(&get_term()->cursor, ret == -1 ? 2 : 0);
+		hist_commit(ret);
+	}
 	return (ret);
 }

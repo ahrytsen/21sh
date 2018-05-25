@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 12:37:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/24 14:50:51 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/25 15:43:52 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,12 @@ static void	ft_user_prompt(void)
 				tgetstr("cd", NULL), pwd);
 }
 
-void	ft_prompt(void)
+void		ft_prompt(void)
 {
 	if (isatty(2))
 	{
 		ft_user_prompt();
 	}
+	else
+		ft_toread_prompt(P_BQUOTE);
 }
