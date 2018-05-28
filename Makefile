@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/05/22 15:04:35 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/05/28 17:12:20 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,7 +20,7 @@ INC_LIB		=	-L./libft -lftprintf -ltermcap
 
 SRC			=	main.c init.c env_utils.c exec.c cmd_parser.c ft_buffer.c	\
 				msh_splitsemicolon.c msh_splitwhitespaces.c	quote_helper.c	\
-				line_parser.c												\
+				line_parser.c ft_signal.c									\
 				\
 				builtins/builtins.c builtins/env_builtin.c builtins/ft_cd.c	\
 				\
@@ -28,7 +28,8 @@ SRC			=	main.c init.c env_utils.c exec.c cmd_parser.c ft_buffer.c	\
 				ft_readline/ft_readline_action.c ft_readline/line.c			\
 				ft_readline/ft_cursor.c ft_readline/ft_readline_helper.c	\
 				ft_readline/ft_history.c ft_readline/ft_highlight.c			\
-				ft_readline/line_edit.c ft_readline/ft_prompt.c
+				ft_readline/line_edit.c ft_readline/ft_prompt.c 			\
+				ft_readline/ft_check_line.c
 
 HDR			=	inc/twenty_one_sh.h
 LIBFT		=	libft/libftprintf.a

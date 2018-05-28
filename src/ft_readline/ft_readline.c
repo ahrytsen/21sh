@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/25 16:44:19 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/28 16:15:27 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,24 +61,18 @@ static int	ft_action(uint64_t buf)
 	return (ft_highlight_helper(buf));
 }
 
-/*int			ft_readline_toread(const int fd, char **line)
-{
-
-}*/
-
-int			ft_readline(const int fd, char **line)
+static int	ft_readline_helper(const int fd, char **line)
 {
 	int				ret;
 	uint64_t		buf;
 
-	//while ()
-	ft_prompt();
 	if (!isatty(0))
 		ret = get_next_line(0, line);
 	else
 	{
 		hist_init();
 		ft_terminal(T_INIT);
+		ft_prompt();
 		while (!(buf = 0)
 				&& (ret = read(fd, &buf, 8)) > 0)
 			if ((ret = ft_action(buf)) <= 0 || buf == K_RET)
@@ -87,5 +81,30 @@ int			ft_readline(const int fd, char **line)
 		*line = line_tostr(&get_term()->cursor, ret == -1 ? 2 : 0);
 		hist_commit(ret);
 	}
+	return (ret);
+}
+
+int			ft_readline(const int fd, char **line)
+{
+	int		ret;
+
+	while (ft_check_line(get_term()->res))
+	{
+		get_term()->res && get_term()->prompt != P_BSLASH ? get_term()->res =
+			ft_strextend(get_term()->res, ft_strdup("\n")) : 0;
+		ret = ft_readline_helper(fd, line);
+		get_term()->res = ft_strextend(get_term()->res, *line);
+		*line = NULL;
+		if (ret < 0 || !get_term()->res)
+		{
+			!get_term()->res ? (ret = -1) : 0;
+			get_term()->res = NULL;
+			return (ret);
+		}
+		else if (!ret)
+			break ;
+	}
+	*line = get_term()->res;
+	get_term()->res = NULL;
 	return (ret);
 }

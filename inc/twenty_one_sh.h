@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/24 14:37:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/28 17:09:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@
 **	PROMPT
 */
 # define P_USER 0
-# define P_QUOTE 1
-# define P_BQUOTE 2
-# define P_DQUOTE 3
-# define P_HEREDOC 4
-# define P_BSLASH 5
+# define P_HEREDOC 1
+# define P_DQUOTE 34
+# define P_QUOTE 39
+# define P_BSLASH 92
+# define P_BQUOTE 96
 
 typedef struct	s_line
 {
@@ -98,6 +98,8 @@ typedef struct	s_term
 	t_line	*st_sel;
 	t_line	*end_sel;
 	t_line	*buffer;
+	char	*res;
+	int		prompt;
 	int		curx;
 	int		cury;
 	char	*clear;
@@ -170,6 +172,10 @@ int				main_loop(void);
 */
 void			ft_init(void);
 void			ft_terminal(int mod);
+/*
+**				ft_signal.c
+*/
+void			ft_init_signal(void);
 /*
 **				builtins/builtins.c
 */
@@ -271,8 +277,12 @@ void			hist_commit(int st);
 void			ft_highlight(uint64_t buf);
 uint64_t		ft_highlight_helper(uint64_t buf);
 /*
-**				ft_prompt.c
+**				ft_readline/ft_prompt.c
 */
 void			ft_prompt(void);
+/*
+**				ft_readline/ft_check_line.c
+*/
+int				ft_check_line(char *ln);
 
 #endif
