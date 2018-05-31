@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 16:37:14 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:12:53 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/31 22:08:37 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	ft_quote(t_buf **cur, char **line)
 	(*line)++;
 }
 
-void		ft_bquote(t_buf **cur, char **line)
+void		ft_bquote(t_buf **cur, char **line, uint8_t q)
 {
 	t_buf	*head;
 	t_buf	*tmp;
@@ -63,7 +63,7 @@ void		ft_bquote(t_buf **cur, char **line)
 		if (!**line)
 			ft_fatal(1, exit, "21sh: unmatched `\n");
 		else if (**line == '\\' && (*line)++)
-			ft_bquote_slash(&tmp, line);
+			(q ? ft_dquote_slash : ft_slash)(&tmp, line);
 		else
 			ft_putchar_mshbuf(&tmp, *(*line)++);
 	str = ft_buftostr(head);
@@ -83,7 +83,7 @@ static void	ft_dquote(t_buf **cur, char **line)
 		else if (**line == '$' && (*line)++)
 			parse_dollar(cur, line);
 		else if (**line == '`' && (*line)++)
-			ft_bquote(cur, line);
+			ft_bquote(cur, line, 1);
 		else
 			ft_putchar_mshbuf(cur, *(*line)++);
 	(*line)++;
@@ -111,7 +111,7 @@ char		*parse_argv(char *line)
 		else if (*line == '"' && line++)
 			ft_dquote(&cur, &line);
 		else if (*line == '`' && line++)
-			ft_bquote(&cur, &line);
+			ft_bquote(&cur, &line, 0);
 		else
 			ft_putchar_mshbuf(&cur, *line++);
 	free(tmp);

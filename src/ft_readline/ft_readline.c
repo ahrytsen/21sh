@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/28 16:15:27 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/29 18:00:27 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,19 @@ int			ft_readline(const int fd, char **line)
 
 	while (ft_check_line(get_term()->res))
 	{
-		get_term()->res && get_term()->prompt != P_BSLASH ? get_term()->res =
-			ft_strextend(get_term()->res, ft_strdup("\n")) : 0;
 		ret = ft_readline_helper(fd, line);
-		get_term()->res = ft_strextend(get_term()->res, *line);
-		*line = NULL;
+		if (ret > 0 && get_term()->res && get_term()->prompt != P_BSLASH)
+			get_term()->res = ft_strextend(get_term()->res, ft_strdup("\n"));
+		ret > 0 ? get_term()->res = ft_strextend(get_term()->res, *line) : 0;
 		if (ret < 0 || !get_term()->res)
 		{
-			!get_term()->res ? (ret = -1) : 0;
-			get_term()->res = NULL;
-			return (ret);
+			ft_memdel((void**)&get_term()->res);
+			return (-1);
 		}
 		else if (!ret)
 			break ;
 	}
 	*line = get_term()->res;
 	get_term()->res = NULL;
-	return (ret);
+	return (*line ? 1 : ret);
 }

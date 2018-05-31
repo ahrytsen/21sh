@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/05/28 17:12:20 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/05/31 21:59:22 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,7 +20,7 @@ INC_LIB		=	-L./libft -lftprintf -ltermcap
 
 SRC			=	main.c init.c env_utils.c exec.c cmd_parser.c ft_buffer.c	\
 				msh_splitsemicolon.c msh_splitwhitespaces.c	quote_helper.c	\
-				line_parser.c ft_signal.c									\
+				ft_signal.c													\
 				\
 				builtins/builtins.c builtins/env_builtin.c builtins/ft_cd.c	\
 				\

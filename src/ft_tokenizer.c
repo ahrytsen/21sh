@@ -1,42 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/29 19:33:40 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/05/31 17:35:30 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/05/31 19:22:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-int		main_loop(void)
+static t_token	*ft_get_token(char **ln)
 {
-	char	*cmds;
-	char	**cmd;
-	int		i;
+	int	f;
 
-	while (1)
+	f = 0;
+	while (**ln && (!ft_iswhitespace(**ln) || !f))
 	{
-		i = ft_readline(0, &cmds);
-		if (!i || i == -1)
-			return (!i ? get_environ()->st : 1);
-		i = 0;
-		cmd = msh_splitsemicolon(cmds);
-		while (cmd && cmd[i])
-		{
-			get_environ()->st = ft_exec(msh_splitwhitespaces(cmd[i]), NULL);
-			free(cmd[i++]);
-		}
-		free(cmd);
-		free(cmds);
+
 	}
 }
 
-int		main(void)
+int	ft_tokenizer(char *ln, t_token **t)
 {
-	ft_init();
-	return (main_loop());
+	int		i;
+	t_token	*token;
+
+	i = 0;
+	token = NULL;
+	while(*ln)
+	{
+
+	}
+	return (i);
 }

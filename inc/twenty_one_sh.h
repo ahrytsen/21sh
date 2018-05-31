@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/28 17:09:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/31 22:07:22 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,16 +152,42 @@ typedef struct	s_buf
 	struct s_buf	*next;
 }				t_buf;
 
-/*
-**typedef struct	s_cmd
-**{
-**	char			*av;
-**	int				fd_in;
-**	int				fd_out;
-**	struct s_cmd	*next;
-**	struct s_cmd	*prev;
-**}				t_cmd;
-*/
+typedef enum	e_token_type
+{
+	word,
+	pipeline,
+	and,
+	or,
+	heredoc,
+	red_in,
+	red_out,
+	red_out_apend
+}				t_type;
+
+typedef union	u_data
+{
+	int		fd[2];
+	char	*word;
+}				t_data;
+
+typedef struct	s_token
+{
+	t_type	type;
+	t_data	data;
+	struct s_token	*next;
+	struct s_token	*prev;
+}				t_token;
+
+typedef struct	s_cmd
+{
+	char			*av;
+	int				fd_in;
+	int				fd_out;
+	pid_t			pid;
+	int				ret;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+}				t_cmd;
 
 /*
 **				main.c
@@ -201,12 +227,10 @@ char			*ft_getenv(const char *name);
 int				ft_setenv(const char *name, const char *value, int overwrite);
 int				ft_unsetenv(const char *name);
 char			*parse_argv(char *line);
-char			*parse_line(char *line);
 char			**msh_splitsemicolon(char *line);
 char			**msh_splitwhitespaces(char *line);
 void			ft_slash(t_buf **cur, char **line);
-void			ft_bquote(t_buf **cur, char **line);
-void			ft_bquote_slash(t_buf **cur, char **line);
+void			ft_bquote(t_buf **cur, char **line, uint8_t q);
 void			ft_dquote_slash(t_buf **cur, char **line);
 void			ft_bquote_helper(t_buf **cur, char *str);
 /*

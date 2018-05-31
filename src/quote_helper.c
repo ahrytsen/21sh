@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 20:08:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:19:00 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/05/31 21:01:58 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,6 @@ void		ft_dquote_slash(t_buf **cur, char **line)
 	else if (**line)
 		ft_putchar_mshbuf(cur, **line);
 	**line ? (*line)++ : 0;
-}
-
-void		ft_bquote_slash(t_buf **cur, char **line)
-{
-	if (!**line)
-		return ;
-	else if (**line == '`')
-		ft_putchar_mshbuf(cur, **line);
-	else
-	{
-		ft_putchar_mshbuf(cur, '\\');
-		ft_putchar_mshbuf(cur, **line);
-	}
-	(*line)++;
 }
 
 void		ft_slash(t_buf **cur, char **line)
