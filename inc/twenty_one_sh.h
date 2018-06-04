@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/31 22:07:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/04 21:29:14 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,14 +154,17 @@ typedef struct	s_buf
 
 typedef enum	e_token_type
 {
+	blank,
 	word,
 	pipeline,
+	bg_op,
+	semicolon,
 	and,
 	or,
 	heredoc,
-	red_in,
-	red_out,
-	red_out_apend
+	read_in,
+	read_out,
+	read_out_apend
 }				t_type;
 
 typedef union	u_data
@@ -174,13 +177,12 @@ typedef struct	s_token
 {
 	t_type	type;
 	t_data	data;
-	struct s_token	*next;
-	struct s_token	*prev;
 }				t_token;
 
 typedef struct	s_cmd
 {
 	char			*av;
+	t_list			*toks;
 	int				fd_in;
 	int				fd_out;
 	pid_t			pid;
@@ -202,6 +204,14 @@ void			ft_terminal(int mod);
 **				ft_signal.c
 */
 void			ft_init_signal(void);
+/*
+**				ft_tokenizer.c
+*/
+t_list			*ft_tokenizer(char *ln);
+/*
+**				ft_tokenizer_helper.c
+*/
+int				ft_isseparator(int c);
 /*
 **				builtins/builtins.c
 */

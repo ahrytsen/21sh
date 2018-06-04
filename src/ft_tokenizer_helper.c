@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdel.c                                        :+:      :+:    :+:   */
+/*   ft_tokenizer_helper.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 19:05:50 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/04 19:04:51 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/06/04 13:25:13 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/06/04 13:43:21 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <twenty_one_sh.h>
 
-void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
+int		ft_isseparator(int c)
 {
-	t_list *buf;
-
-	if (alst)
-		while (*alst)
-		{
-			buf = (*alst)->next;
-			del ? del((*alst)->content, (*alst)->content_size) : 0;
-			free(*alst);
-			*alst = buf;
-		}
+	return (ft_strchr("|&;()<> \t\n", c) ? 1 : 0);
 }
