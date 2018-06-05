@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/04 21:29:14 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/05 20:50:39 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ typedef struct	s_buf
 
 typedef enum	e_token_type
 {
+	ignore,
 	blank,
 	word,
 	pipeline,
@@ -162,8 +163,15 @@ typedef enum	e_token_type
 	and,
 	or,
 	heredoc,
+	heredoc_t,
+	herestr,
+	open_file,
 	read_in,
+	read_in_and,
 	read_out,
+	read_out_and,
+	read_out_pipe,
+	and_read_out,
 	read_out_apend
 }				t_type;
 

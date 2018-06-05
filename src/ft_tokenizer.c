@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:35:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/04 19:47:33 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/05 20:49:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,56 @@ static void		ft_skip_qoutes(char **s)
 	(*s)++;
 }
 
+static void	ft_get_redirect_in(char **ln, t_token *token)
+{
+	if (**ln == '<' && !(*(*ln)++ = '\0'))
+	{
+		if (**ln == '<' && !(*(*ln)++ = '\0'))
+			token->type = herestr;
+		else if (**ln == '-' && !(*(*ln)++ = '\0'))
+			token->type = heredoc_t;
+		else
+			token->type = heredoc;
+	}
+	else if (**ln == '>' && !(*(*ln)++ = '\0'))
+		token->type = open_file;
+	else if (**ln == '&' && !(*(*ln)++ = '\0'))
+		token->type = read_in_and;
+	else
+		token->type = read_in;
+}
+
+static void	ft_get_redirect_out(char **ln, t_token *token)
+{
+	if (**ln == '|' && !(*(*ln)++ = 0))
+		token->type = read_out_pipe;
+	else if (**ln == '&' && !(*(*ln)++ = 0))
+		token->type = read_out_and;
+	else if (**ln == '>' && !(*(*ln)++ = 0))
+		token->type = read_out_apend;
+	else
+		token->type = read_out;
+}
+
 static void	ft_get_separator(char **ln, t_token *token)
 {
-	if (**ln == ' ' || **ln == '\t')
+	if ((**ln == ' ' || **ln == '\t') && !(*(*ln)++ = '\0'))
 		token->type = blank;
-	else if (**ln == ';' || **ln == '\n')
+	else if ((**ln == ';' || **ln == '\n') && !(*(*ln)++ = '\0'))
 		token->type = semicolon;
-	else if (**ln == '|')
-		token->type = ft_strnequ(*ln, "||", 2) ? or : pipeline;
-	else if (**ln == '&')
-		token->type = ft_strnequ(*ln, "&&", 2) ? and : bg_op;
-	else if (**ln == '<')
-		token->type = ft_strnequ(*ln, "<<", 2) ? heredoc : read_in;
-	else if (**ln == '>')
-		token->type = ft_strnequ(*ln, ">>", 2) ? read_out_apend : read_out;
-	**ln = 0;
-	*ln += (token->type == read_out_apend || token->type == or
-			|| token->type == and || token->type == heredoc) ? 2 : 1;
+	else if (**ln == '|' && !(*(*ln)++ = '\0'))
+		token->type = (**ln == '|' && !(*(*ln)++ = '\0')) ? or : pipeline;
+	else if (**ln == '&' && !(*(*ln)++ = '\0'))
+	{
+		if (**ln == '>' && !(*(*ln)++ = '\0'))
+			token->type = and_read_out;
+		else
+			token->type = (**ln == '&' && !(*(*ln)++ = '\0')) ? and : bg_op;
+	}
+	else if (**ln == '<' && !(*(*ln)++ = '\0'))
+		ft_get_redirect_in(ln, token);
+	else if (**ln == '>' && !(*(*ln)++ = '\0'))
+		ft_get_redirect_out(ln, token);
 }
 
 static void	ft_get_token(char **ln, t_token *token)
@@ -69,14 +102,12 @@ static void	ft_get_token(char **ln, t_token *token)
 
 t_list	*ft_tokenizer(char *ln)
 {
-	int		i;
 	t_token	tok;
 	t_list	*toks;
 	t_list  *tmp;
 
-	i = 0;
 	toks = NULL;
-	while(*ln && ++i)
+	while(*ln)
 	{
 		(!ft_isseparator(*ln) ? ft_get_token : ft_get_separator)(&ln, &tok);
 		if ((tok.type == semicolon || tok.type == blank)
