@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/05 20:50:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/06 17:25:50 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,10 +175,16 @@ typedef enum	e_token_type
 	read_out_apend
 }				t_type;
 
+typedef struct	s_redir
+{
+	int	left;
+	int	right;
+	int	cls;
+}				t_redir;
 typedef union	u_data
 {
-	int		fd[2];
-	char	*word;
+	char		*word;
+	t_redir		redir;
 }				t_data;
 
 typedef struct	s_token
@@ -193,11 +199,20 @@ typedef struct	s_cmd
 	t_list			*toks;
 	int				fd_in;
 	int				fd_out;
+	int				fd_err;
 	pid_t			pid;
 	int				ret;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }				t_cmd;
+
+
+typedef struct	s_ast
+{
+	int		prior;
+	int		ret_val;
+	t_cmd	*cmd;
+}				t_ast;
 
 /*
 **				main.c

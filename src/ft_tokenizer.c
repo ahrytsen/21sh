@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:35:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/05 20:49:12 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/06 18:26:45 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,23 +81,35 @@ static void	ft_get_separator(char **ln, t_token *token)
 		else
 			token->type = (**ln == '&' && !(*(*ln)++ = '\0')) ? and : bg_op;
 	}
-	else if (**ln == '<' && !(*(*ln)++ = '\0'))
+	else if (**ln == '<' && !(*(*ln)++ = '\0') && !(token->data.redir.left = 0))
 		ft_get_redirect_in(ln, token);
-	else if (**ln == '>' && !(*(*ln)++ = '\0'))
+	else if (**ln == '>' && !(*(*ln)++ = '\0') && (token->data.redir.left = 1))
 		ft_get_redirect_out(ln, token);
 }
 
 static void	ft_get_token(char **ln, t_token *token)
 {
+	int	f;
+
+	f = 1;
 	token->type = word;
 	token->data.word = *ln;
 	while (**ln && !ft_isseparator(**ln))
+	{
+		f && !ft_isdigit(**ln) ? f = 0 : 0;
 		if (**ln == '\'' || **ln == '"' || **ln == '`')
 			ft_skip_qoutes(ln);
 		else if (**ln == '\\')
 			ft_skip_slash(ln);
 		else
 			(*ln)++;
+	}
+	(**ln == '<' || **ln == '>') && f
+		? token->data.redir.left = ft_atoi(token->data.word) : 0;
+	if (f && **ln == '<' && !(*(*ln)++ = '\0'))
+		ft_get_redirect_in(ln, token);
+	else if (f && **ln == '>' && !(*(*ln)++ = '\0'))
+		ft_get_redirect_out(ln, token);
 }
 
 t_list	*ft_tokenizer(char *ln)
