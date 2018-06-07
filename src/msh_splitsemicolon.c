@@ -6,19 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 18:39:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/31 22:47:16 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/07 21:15:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-static void		ft_skip_slash(char **s)
-{
-	if (*++(*s))
-		(*s)++;
-}
-
-static void		ft_skip_qoutes(char **s)
+static void		skip_qoutes(char **s)
 {
 	char	q;
 
@@ -27,7 +21,7 @@ static void		ft_skip_qoutes(char **s)
 		if (!**s)
 			ft_fatal(1, exit, "21sh: unmatched %c", q);
 		else if (q == '"' && **s == '`')
-			ft_skip_qoutes(s);
+			skip_qoutes(s);
 		else if (q != '\'' && **s == '\\' && (*s)++)
 			**s ? (*s)++ : 0;
 		else
@@ -47,7 +41,7 @@ static size_t	ft_countcmd(char *s)
 		{
 			!m ? (res++) : 0;
 			m = 1;
-			(*s == '\\') ? ft_skip_slash(&s) : ft_skip_qoutes(&s);
+			(*s == '\\' ? ft_skip_slash : skip_qoutes)(&s);
 		}
 		else if (*s != ';' && s++ && !ft_iswhitespace(*(s - 1)) && !m)
 		{
@@ -82,7 +76,7 @@ char			**msh_splitsemicolon(char *line)
 	while (*line)
 		if ((*line == '"' || *line == '\'' || *line == '`' || *line == '\\')
 			&& (!m ? (int)(st = line) : 1) && (++m))
-			*line == '\\' ? ft_skip_slash(&line) : ft_skip_qoutes(&line);
+			(*line == '\\' ? ft_skip_slash : skip_qoutes)(&line);
 		else if (*line != ';' && line++ && !m
 				&& !ft_iswhitespace(*(line - 1)) && (m = 1))
 			st = line - 1;

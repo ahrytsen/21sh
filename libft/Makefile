@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/03 20:19:57 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/05/07 14:44:57 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/06/07 18:55:58 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -44,7 +44,7 @@ OBJ		= $(addprefix $(DIROBJ), $(SRC:.c=.o))
 
 CC		= gcc
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g
 
 all: $(NAME)
 

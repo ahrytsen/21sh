@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/29 18:00:27 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/07 20:54:20 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,23 +86,21 @@ static int	ft_readline_helper(const int fd, char **line)
 
 int			ft_readline(const int fd, char **line)
 {
+	char	*tmp;
 	int		ret;
 
-	while (ft_check_line(get_term()->res))
-	{
-		ret = ft_readline_helper(fd, line);
-		if (ret > 0 && get_term()->res && get_term()->prompt != P_BSLASH)
-			get_term()->res = ft_strextend(get_term()->res, ft_strdup("\n"));
-		ret > 0 ? get_term()->res = ft_strextend(get_term()->res, *line) : 0;
-		if (ret < 0 || !get_term()->res)
-		{
-			ft_memdel((void**)&get_term()->res);
-			return (-1);
-		}
-		else if (!ret)
-			break ;
-	}
-	*line = get_term()->res;
 	get_term()->res = NULL;
+	while (ft_check_line(get_term()->res)
+			&& (ret = ft_readline_helper(fd, line)) > 0)
+	{
+		if ((tmp = get_term()->res) && get_term()->prompt != P_BSLASH)
+		{
+			get_term()->res = ft_strjoin(tmp, "\n");
+			free(tmp);
+		}
+		get_term()->res = ft_strextend(get_term()->res, *line);
+	}
+	ret < 0 ? ft_memdel((void**)&get_term()->res) : 0;
+	*line = get_term()->res;
 	return (*line ? 1 : ret);
 }

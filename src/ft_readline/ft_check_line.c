@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/25 15:22:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/28 16:31:44 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/07 21:16:50 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-static int	ft_skip_slash(char **ln)
+static int	skip_slash(char **ln)
 {
 	(*ln)++;
 	if (**ln)
@@ -25,7 +25,7 @@ static int	ft_skip_slash(char **ln)
 	return (0);
 }
 
-static int	ft_skip_qoutes(char **ln)
+static int	skip_qoutes(char **ln)
 {
 	char	q;
 
@@ -38,12 +38,12 @@ static int	ft_skip_qoutes(char **ln)
 		}
 		else if (q == '"' && **ln == '`')
 		{
-			if (ft_skip_qoutes(ln))
+			if (skip_qoutes(ln))
 				return (1);
 		}
 		else if (q != '\'' && **ln == '\\')
 		{
-			if (ft_skip_slash(ln))
+			if (skip_slash(ln))
 				return (1);
 		}
 		else
@@ -62,12 +62,12 @@ int			ft_check_line(char *ln)
 	while (*ln)
 		if (*ln == '"' || *ln == '\'' || *ln == '`')
 		{
-			if (ft_skip_qoutes(&ln))
+			if (skip_qoutes(&ln))
 				return (1);
 		}
 		else if (*ln == '\\')
 		{
-			if (ft_skip_slash(&ln))
+			if (skip_slash(&ln))
 				return (1);
 		}
 		else
