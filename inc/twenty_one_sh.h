@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/07 21:07:49 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/08 18:49:30 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,12 @@ typedef struct	s_token
 	t_data	data;
 }				t_token;
 
+typedef struct	s_ast_op
+{
+	int		ret_left;
+	int		ret_right;
+}				t_ast_op;
+
 typedef struct	s_cmd
 {
 	char			*av;
@@ -206,11 +212,29 @@ typedef struct	s_cmd
 	struct s_cmd	*prev;
 }				t_cmd;
 
+typedef union	u_ast_data
+{
+	t_cmd		cmd;
+	t_ast_op	oper;
+}				t_ast_data;
+
+typedef enum	e_ast_node_type
+{
+	cmd,
+	ast_bg,
+	ast_smcln,
+	ast_and,
+	ast_or
+}				t_ast_type;
+
 typedef struct	s_ast
 {
-	int		prior;
-	int		ret_val;
-	t_cmd	*cmd;
+	t_list			*toks;
+	t_ast_type		type;
+	t_ast_data		data;
+	struct s_ast	*left;
+	struct s_ast	*right;
+	struct s_ast	*prev;
 }				t_ast;
 
 /*
