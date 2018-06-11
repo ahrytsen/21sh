@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/08 18:49:30 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/11 19:42:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,17 +214,17 @@ typedef struct	s_cmd
 
 typedef union	u_ast_data
 {
-	t_cmd		cmd;
+	t_cmd		*cmd;
 	t_ast_op	oper;
 }				t_ast_data;
 
 typedef enum	e_ast_node_type
 {
 	cmd,
-	ast_bg,
-	ast_smcln,
 	ast_and,
-	ast_or
+	ast_or,
+	ast_bg,
+	ast_smcln
 }				t_ast_type;
 
 typedef struct	s_ast
@@ -261,7 +261,15 @@ int				ft_isseparator(int c);
 int				ft_is_fd(t_token *tok);
 void			ft_skip_slash(char **s);
 void			ft_skip_qoutes(char **s);
-
+/*
+**				ft_ast.c
+*/
+t_ast			*ft_make_ast(t_list *toks);
+/*
+**				ft_ast_utils.c
+*/
+t_ast			*ft_ast_push(t_ast *ast, t_ast *node);
+t_ast			*ft_ast_del(t_ast *ast, int up);
 /*
 **				builtins/builtins.c
 */

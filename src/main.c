@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/07 19:22:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/11 18:19:40 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	test(t_list *elem)
 	else
 		ft_printf("[*unknown*]");
 	!elem->next ? ft_printf("\n") : 0;
-	free(tok);
+	//free(tok);
 }
 
 int		main_loop(void)
@@ -63,6 +63,7 @@ int		main_loop(void)
 	char	*cmds;
 //	char	**cmd;
 	t_list	*toks;
+	t_ast	*ast;
 	int		i;
 
 	while (1)
@@ -72,7 +73,8 @@ int		main_loop(void)
 			return (!i ? get_environ()->st : 1);
 		toks = ft_tokenizer(cmds);
 		ft_lstiter(toks, test);
-		ft_lstdel(&toks, NULL);
+		ast = ft_make_ast(toks);
+		//ft_lstdel(&toks, NULL);
 /*		i = 0;
 		cmd = msh_splitsemicolon(cmds);
 		while (cmd && cmd[i])

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/31 17:35:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/07 21:14:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/11 18:31:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,8 @@ t_list		*ft_tokenizer(char *ln)
 	{
 		ft_bzero(&tok, sizeof(tok));
 		(!ft_isseparator(*ln) ? ft_get_token : ft_get_separator)(&ln, &tok);
-		if (tok.type == blank || (!toks && tok.type == semicolon)
-			|| (toks && tok.type == semicolon
-				&& (((t_token*)tmp->content)->type == semicolon
-					|| ((t_token*)tmp->content)->type == bg_op)))
+		if (((!toks || ((t_token*)tmp->content)->type == semicolon)
+			&& tok.type == semicolon) || tok.type == blank)
 			continue ;
 		if (toks && ((t_token*)tmp->content)->type >= heredoc
 			&& tok.type == word)
