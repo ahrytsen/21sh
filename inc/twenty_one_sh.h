@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/11 19:42:41 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/12 21:21:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ typedef struct	s_ast_op
 
 typedef struct	s_cmd
 {
-	char			*av;
+	char			**av;
 	t_list			*toks;
 	int				fd_in;
 	int				fd_out;
@@ -251,20 +251,30 @@ void			ft_terminal(int mod);
 */
 void			ft_init_signal(void);
 /*
-**				ft_tokenizer.c
+**				ft_tokenize.c
 */
-t_list			*ft_tokenizer(char *ln);
+t_list			*ft_tokenize(char *ln);
 /*
-**				ft_tokenizer_helper.c
+**				ft_tokenize_utils.c
 */
+void			ft_token_del(void *token, size_t size);
 int				ft_isseparator(int c);
 int				ft_is_fd(t_token *tok);
 void			ft_skip_slash(char **s);
 void			ft_skip_qoutes(char **s);
 /*
+**				ft_cmdlst.c
+*/
+t_cmd			*ft_make_cmdlst(t_list **toks);
+/*
+**				ft_cmdlst_utils.c
+*/
+t_cmd			*ft_cmdlst_del(t_cmd *cmdlst);
+t_ast			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
+/*
 **				ft_ast.c
 */
-t_ast			*ft_make_ast(t_list *toks);
+t_ast			*ft_make_ast(t_list **toks);
 /*
 **				ft_ast_utils.c
 */

@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tokenizer_helper.c                              :+:      :+:    :+:   */
+/*   ft_tokenize_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/04 13:25:13 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/07 21:00:16 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/06/12 19:11:31 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/06/12 19:11:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+void	ft_token_del(void *token, size_t size)
+{
+	(void)size;
+	free(token);
+}
 
 int		ft_isseparator(int c)
 {

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:16:07 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/11 19:15:54 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/12 21:19:58 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	ft_get_operator(t_list **toks, t_ast *ast_node)
 		ast_node->type = ast_and;
 	else if (tok->type == or)
 		ast_node->type = ast_or;
-	ft_lstdel(&tmp, NULL);
+	ft_lstdel(&tmp, ft_token_del);
 }
 
 static void	ft_get_cmd(t_list **toks, t_ast *ast_node)
@@ -65,24 +65,25 @@ static void	ft_get_cmd(t_list **toks, t_ast *ast_node)
 	tmp->next = NULL;
 }
 
-t_ast		*ft_make_ast(t_list *toks)
+t_ast		*ft_make_ast(t_list **toks)
 {
 	t_ast	*ast;
 	t_ast	*tmp;
 	t_ast	ast_node;
 
 	ast = NULL;
-	while (toks)
+	while (*toks)
 	{
 		ft_bzero(&ast_node, sizeof(ast_node));
-		(ft_isoperator(toks->content)
-		? ft_get_operator : ft_get_cmd)(&toks, &ast_node);
-		if ((ast_node.type > cmd && (!ast || ast->type > cmd)) && ft_dprintf(2,
+		(ft_isoperator((*toks)->content)
+		? ft_get_operator : ft_get_cmd)(toks, &ast_node);
+		if (((ast_node.type > cmd && (!ast || ast->type > cmd)) && ft_dprintf(2,
 					"21sh: unexpected token `%s'\n", ft_tokename(&ast_node)))
+			|| !(tmp = ft_ast_push(ast, &ast_node)))
+		{
+			ft_lstdel(&ast_node.toks, ft_token_del);
 			return (ft_ast_del(ast, 1));
-		if (!(tmp = ft_ast_push(ast, &ast_node))
-			&& ft_dprintf(2, "21sh: malloc error\n"))
-			return (ft_ast_del(ast, 1));
+		}
 		ast = tmp;
 	}
 	if (ast && ast->type != cmd && ast->type != ast_smcln

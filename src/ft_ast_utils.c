@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:54:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/11 19:40:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/12 21:21:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_ast			*ft_ast_del(t_ast *ast, int up)
 		ast = ast->prev;
 	ast->right = ft_ast_del(ast->right, 0);
 	ast->left = ft_ast_del(ast->left, 0);
-	ft_lstdel(&ast->toks, NULL);
+	ft_lstdel(&ast->toks, ft_token_del);
 	free(ast);
 	return (NULL);
 }
@@ -62,10 +62,14 @@ t_ast			*ft_ast_push(t_ast *ast, t_ast *node)
 {
 	t_ast *new_node;
 
-	if (!(new_node = (t_ast*)malloc(sizeof(t_ast))))
-		return (ft_ast_del(ast, 1));
+	if ((node->type == cmd
+			&& !(node->data.cmd = ft_make_cmdlst(&node->toks)))
+		|| (!(new_node = (t_ast*)malloc(sizeof(t_ast)))
+			&& ft_dprintf(2, "21sh: malloc error\n")))
+		return (!ft_ast_del(ast, 1)
+				? (t_ast*)ft_cmdlst_del(node->data.cmd) : NULL);
+	node->toks = NULL;
 	ft_memcpy(new_node, node, sizeof(t_ast));
-	node->data.cmd = ft_makecmd_list(node->toks);
 	if (!ast)
 		return (new_node);
 	return ((ft_getprior(ast->type) > ft_getprior(new_node->type)

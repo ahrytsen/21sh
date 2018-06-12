@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tokenizer.c                                     :+:      :+:    :+:   */
+/*   ft_tokenize.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/31 17:35:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/11 18:31:49 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/06/12 19:11:07 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/06/12 19:11:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static void	ft_get_token(char **ln, t_token *token)
 	}
 }
 
-t_list		*ft_tokenizer(char *ln)
+t_list		*ft_tokenize(char *ln)
 {
 	t_token	tok;
 	t_list	*toks;
