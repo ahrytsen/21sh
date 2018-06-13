@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 20:08:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/31 21:01:58 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/13 20:50:28 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,17 @@ void		ft_slash(t_buf **cur, char **line)
 
 static void	ft_bquote_child(int fd_get[2], char *cmds)
 {
-	int		i;
-	char	**cmd;
+	t_list	*toks;
+	t_ast	*ast;
 
-	i = 0;
 	get_environ()->pid = 1;
 	close(fd_get[0]);
 	dup2(fd_get[1], 1);
-	cmd = cmds ? msh_splitsemicolon(cmds) : NULL;
-	while (cmd && cmd[i])
-	{
-		get_environ()->st = ft_exec(msh_splitwhitespaces(cmd[i]), NULL);
-		free(cmd[i++]);
-	}
-	free(cmd);
+	toks = ft_tokenize(cmds);
+	ast = ft_make_ast(&toks);
+	ft_lstdel(&toks, ft_token_del);
+	get_environ()->st = ft_ast_exec(ast);
+	ast = ft_ast_del(ast, 1);
 	free(cmds);
 	close(fd_get[1]);
 	exit(get_environ()->st);

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 15:58:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/13 19:34:17 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,12 +193,12 @@ typedef struct	s_token
 	t_data	data;
 }				t_token;
 
-typedef struct	s_ast_op
+/*typedef struct	s_ast_op
 {
 	int		ret_left;
 	int		ret_right;
 }				t_ast_op;
-
+*/
 typedef struct	s_cmd
 {
 	char			**av;
@@ -274,6 +274,10 @@ t_ast			*ft_make_ast(t_list **toks);
 */
 t_ast			*ft_ast_push(t_ast *ast, t_ast *node);
 t_ast			*ft_ast_del(t_ast *ast, int up);
+/*
+**				ft_ast_exec.c
+*/
+int				ft_ast_exec(t_ast *ast);
 /*
 **				builtins/builtins.c
 */

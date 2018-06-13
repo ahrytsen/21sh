@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 16:37:14 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/31 22:08:37 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/13 19:53:20 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,5 @@ char		*parse_argv(char *line)
 			ft_bquote(&cur, &line, 0);
 		else
 			ft_putchar_mshbuf(&cur, *line++);
-	free(tmp);
 	return (ft_buftostr(head));
 }

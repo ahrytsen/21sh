@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/06/12 19:13:10 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/06/13 19:52:13 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -19,9 +19,9 @@ SUB_OBJ		=	libftprintf.a
 INC_LIB		=	-L./libft -lftprintf -ltermcap
 
 SRC			=	main.c init.c env_utils.c exec.c cmd_parser.c ft_buffer.c	\
-				msh_splitsemicolon.c msh_splitwhitespaces.c	quote_helper.c	\
-				ft_signal.c ft_tokenize.c ft_tokenize_utils.c ft_ast.c		\
-				ft_ast_utils.c ft_cmdlst.c ft_cmdlst_utils.c				\
+				quote_helper.c ft_signal.c ft_tokenize.c ft_tokenize_utils.c\
+				ft_ast.c ft_ast_utils.c ft_cmdlst.c ft_cmdlst_utils.c		\
+				ft_ast_exec.c	\
 				\
 				builtins/builtins.c builtins/env_builtin.c builtins/ft_cd.c	\
 				\
