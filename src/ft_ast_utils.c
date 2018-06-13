@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:54:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/12 21:21:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/13 16:51:33 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_ast			*ft_ast_del(t_ast *ast, int up)
 	ast->right = ft_ast_del(ast->right, 0);
 	ast->left = ft_ast_del(ast->left, 0);
 	ft_lstdel(&ast->toks, ft_token_del);
+	ast->cmd = ft_cmdlst_del(ast->cmd);
 	free(ast);
 	return (NULL);
 }
@@ -63,11 +64,10 @@ t_ast			*ft_ast_push(t_ast *ast, t_ast *node)
 	t_ast *new_node;
 
 	if ((node->type == cmd
-			&& !(node->data.cmd = ft_make_cmdlst(&node->toks)))
+			&& !(node->cmd = ft_make_cmdlst(&node->toks)))
 		|| (!(new_node = (t_ast*)malloc(sizeof(t_ast)))
 			&& ft_dprintf(2, "21sh: malloc error\n")))
-		return (!ft_ast_del(ast, 1)
-				? (t_ast*)ft_cmdlst_del(node->data.cmd) : NULL);
+		return ((t_ast*)ft_cmdlst_del(node->cmd));
 	node->toks = NULL;
 	ft_memcpy(new_node, node, sizeof(t_ast));
 	if (!ast)

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 17:35:56 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/12 20:02:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/13 15:47:26 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ t_cmd			*ft_cmdlst_del(t_cmd *cmdlst)
 		tmp = cmdlst;
 		cmdlst = cmdlst->next;
 		ft_strarr_free(tmp->av);
-		ft_lstdel(tmp->toks, ft_token_del);
+		ft_lstdel(&tmp->toks, ft_token_del);
 		free(tmp);
 	}
 	return (NULL);
 }
 
-t_ast			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node)
+t_cmd			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node)
 {
 	t_cmd *new_node;
 

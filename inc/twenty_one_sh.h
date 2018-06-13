@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/12 21:21:41 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/13 15:58:06 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,12 +212,6 @@ typedef struct	s_cmd
 	struct s_cmd	*prev;
 }				t_cmd;
 
-typedef union	u_ast_data
-{
-	t_cmd		*cmd;
-	t_ast_op	oper;
-}				t_ast_data;
-
 typedef enum	e_ast_node_type
 {
 	cmd,
@@ -231,7 +225,7 @@ typedef struct	s_ast
 {
 	t_list			*toks;
 	t_ast_type		type;
-	t_ast_data		data;
+	t_cmd			*cmd;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	struct s_ast	*prev;
@@ -270,7 +264,7 @@ t_cmd			*ft_make_cmdlst(t_list **toks);
 **				ft_cmdlst_utils.c
 */
 t_cmd			*ft_cmdlst_del(t_cmd *cmdlst);
-t_ast			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
+t_cmd			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
 /*
 **				ft_ast.c
 */
