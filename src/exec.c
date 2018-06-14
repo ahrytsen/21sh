@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:18:20 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 17:17:29 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int			ft_exec(char **cmd, char *altpath)
 {
 	char	*bin_path;
 	int		st;
-	int		i;
 
 	bin_path = NULL;
 	if (!cmd || !*cmd)
@@ -116,10 +115,6 @@ int			ft_exec(char **cmd, char *altpath)
 		st = ft_exec_bypath(cmd, bin_path);
 	}
 	get_environ()->pid = 0;
-	i = 0;
-	while (cmd[i])
-		free(cmd[i++]);
-	free(cmd);
 	free(bin_path);
 	return (st);
 }

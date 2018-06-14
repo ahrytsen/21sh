@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/07 20:54:20 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 18:03:05 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ int			ft_readline(const int fd, char **line)
 	}
 	ret < 0 ? ft_memdel((void**)&get_term()->res) : 0;
 	*line = get_term()->res;
+	get_term()->res = NULL;
 	return (*line ? 1 : ret);
 }

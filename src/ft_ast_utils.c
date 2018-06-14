@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 13:54:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 16:51:33 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 20:43:08 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_ast			*ft_ast_push(t_ast *ast, t_ast *node)
 	t_ast *new_node;
 
 	if ((node->type == cmd
-			&& !(node->cmd = ft_make_cmdlst(&node->toks)))
+			&& !(node->cmd = ft_cmdlst_make(&node->toks)))
 		|| (!(new_node = (t_ast*)malloc(sizeof(t_ast)))
 			&& ft_dprintf(2, "21sh: malloc error\n")))
 		return ((t_ast*)ft_cmdlst_del(node->cmd));

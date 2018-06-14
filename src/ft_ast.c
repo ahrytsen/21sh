@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:16:07 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 17:34:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 20:42:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	ft_get_cmd(t_list **toks, t_ast *ast_node)
 	tmp->next = NULL;
 }
 
-t_ast		*ft_make_ast(t_list **toks)
+t_ast		*ft_ast_make(t_list **toks)
 {
 	t_ast	*ast;
 	t_ast	*tmp;

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 19:53:42 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 17:35:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 20:51:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	ft_get_cmd(t_list **toks, t_cmd *cmd)
 	tmp->next = NULL;
 }
 
-t_cmd		*ft_make_cmdlst(t_list **toks)
+t_cmd		*ft_cmdlst_make(t_list **toks)
 {
 	t_cmd	*cmdlst;
 	t_cmd	*tmp;

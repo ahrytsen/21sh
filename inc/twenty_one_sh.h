@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 19:34:17 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 20:41:37 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ void			ft_skip_qoutes(char **s);
 /*
 **				ft_cmdlst.c
 */
-t_cmd			*ft_make_cmdlst(t_list **toks);
+t_cmd			*ft_cmdlst_make(t_list **toks);
 /*
 **				ft_cmdlst_utils.c
 */
@@ -268,7 +268,7 @@ t_cmd			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
 /*
 **				ft_ast.c
 */
-t_ast			*ft_make_ast(t_list **toks);
+t_ast			*ft_ast_make(t_list **toks);
 /*
 **				ft_ast_utils.c
 */

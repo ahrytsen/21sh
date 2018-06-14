@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 20:08:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 20:50:28 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 20:54:46 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	ft_bquote_child(int fd_get[2], char *cmds)
 	close(fd_get[0]);
 	dup2(fd_get[1], 1);
 	toks = ft_tokenize(cmds);
-	ast = ft_make_ast(&toks);
+	ast = ft_ast_make(&toks);
 	ft_lstdel(&toks, ft_token_del);
 	get_environ()->st = ft_ast_exec(ast);
 	ast = ft_ast_del(ast, 1);

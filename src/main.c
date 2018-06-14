@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/13 20:31:25 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/14 20:54:24 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		main_loop(void)
 		if (!(i = ft_readline(0, &cmds)) || i == -1)
 			return (!i ? get_environ()->st : 1);
 		toks = ft_tokenize(cmds);
-		ast = ft_make_ast(&toks);
+		ast = ft_ast_make(&toks);
 		//test_ast(ast);
 		//ast ? ft_printf("\n") : 0;
 		ft_lstdel(&toks, ft_token_del);

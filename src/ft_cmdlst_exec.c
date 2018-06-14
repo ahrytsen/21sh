@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ast_exec.c                                      :+:      :+:    :+:   */
+/*   ft_cmdlst_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/13 18:55:11 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 19:15:02 by ahrytsen         ###   ########.fr       */
+/*   Created: 2018/06/14 20:04:56 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/06/14 20:41:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ char	**ft_make_av(t_list *toks)
 	}
 	return (av);
 }
-
-
 
 void		ft_cmdexec(t_cmd *cmd)
 {
@@ -99,7 +97,7 @@ void		ft_cmdexec(t_cmd *cmd)
 	dup2(bkp_fd[2], 2);
 }
 
-int		ft_ast_cmd_exec(t_ast *ast)
+int		ft_cmdlst_exec(t_ast *ast)
 {
 	t_cmd	*cmd;
 
@@ -120,62 +118,4 @@ int		ft_ast_cmd_exec(t_ast *ast)
 		cmd = cmd->next;
 	}
 	return (cmd->ret);
-}
-
-int		ft_ast_and_exec(t_ast *ast)
-{
-	int	ret_right;
-	int	ret_left;
-
-	if (!(ret_right = ft_ast_exec(ast->right)))
-		return ((ret_left = ft_ast_exec(ast->left)));
-	else
-		return (ret_right);
-}
-
-int		ft_ast_or_exec(t_ast *ast)
-{
-	int	ret_right;
-	int	ret_left;
-
-	if (!(ret_right = ft_ast_exec(ast->right)))
-		return (ret_right);
-	else
-		return ((ret_left = ft_ast_exec(ast->left)));
-}
-
-int		ft_ast_bg_exec(t_ast *ast)
-{
-	int	ret_right;
-	int	ret_left;
-
-	ret_right = ft_ast_exec(ast->right);
-	return ((ret_left = ft_ast_exec(ast->left)));
-}
-
-int		ft_ast_smcln_exec(t_ast *ast)
-{
-	int	ret_right;
-	int	ret_left;
-
-	ret_right = ft_ast_exec(ast->right);
-	return ((ret_left = ft_ast_exec(ast->left)));
-}
-
-int		ft_ast_exec(t_ast *ast)
-{
-	if (!ast)
-		return (-1);
-	else if (ast->type == cmd)
-		return (ft_ast_cmd_exec(ast));
-	else if (ast->type == ast_and)
-		return (ft_ast_and_exec(ast));
-	else if (ast->type == ast_or)
-		return (ft_ast_or_exec(ast));
-	else if (ast->type == ast_bg)
-		return (ft_ast_bg_exec(ast));
-	else if (ast->type == ast_smcln)
-		return (ft_ast_smcln_exec(ast));
-	else
-		return (-1);
 }
