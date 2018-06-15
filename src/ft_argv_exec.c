@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 17:17:29 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/15 14:16:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static char	*ft_search_bin(char *bin_name, const char *altpath)
 	return (exec_path);
 }
 
-int			ft_exec(char **cmd, char *altpath)
+int			ft_argv_exec(char **cmd, char *altpath)
 {
 	char	*bin_path;
 	int		st;

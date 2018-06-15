@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 20:41:37 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/15 18:05:53 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,24 @@
 # define P_BSLASH 92
 # define P_BQUOTE 96
 
+/*
+**	ENVIRON
+*/
+# define ENV_PRINT 0
+# define ENV_CLEAR 1
+
+/*
+**	FILDES
+*/
+# define FD_BACKUP 0
+# define FD_RESTORE 1
+
+/*
+**	EXEC_MOD
+*/
+# define EXEC_BG 0
+# define EXEC_FG 1
+
 typedef struct	s_line
 {
 	uint64_t		ch;
@@ -119,9 +137,6 @@ typedef struct	s_term
 	int		width;
 }				t_term;
 
-# define ENV_PRINT 0
-# define ENV_CLEAR 1
-
 typedef struct	s_op
 {
 	int		v;
@@ -136,6 +151,7 @@ typedef struct	s_env
 	char		**env;
 	int			st;
 	pid_t		pid;
+	int			bkp_fd[3];
 }				t_env;
 
 typedef struct	s_builtins
@@ -186,7 +202,6 @@ typedef union	u_data
 	char		*word;
 	t_redir		redir;
 }				t_data;
-
 typedef struct	s_token
 {
 	t_type	type;
@@ -225,6 +240,7 @@ typedef struct	s_ast
 {
 	t_list			*toks;
 	t_ast_type		type;
+	pid_t			pid;
 	t_cmd			*cmd;
 	struct s_ast	*left;
 	struct s_ast	*right;
@@ -239,6 +255,7 @@ int				main_loop(void);
 **				init.c
 */
 void			ft_init(void);
+void			ft_fildes(int mod);
 void			ft_terminal(int mod);
 /*
 **				ft_signal.c
@@ -266,6 +283,10 @@ t_cmd			*ft_cmdlst_make(t_list **toks);
 t_cmd			*ft_cmdlst_del(t_cmd *cmdlst);
 t_cmd			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
 /*
+**				ft_cmdlst_exec.c
+*/
+int				ft_cmdlst_exec(t_cmd *cmd);
+/*
 **				ft_ast.c
 */
 t_ast			*ft_ast_make(t_list **toks);
@@ -278,6 +299,25 @@ t_ast			*ft_ast_del(t_ast *ast, int up);
 **				ft_ast_exec.c
 */
 int				ft_ast_exec(t_ast *ast);
+/*
+**				ft_argv.c
+*/
+char			**ft_argv_make(t_list *toks);
+/*
+**				ft_argv_utils.c
+*/
+void			ft_bquote(t_buf **cur, char **line, uint8_t q);
+char			*parse_argv(char *line);
+/*
+**				ft_argv_quotes.c
+*/
+void			ft_slash(t_buf **cur, char **line);
+void			ft_dquote_slash(t_buf **cur, char **line);
+void			ft_bquote_helper(t_buf **cur, char *str);
+/*
+**				ft_argv_exec.c
+*/
+int				ft_argv_exec(char **cmd, char *altpath);
 /*
 **				builtins/builtins.c
 */
@@ -293,26 +333,17 @@ int				ft_cd(char **av);
 **				builtins/env_builtin.c
 */
 int				ft_env(char **av);
-/*
-**				msh
-*/
-int				ft_exec(char **cmd, char *altpath);
-t_env			*get_environ(void);
 void			ft_env_op(int p);
+/*
+**				env_utils.c
+*/
+t_env			*get_environ(void);
 char			*ft_getenv(const char *name);
 int				ft_setenv(const char *name, const char *value, int overwrite);
 int				ft_unsetenv(const char *name);
-char			*parse_argv(char *line);
-char			**msh_splitsemicolon(char *line);
-char			**msh_splitwhitespaces(char *line);
-void			ft_slash(t_buf **cur, char **line);
-void			ft_bquote(t_buf **cur, char **line, uint8_t q);
-void			ft_dquote_slash(t_buf **cur, char **line);
-void			ft_bquote_helper(t_buf **cur, char *str);
 /*
-**				buffer
+**				ft_buffer.c
 */
-t_buf			*ft_new_mshbuf(void);
 void			ft_putstr_mshbuf(t_buf **buf, char *str, ssize_t len);
 void			ft_putchar_mshbuf(t_buf **buf, char c);
 char			*ft_buftostr(t_buf *buf_head);

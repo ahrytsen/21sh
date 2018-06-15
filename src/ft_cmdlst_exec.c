@@ -6,116 +6,82 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 20:04:56 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 20:41:41 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/15 18:39:18 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-int		ft_count_args(t_list *toks)
+static int	ft_pl_make(int pl[2], t_cmd *cmd)
 {
-	int	ret;
-
-	ret = 0;
-	while (toks)
-	{
-		if (((t_token*)(toks->content))->type == word)
-			ret++;
-		toks = toks->next;
-	}
-	return (ret);
-}
-
-char	**ft_make_av(t_list *toks)
-{
-	int		i;
-	int		size;
-	char	**av;
-
-	i = 0;
-	size = ft_count_args(toks) + 1;
-	if (!(av = ft_memalloc(size * sizeof(av))))
-		return (NULL);
-	while (i < size && toks)
-	{
-		if (((t_token*)(toks->content))->type == word
-			&& !(av[i++] = parse_argv(((t_token*)(toks->content))->data.word)))
-		{
-			ft_strarr_free(av);
-			return (NULL);
-		}
-		toks = toks->next;
-	}
-	return (av);
-}
-
-void		ft_cmdexec(t_cmd *cmd)
-{
-	static int	fd[2];
-	static int	bkp_fd[3];
-
-	bkp_fd[0] = dup(0);
-	bkp_fd[1] = dup(1);
-	bkp_fd[2] = dup(2);
 	if (cmd->prev)
 	{
-		dup2(fd[0], 0);
-		close(fd[0]);
+		dup2(pl[0], 0);
+		close(pl[0]);
 	}
 	if (cmd->next)
 	{
-		pipe(fd);
-		dup2(fd[1], 1);
-		close(fd[1]);
+		if (pipe(pl) && ft_dprintf(2, "21sh: pipe error\n"))
+			return (1);
+		dup2(pl[1], 1);
+		close(pl[1]);
 	}
-	if (cmd->next || cmd->prev)
+	return (0);
+}
+
+static int	ft_pl_exec(t_cmd *cmd)
+{
+	static int	pl[2];
+
+	if (ft_pl_make(pl, cmd))
+		return (1);
+	if ((cmd->pid = fork()))
 	{
-		if ((cmd->pid = fork()))
-		{
-			get_environ()->pid = cmd->pid;
-			if (!cmd->next)
-			{
-				waitpid(cmd->pid, &cmd->ret, 0);
-				get_environ()->pid = 0;
-			}
-		}
-		else
-		{
-			get_environ()->pid = 1;
-			if ((cmd->av = ft_make_av(cmd->toks)))
-				cmd->ret = ft_exec(cmd->av, NULL);
-			exit(cmd->ret);
-		}
+		cmd->pid != -1 ? (get_environ()->pid = cmd->pid) : 0;
+		ft_fildes(FD_RESTORE);
+		return (cmd->pid == -1 ? 1 : 0);
 	}
 	else
 	{
-		if ((cmd->av = ft_make_av(cmd->toks)))
-			cmd->ret = ft_exec(cmd->av, NULL);
+		get_environ()->pid = 1;
+		(cmd->av = ft_argv_make(cmd->toks))
+			? cmd->ret = ft_argv_exec(cmd->av, NULL)
+			: ft_dprintf(2, "21sh: malloc error\n");
+		exit(cmd->av ? cmd->ret : 1);
 	}
-	dup2(bkp_fd[0], 0);
-	dup2(bkp_fd[1], 1);
-	dup2(bkp_fd[2], 2);
+	return (0);
 }
 
-int		ft_cmdlst_exec(t_ast *ast)
+static int	ft_cmd_exec(t_cmd *cmd)
 {
-	t_cmd	*cmd;
+	if (cmd->next || cmd->prev)
+		return (ft_pl_exec(cmd));
+	else
+	{
+		(cmd->av = ft_argv_make(cmd->toks))
+			? cmd->ret = ft_argv_exec(cmd->av, NULL)
+			: ft_dprintf(2, "21sh: malloc error\n");
+		ft_fildes(FD_RESTORE);
+		cmd->av ? 0 : (cmd->ret = -1);
+		return (cmd->av ? 0 : 1);
+	}
+}
 
-	cmd = ast->cmd;
-	while (1)
+int		ft_cmdlst_exec(t_cmd *cmd)
+{
+	int	ret;
+
+	while (!ft_cmd_exec(cmd))
 	{
-		ft_cmdexec(cmd);
 		if (!cmd->next)
 			break ;
 		cmd = cmd->next;
 	}
-	cmd = ast->cmd;
-	while (1)
-	{
+	waitpid(get_environ()->pid, &cmd->ret, 0);
+	cmd->ret = WEXITSTATUS(cmd->ret);
+	get_environ()->pid = 0;
+	ret = cmd->ret;
+	while (cmd->prev)
 		cmd->pid > 0 ? kill(cmd->pid, SIGKILL) : 0;
-		if (!cmd->next)
-			break ;
-		cmd = cmd->next;
-	}
-	return (cmd->ret);
+	return (ret);
 }

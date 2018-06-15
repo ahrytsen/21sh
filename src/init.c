@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/28 17:10:05 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/15 13:42:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,22 @@ static void	ft_init_termcap(void)
 	get_term()->width = tgetnum("co");
 }
 
+void		ft_fildes(int mod)
+{
+	if (mod == FD_BACKUP)
+	{
+		get_environ()->bkp_fd[0] = dup(0);
+		get_environ()->bkp_fd[1] = dup(1);
+		get_environ()->bkp_fd[2] = dup(2);
+	}
+	else if (mod == FD_RESTORE)
+	{
+		dup2(get_environ()->bkp_fd[0], 0);
+		dup2(get_environ()->bkp_fd[1], 1);
+		dup2(get_environ()->bkp_fd[2], 2);
+	}
+}
+
 void		ft_terminal(int mod)
 {
 	static struct termios	*savetty = NULL;
@@ -67,6 +83,7 @@ void		ft_init(void)
 
 	ft_init_signal();
 	ft_bzero(get_term(), sizeof(t_term));
+	ft_fildes(FD_BACKUP);
 	ft_init_termcap();
 	get_environ()->env = ft_strdup_arr(environ);
 	tmp = ft_getenv("SHLVL");
