@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/18 14:04:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 21:33:08 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/18 22:13:03 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	ft_tofile_redir(t_token *tok)
 	if (tok->type == open_file)
 		oflag |= O_RDWR | O_CREAT;
 	else if (tok->type >= read_out && tok->type < and_read_out)
-		oflag |= O_WRONLY | O_CREAT | (tok->type == read_out_apend ? O_APPEND : 0);
+		oflag |= O_WRONLY | O_CREAT
+			| (tok->type == read_out_apend ? O_APPEND : 0);
 	fd = open(tok->data.redir.right,
 			oflag, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	dup2(fd, tok->data.redir.left);

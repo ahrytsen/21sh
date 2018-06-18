@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/15 14:16:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/18 21:56:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,7 @@ int			ft_argv_exec(char **cmd, char *altpath)
 
 	bin_path = NULL;
 	if (!cmd || !*cmd)
-	{
-		free(cmd);
-		return (!cmd ? -1 : 0);
-	}
+		return (0);
 	if (ft_strchr(*cmd, '/'))
 		st = ft_exec_bypath(cmd, *cmd);
 	else if ((st = ft_exec_builtin(cmd)) == -1)

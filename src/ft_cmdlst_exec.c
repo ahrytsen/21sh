@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 20:04:56 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 21:17:25 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/18 22:09:55 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ int			ft_cmdlst_exec(t_cmd *cmd)
 			break ;
 		cmd = cmd->next;
 	}
-	if (!ret)
+	if (!ret && get_environ()->pid)
 	{
 		waitpid(get_environ()->pid, &cmd->ret, 0);
 		cmd->ret = WEXITSTATUS(cmd->ret);
-		ret = cmd->ret;
 	}
+	!ret ? ret = cmd->ret : 0;
 	get_environ()->pid = 0;
 	while ((cmd = cmd->prev))
 		cmd->pid > 0 ? kill(cmd->pid, SIGKILL) : 0;
