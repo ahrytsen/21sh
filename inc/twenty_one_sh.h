@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/15 18:05:53 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/18 21:25:33 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ typedef enum	e_token_type
 	read_out,
 	read_out_and,
 	read_out_pipe,
-	and_read_out,
-	read_out_apend
+	read_out_apend,
+	and_read_out
 }				t_type;
 
 typedef struct	s_redir
@@ -318,6 +318,11 @@ void			ft_bquote_helper(t_buf **cur, char *str);
 **				ft_argv_exec.c
 */
 int				ft_argv_exec(char **cmd, char *altpath);
+/*
+**				ft_redirection.c
+*/
+void			ft_redirection(t_list *toks);
+void			ft_redirection_close(t_list *toks);
 /*
 **				builtins/builtins.c
 */

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:55:11 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/15 18:06:40 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/18 13:59:51 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 static int	ft_ast_and_exec(t_ast *ast)
 {
 	int	ret_right;
-	int	ret_left;
 
 	if (!(ret_right = ft_ast_exec(ast->right)))
-		return ((ret_left = ft_ast_exec(ast->left)));
+		return (ft_ast_exec(ast->left));
 	else
 		return (ret_right);
 }
@@ -26,37 +25,35 @@ static int	ft_ast_and_exec(t_ast *ast)
 static int	ft_ast_or_exec(t_ast *ast)
 {
 	int	ret_right;
-	int	ret_left;
 
 	if (!(ret_right = ft_ast_exec(ast->right)))
 		return (ret_right);
 	else
-		return ((ret_left = ft_ast_exec(ast->left)));
+		return (ft_ast_exec(ast->left));
 }
 
 static int	ft_ast_bg_exec(t_ast *ast)
 {
 	if ((ast->pid = fork()))
 	{
-		if (ast->pid == -1)
-		{
-			ft_dprintf(2, "21sh: fork() error\n");
-			return (-1);
-		}
-		kill(ast->pid, SIGTSTP);
+		ast->pid > 0
+			? kill(ast->pid, SIGTSTP)
+			: ft_dprintf(2, "21sh: fork() error\n");
+		return (ast->left ? ft_ast_exec(ast->left) : 0);
 	}
 	else
+	{
+		get_environ()->pid = 1;
 		exit(ft_ast_exec(ast->right));
-	return (0);
+	}
 }
 
 static int	ft_ast_smcln_exec(t_ast *ast)
 {
 	int	ret_right;
-	int	ret_left;
 
 	ret_right = ft_ast_exec(ast->right);
-	return ((ret_left = ft_ast_exec(ast->left)));
+	return (ast->left ? ft_ast_exec(ast->left) : ret_right);
 }
 
 int			ft_ast_exec(t_ast *ast)

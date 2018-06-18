@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/06/15 14:17:48 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/06/18 19:47:49 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -22,6 +22,7 @@ SRC			=	main.c init.c env_utils.c ft_buffer.c ft_signal.c			\
 				ft_tokenize.c ft_tokenize_utils.c ft_ast.c ft_ast_utils.c	\
 				ft_ast_exec.c ft_cmdlst.c ft_cmdlst_utils.c ft_cmdlst_exec.c\
 				ft_argv.c ft_argv_utils.c ft_argv_quotes.c ft_argv_exec.c	\
+				ft_redirection.c											\
 				\
 				builtins/builtins.c builtins/env_builtin.c builtins/ft_cd.c	\
 				\
