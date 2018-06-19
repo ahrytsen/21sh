@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 19:11:07 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 21:06:56 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/19 21:17:36 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static void	ft_get_redirect_in(char **ln, t_token *token)
 		else
 			token->type = heredoc;
 	}
-	else if (**ln == '>' && !(*(*ln)++ = '\0')
-			&& (token->data.redir.left = 1))
+	else if (**ln == '>' && !(*(*ln)++ = '\0'))
 		token->type = open_file;
 	else if (**ln == '&' && !(*(*ln)++ = '\0'))
 		token->type = read_in_and;
@@ -86,10 +85,12 @@ static void	ft_get_token(char **ln, t_token *token)
 		else
 			(*ln)++;
 	}
-	if ((**ln == '<' || **ln == '>') && f)
+	if ((**ln == '<' || **ln == '>') && f && (f = **ln)
+		&& !(*(*ln)++ = '\0'))
 	{
 		token->data.redir.left = ft_atoi(token->data.word);
-		ft_get_separator(ln, token);
+		(f == '<') ? ft_get_redirect_in(ln, token)
+			: ft_get_redirect_out(ln, token);
 	}
 }
 
@@ -107,7 +108,7 @@ t_list		*ft_tokenize(char *ln)
 		if (((!toks || ((t_token*)tmp->content)->type == semicolon)
 			&& tok.type == semicolon) || tok.type == blank)
 			continue ;
-		if (toks && ((t_token*)tmp->content)->type >= heredoc
+		if (toks && ((t_token*)tmp->content)->type > or
 			&& !((t_token*)tmp->content)->data.redir.right && tok.type == word)
 			((t_token*)tmp->content)->data.redir.right = tok.data.word;
 		else if (!(tmp =

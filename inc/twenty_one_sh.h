@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 21:25:33 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/19 21:40:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,12 +182,12 @@ typedef enum	e_token_type
 	heredoc_t,
 	herestr,
 	open_file,
-	read_in,
-	read_in_and,
 	read_out,
-	read_out_and,
 	read_out_pipe,
 	read_out_apend,
+	read_in,
+	read_in_and,
+	read_out_and,
 	and_read_out
 }				t_type;
 
@@ -195,6 +195,7 @@ typedef struct	s_redir
 {
 	int		cls;
 	int		left;
+	int		nbr;
 	char	*right;
 }				t_redir;
 typedef union	u_data
@@ -270,7 +271,7 @@ t_list			*ft_tokenize(char *ln);
 */
 void			ft_token_del(void *token, size_t size);
 int				ft_isseparator(int c);
-int				ft_is_fd(t_token *tok);
+//int				ft_is_fd(t_token *tok);
 void			ft_skip_slash(char **s);
 void			ft_skip_qoutes(char **s);
 /*
@@ -323,6 +324,10 @@ int				ft_argv_exec(char **cmd, char *altpath);
 */
 void			ft_redirection(t_list *toks);
 void			ft_redirection_close(t_list *toks);
+/*
+**				ft_redirection_utils.c
+*/
+int				ft_redir_right_param(t_token *tok);
 /*
 **				builtins/builtins.c
 */
