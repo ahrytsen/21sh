@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/18 14:04:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/19 21:44:46 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/20 19:18:02 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	ft_redir_file(t_token *tok)
 		close(fd);
 	}
 	else if (fd < 0)
-		ft_dprintf(2, "21sh: open() error%d\n", O_RDWR);
+		ft_dprintf(2, "21sh: open() error\n");
 }
 
 void		ft_redirection_close(t_list *toks)

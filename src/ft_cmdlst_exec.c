@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/14 20:04:56 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 22:09:55 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/20 21:02:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static int	ft_pl_make(int pl[2], t_cmd *cmd)
 	{
 		dup2(pl[0], 0);
 		close(pl[0]);
+		close(pl[1]);
 	}
 	if (cmd->next)
 	{
 		if (pipe(pl) && ft_dprintf(2, "21sh: pipe error\n"))
 			return (1);
 		dup2(pl[1], 1);
-		close(pl[1]);
 	}
 	return (0);
 }
@@ -45,6 +45,7 @@ static int	ft_pl_exec(t_cmd *cmd)
 	else
 	{
 		get_environ()->pid = 1;
+		ft_redirection(cmd->toks);
 		(cmd->av = ft_argv_make(cmd->toks))
 			? cmd->ret = ft_argv_exec(cmd->av, NULL)
 			: ft_dprintf(2, "21sh: malloc error\n");
@@ -58,9 +59,11 @@ static int	ft_cmd_exec(t_cmd *cmd)
 		return (ft_pl_exec(cmd));
 	else
 	{
+		ft_redirection(cmd->toks);
 		(cmd->av = ft_argv_make(cmd->toks))
 			? cmd->ret = ft_argv_exec(cmd->av, NULL)
 			: ft_dprintf(2, "21sh: malloc error\n");
+		ft_redirection_close(cmd->toks);
 		return (cmd->av ? 0 : 1);
 	}
 }
@@ -71,9 +74,7 @@ int			ft_cmdlst_exec(t_cmd *cmd)
 
 	while (1)
 	{
-		ft_redirection(cmd->toks);
 		ret = ft_cmd_exec(cmd);
-		ft_redirection_close(cmd->toks);
 		ft_fildes(FD_RESTORE);
 		if (ret || !cmd->next)
 			break ;

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/19 21:40:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/20 20:33:52 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ typedef struct	s_buf
 
 typedef enum	e_token_type
 {
-	ignore,
 	blank,
 	word,
 	pipeline,
@@ -209,12 +208,6 @@ typedef struct	s_token
 	t_data	data;
 }				t_token;
 
-/*typedef struct	s_ast_op
-{
-	int		ret_left;
-	int		ret_right;
-}				t_ast_op;
-*/
 typedef struct	s_cmd
 {
 	char			**av;
@@ -230,11 +223,11 @@ typedef struct	s_cmd
 
 typedef enum	e_ast_node_type
 {
-	cmd,
-	ast_and,
-	ast_or,
-	ast_bg,
-	ast_smcln
+	cmd = word,
+	ast_and = and,
+	ast_or = or,
+	ast_bg = bg_op,
+	ast_smcln = semicolon
 }				t_ast_type;
 
 typedef struct	s_ast
@@ -271,7 +264,7 @@ t_list			*ft_tokenize(char *ln);
 */
 void			ft_token_del(void *token, size_t size);
 int				ft_isseparator(int c);
-//int				ft_is_fd(t_token *tok);
+int				ft_check_redir(t_token *prev, t_token *next, char *ln);
 void			ft_skip_slash(char **s);
 void			ft_skip_qoutes(char **s);
 /*
@@ -290,6 +283,7 @@ int				ft_cmdlst_exec(t_cmd *cmd);
 /*
 **				ft_ast.c
 */
+char			*ft_tname(int type);
 t_ast			*ft_ast_make(t_list **toks);
 /*
 **				ft_ast_utils.c

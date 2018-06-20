@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 19:11:07 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/19 21:17:36 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/20 20:33:15 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,11 @@ t_list		*ft_tokenize(char *ln)
 		if (toks && ((t_token*)tmp->content)->type > or
 			&& !((t_token*)tmp->content)->data.redir.right && tok.type == word)
 			((t_token*)tmp->content)->data.redir.right = tok.data.word;
-		else if (!(tmp =
-					ft_lstpush_back(toks ? &tmp : &toks, &tok, sizeof(tok))))
+		else if (ft_check_redir(toks ? tmp->content : NULL, &tok, ln)
+			|| !(tmp = ft_lstpush_back(toks ? &tmp : &toks, &tok, sizeof(tok))))
 		{
-			ft_lstdel(&toks, NULL);
+			!tmp ? ft_dprintf(2, "21sh: malloc error\n") : 0;
+			ft_lstdel(&toks, ft_token_del);
 			return (NULL);
 		}
 	}

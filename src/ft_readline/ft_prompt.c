@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 12:37:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 22:20:15 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/20 19:05:52 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ static void	ft_user_prompt(void)
 
 	getcwd(pwd, MAXPATHLEN);
 	tmp = 3;
+	ft_dprintf(2, "\r%s\033[3%cm", tgetstr("cd", NULL),
+				get_environ()->st ? '1' : '2');
+	tmp += ft_dprintf(2, "[%d] ", get_environ()->st);
+	ft_dprintf(2, "\033[33m");
+	tmp += ft_dprintf(2, "%s ", pwd);
+	ft_dprintf(2, "\033[32m$>\033[0m ");
 	get_term()->cury = tmp / get_term()->width;
 	get_term()->curx = tmp % get_term()->width;
-	ft_dprintf(2, "\r%s\033[33m", tgetstr("cd", NULL));
-	tmp += ft_dprintf(2, "(prev status: %d) %s ", get_environ()->st, pwd);
-	ft_dprintf(2, "\033[32m$>\033[0m ");
 }
 
 void		ft_prompt(void)
