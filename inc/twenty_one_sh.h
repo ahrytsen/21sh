@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/20 20:33:52 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/21 19:57:34 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@
 # define K_SELECT 3
 
 /*
-**	MODS
+**	TERMINAL MODS
 */
 # define T_INIT 1
 # define T_RESTORE 0
@@ -195,6 +195,7 @@ typedef struct	s_redir
 	int		cls;
 	int		left;
 	int		nbr;
+	int		fd[2];
 	char	*right;
 }				t_redir;
 typedef union	u_data
@@ -266,7 +267,7 @@ void			ft_token_del(void *token, size_t size);
 int				ft_isseparator(int c);
 int				ft_check_redir(t_token *prev, t_token *next, char *ln);
 void			ft_skip_slash(char **s);
-void			ft_skip_qoutes(char **s);
+int				ft_skip_qoutes(char **s);
 /*
 **				ft_cmdlst.c
 */

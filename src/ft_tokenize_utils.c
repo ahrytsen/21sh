@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 19:11:31 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/20 20:43:38 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/21 20:35:00 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,16 @@ void	ft_skip_slash(char **s)
 		(*s)++;
 }
 
-void	ft_skip_qoutes(char **s)
+int		ft_skip_qoutes(char **s)
 {
 	char	q;
 
 	q = *(*s)++;
 	while (**s != q)
-		if (!**s)
-			return ;
+		if (!**s
+			&& ft_dprintf(2, "21sh: %s `%c'\n",
+						"unexpected EOF while looking for matching", q))
+			return (1);
 		else if (q == '"' && **s == '`')
 			ft_skip_qoutes(s);
 		else if (q != '\'' && **s == '\\' && (*s)++)
@@ -61,4 +63,5 @@ void	ft_skip_qoutes(char **s)
 		else
 			(*s)++;
 	(*s)++;
+	return (0);
 }

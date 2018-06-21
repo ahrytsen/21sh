@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/18 21:56:35 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/21 20:14:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,21 @@ static int	ft_exec_builtin(char **cmd)
 
 static int	ft_exec_bypath(char **cmd, char *path)
 {
-	int			st;
 	struct stat	tmp;
 
-	st = 0;
 	if (path && !access(path, X_OK))
 	{
 		if (!get_environ()->pid && (get_environ()->pid = fork()))
-			wait4(get_environ()->pid, &st, 0, 0);
-		else if ((st = execve(path, cmd, get_environ()->env)))
 		{
-			if (stat(path, &tmp) || !S_ISREG(tmp.st_mode)
-				|| dup2(open(path, O_RDONLY), 0) == -1)
-				exit(ft_dprintf(2, "%s: permission denied\n", *cmd) ? -2 : 0);
-			else
-				main_loop();
+			return (get_environ()->pid > 0 ? 0
+					: ft_dprintf(2, "21sh: fork error\n"));
 		}
-		return (WEXITSTATUS(st));
+		execve(path, cmd, get_environ()->env);
+		if (stat(path, &tmp) || !S_ISREG(tmp.st_mode)
+			|| dup2(open(path, O_RDONLY), 0) == -1)
+			exit(ft_dprintf(2, "%s: permission denied\n", *cmd) ? -2 : 0);
+		else
+			return (main_loop());
 	}
 	ft_dprintf(2, "%s: command not found or permission denied\n", *cmd);
 	return (-1);
@@ -111,7 +109,6 @@ int			ft_argv_exec(char **cmd, char *altpath)
 		bin_path = ft_search_bin(*cmd, altpath);
 		st = ft_exec_bypath(cmd, bin_path);
 	}
-	get_environ()->pid = 0;
 	free(bin_path);
 	return (st);
 }

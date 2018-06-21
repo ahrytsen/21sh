@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 19:11:07 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/20 20:33:15 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/21 20:09:46 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	ft_get_redirect_out(char **ln, t_token *token)
 		token->type = read_out;
 }
 
-static void	ft_get_separator(char **ln, t_token *token)
+static int	ft_get_separator(char **ln, t_token *token)
 {
 	if ((**ln == ' ' || **ln == '\t') && !(*(*ln)++ = '\0'))
 		token->type = blank;
@@ -66,32 +66,35 @@ static void	ft_get_separator(char **ln, t_token *token)
 	else if (**ln == '>' && !(*(*ln)++ = '\0')
 			&& (token->data.redir.left = 1))
 		ft_get_redirect_out(ln, token);
+	return (0);
 }
 
-static void	ft_get_token(char **ln, t_token *token)
+static int	ft_get_token(char **ln, t_token *token)
 {
-	int	f;
+	int	f[2];
 
-	f = 1;
+	f[0] = 1;
+	f[1] = 0;
 	token->type = word;
 	token->data.word = *ln;
 	while (**ln && !ft_isseparator(**ln))
 	{
-		f && !ft_isdigit(**ln) ? f = 0 : 0;
+		f[0] && !ft_isdigit(**ln) ? f[0] = 0 : 0;
 		if (**ln == '\'' || **ln == '"' || **ln == '`')
-			ft_skip_qoutes(ln);
+			f[1] = ft_skip_qoutes(ln);
 		else if (**ln == '\\')
 			ft_skip_slash(ln);
 		else
 			(*ln)++;
 	}
-	if ((**ln == '<' || **ln == '>') && f && (f = **ln)
+	if ((**ln == '<' || **ln == '>') && f[0] && (f[0] = **ln)
 		&& !(*(*ln)++ = '\0'))
 	{
 		token->data.redir.left = ft_atoi(token->data.word);
-		(f == '<') ? ft_get_redirect_in(ln, token)
+		(f[0] == '<') ? ft_get_redirect_in(ln, token)
 			: ft_get_redirect_out(ln, token);
 	}
+	return (f[1]);
 }
 
 t_list		*ft_tokenize(char *ln)
@@ -104,11 +107,12 @@ t_list		*ft_tokenize(char *ln)
 	while (*ln)
 	{
 		ft_bzero(&tok, sizeof(tok));
-		(!ft_isseparator(*ln) ? ft_get_token : ft_get_separator)(&ln, &tok);
-		if (((!toks || ((t_token*)tmp->content)->type == semicolon)
+		if ((!ft_isseparator(*ln) ? ft_get_token : ft_get_separator)(&ln, &tok))
+			ft_lstdel(&toks, ft_token_del);
+		else if (((!toks || ((t_token*)tmp->content)->type == semicolon)
 			&& tok.type == semicolon) || tok.type == blank)
 			continue ;
-		if (toks && ((t_token*)tmp->content)->type > or
+		else if (toks && ((t_token*)tmp->content)->type > or
 			&& !((t_token*)tmp->content)->data.redir.right && tok.type == word)
 			((t_token*)tmp->content)->data.redir.right = tok.data.word;
 		else if (ft_check_redir(toks ? tmp->content : NULL, &tok, ln)
