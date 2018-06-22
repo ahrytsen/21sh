@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:55:11 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/20 21:04:08 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/22 18:40:30 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ static int	ft_ast_bg_exec(t_ast *ast)
 	if ((ast->pid = fork()))
 	{
 		ast->pid > 0
-			? kill(ast->pid, SIGTSTP)
+			? kill(ast->pid, SIGSTOP)
 			: ft_dprintf(2, "21sh: fork() error\n");
 		return (ast->left ? ft_ast_exec(ast->left) : 0);
 	}
 	else
 	{
-		get_environ()->pid = 1;
+		//signal(SIGTSTP, SIG_DFL);
+		//get_environ()->pid = 1;
 		exit(ft_ast_exec(ast->right));
 	}
 }

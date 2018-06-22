@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/28 17:05:37 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/28 17:09:01 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/22 20:00:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ static void	sig_handler(int signo)
 		get_term()->width = w.ws_col;
 		ft_redraw_line();
 	}
+	else if (signo == SIGTSTP)
+	{
+		if (get_environ()->pid)
+			kill(SIGSTOP, get_environ()->pid);
+	}
 }
 
 void		ft_init_signal(void)
@@ -46,9 +51,7 @@ void		ft_init_signal(void)
 	signal(SIGWINCH, sig_handler);
 	signal(SIGABRT, sig_handler);
 	signal(SIGINT, sig_handler);
-	signal(SIGSTOP, sig_handler);
 	signal(SIGCONT, sig_handler);
 	signal(SIGTSTP, sig_handler);
-	signal(SIGKILL, sig_handler);
 	signal(SIGQUIT, sig_handler);
 }
