@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 18:03:05 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 20:23:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	ft_action(uint64_t buf)
 {
 	if (buf == K_RET)
 		ft_readline_ret();
-	else if (buf == 4)
+	else if (buf == K_DEL)
 		buf = ft_del();
 	else if (buf == K_TAB)
 		ft_autocomplit(get_term()->cursor);
@@ -89,19 +89,20 @@ int			ft_readline(const int fd, char **line)
 	char	*tmp;
 	int		ret;
 
-	get_term()->res = NULL;
-	while (ft_check_line(get_term()->res)
-			&& (ret = ft_readline_helper(fd, line)) > 0)
+	tmp = NULL;
+	*line = NULL;
+	while (ft_check_line(*line))
 	{
-		if ((tmp = get_term()->res) && get_term()->prompt != P_BSLASH)
+		if ((tmp = *line) && get_term()->prompt != P_BSLASH)
 		{
-			get_term()->res = ft_strjoin(tmp, "\n");
+			*line = ft_strjoin(tmp, "\n");
 			free(tmp);
 		}
-		get_term()->res = ft_strextend(get_term()->res, *line);
+		ret = ft_readline_helper(fd, &tmp);
+		if (ret <= 0)
+			break ;
+		*line = ft_strextend(*line, tmp);
 	}
-	ret < 0 ? ft_memdel((void**)&get_term()->res) : 0;
-	*line = get_term()->res;
-	get_term()->res = NULL;
+	ret < 0 ? ft_memdel((void**)line) : 0;
 	return (*line ? 1 : ret);
 }

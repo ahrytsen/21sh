@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/18 14:04:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/21 17:45:51 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 22:02:20 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,7 @@ static void	ft_redir_heredoc(t_token *tok)
 		return ;
 	dup2(pl[0], tok->data.redir.left);
 	close(pl[0]);
-	if (tok->type == herestr)
-	{
-		ft_dprintf(pl[1], "%s\n", tok->data.redir.right);
-	}
-	else
-		;
+	ft_dprintf(pl[1], tok->type == herestr ? "%s\n" : "%s", tok->data.redir.right);
 	close(pl[1]);
 }
 

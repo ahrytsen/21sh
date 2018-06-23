@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/22 20:31:36 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 21:41:37 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ typedef struct	s_term
 	t_line	*st_sel;
 	t_line	*end_sel;
 	t_line	*buffer;
-	char	*res;
 	int		prompt;
 	int		curx;
 	int		cury;
@@ -124,17 +123,18 @@ typedef struct	s_term
 	char	*curmov;
 	char	*cm_left;
 	char	*cm_right;
-	char	*undln_on;
-	char	*undln_off;
+//	char	*undln_on;
+//	char	*undln_off;
 	char	*iv_on;
 	char	*iv_off;
-	char	*im_on;
-	char	*im_off;
+//	char	*im_on;
+//	char	*im_off;
 	char	*del_ch;
-	char	*dm_on;
-	char	*dm_off;
+//	char	*dm_on;
+//	char	*dm_off;
 	int		height;
 	int		width;
+	int		is_inter;
 }				t_term;
 
 typedef struct	s_op
@@ -213,9 +213,6 @@ typedef struct	s_cmd
 {
 	char			**av;
 	t_list			*toks;
-	int				fd_in;
-	int				fd_out;
-	int				fd_err;
 	pid_t			pid;
 	int				ret;
 	struct s_cmd	*next;
@@ -268,6 +265,11 @@ int				ft_isseparator(int c);
 int				ft_check_redir(t_token *prev, t_token *next, char *ln);
 void			ft_skip_slash(char **s);
 int				ft_skip_qoutes(char **s);
+/*
+**				ft_heredoc.c
+*/
+int				ft_heredoc(t_list *toks);
+int				ft_heredoc_toread(t_token *tok);
 /*
 **				ft_cmdlst.c
 */

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/11 19:53:42 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 20:51:23 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 22:22:14 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ static void	ft_get_cmd(t_list **toks, t_cmd *cmd)
 
 	cmd->toks = *toks;
 	tmp = *toks;
-	cmd->fd_out = 1;
-	cmd->fd_err = 2;
 	while (*toks && ((t_token*)(*toks)->content)->type != pipeline)
 	{
 		tmp = *toks;

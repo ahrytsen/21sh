@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/25 15:22:52 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/07 21:16:50 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 21:54:24 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static int	skip_qoutes(char **ln)
 
 int			ft_check_line(char *ln)
 {
+	if (get_term()->prompt == P_HEREDOC)
+		return (ln ? 0 : 1);
 	if (!ln)
 	{
 		get_term()->prompt = P_USER;

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/14 19:05:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/19 18:22:10 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 20:33:37 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ void	hist_commit(int st)
 	clean_hist();
 	if (to_save->prev && st != -1)
 		get_term()->hist->line = to_save;
-	else
-		line_tostr(&to_save, 2);
+	else if (st != -1)
+		get_term()->hist->tmp = to_save;
 }

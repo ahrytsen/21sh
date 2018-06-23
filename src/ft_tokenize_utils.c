@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 19:11:31 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/21 20:35:00 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 22:15:29 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	ft_token_del(void *token, size_t size)
 {
 	(void)size;
+	if (((t_token*)token)->type == heredoc || ((t_token*)token)->type == heredoc_t)
+	  free(((t_token*)token)->data.redir.right);
 	free(token);
 }
 

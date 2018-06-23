@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/15 13:42:49 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/23 20:38:11 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ static void	ft_init_termcap(void)
 	get_term()->clear = tgetstr("ce", NULL);
 	get_term()->cm_left = tgetstr("le", NULL);
 	get_term()->cm_right = tgetstr("nd", NULL);
-	get_term()->undln_on = tgetstr("us", NULL);
-	get_term()->undln_off = tgetstr("ue", NULL);
+//	get_term()->undln_on = tgetstr("us", NULL);
+//	get_term()->undln_off = tgetstr("ue", NULL);
 	get_term()->iv_on = tgetstr("mr", NULL);
 	get_term()->iv_off = tgetstr("me", NULL);
-	get_term()->im_on = tgetstr("im", NULL);
-	get_term()->im_off = tgetstr("ei", NULL);
+//	get_term()->im_on = tgetstr("im", NULL);
+//	get_term()->im_off = tgetstr("ei", NULL);
 	get_term()->del_ch = tgetstr("DC", NULL);
 	get_term()->height = tgetnum("li");
 	get_term()->width = tgetnum("co");
