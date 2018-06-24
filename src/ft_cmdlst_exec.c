@@ -70,13 +70,16 @@ int			ft_cmdlst_exec(t_cmd *cmd)
 	}
 	if (!cmd->ret && get_environ()->pid)
 	{
-		waitpid(get_environ()->pid, &cmd->ret, WUNTRACED);
+		ft_waitpid(get_environ()->pid, &cmd->ret, WUNTRACED);
 		cmd->ret = WEXITSTATUS(cmd->ret);
 	}
 	ret = cmd->ret;
 	get_environ()->pid = 0;
 	while ((cmd = cmd->prev))
-		cmd->pid > 0 && !kill(cmd->pid, SIGKILL)
-			? waitpid(cmd->pid, &cmd->ret, WUNTRACED) : 0;
+		if (cmd->pid > 0 && !kill(cmd->pid, SIGKILL))
+		{
+			ft_waitpid(cmd->pid, &cmd->ret, WUNTRACED);
+			cmd->ret = WEXITSTATUS(cmd->ret);
+		}
 	return (ret);
 }

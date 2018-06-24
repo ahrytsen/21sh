@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/23 20:23:41 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/24 19:52:47 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static int	ft_action(uint64_t buf)
 {
 	if (buf == K_RET)
 		ft_readline_ret();
-	else if (buf == K_DEL)
-		buf = ft_del();
+	else if (buf == K_DEL || buf == K_CTRL_D)
+		buf = ft_del(buf);
 	else if (buf == K_TAB)
 		ft_autocomplit(get_term()->cursor);
 	else if (buf == K_BS)

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 19:53:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/23 21:39:17 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/24 17:51:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,8 @@ int			main_loop(void)
 
 	while (1)
 	{
-		if (!(i = ft_readline(0, &cmds)) || i == -1)
-		{
-			if (i && get_term()->is_inter)
-				get_term()->is_inter = 0;
-			else
+		if (!(i = ft_readline(0, &cmds)) || (i == -1 && !ft_is_interrupted()))
 				return (!i ? get_environ()->st : 1);
-		}
 		if (cmds && (toks = ft_tokenize(cmds)) && ft_heredoc(toks))
 		{
 			ast = ft_ast_make(&toks);

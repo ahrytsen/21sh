@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/23 21:41:37 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/24 19:54:49 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@
 # define K_END 0X465B1B
 # define K_BS 0X7F
 # define K_ABS 0X7F1B
-# define K_DEL 0X4
+# define K_DEL 0X7E335B1B
+# define K_CTRL_D 0X4
 # define K_ADEL 0X641B
 # define K_SPC 0X20
 # define K_RET 0XA
@@ -134,6 +135,7 @@ typedef struct	s_term
 //	char	*dm_off;
 	int		height;
 	int		width;
+	char	*heredoc_key;
 	int		is_inter;
 }				t_term;
 
@@ -253,6 +255,11 @@ void			ft_terminal(int mod);
 **				ft_signal.c
 */
 void			ft_init_signal(void);
+int				ft_is_interrupted(void);
+/*
+**				ft_wait.c
+*/
+pid_t			ft_waitpid(pid_t pid, int *stat_loc, int options);
 /*
 **				ft_tokenize.c
 */
@@ -365,7 +372,7 @@ int				ft_readline(const int fd, char **line);
 void			ft_back_space(void);
 void			ft_move(uint64_t buf);
 int				ft_add(uint64_t buf);
-int				ft_del(void);
+int				ft_del(uint64_t buf);
 void			ft_word_action(uint64_t buf);
 /*
 **				ft_readline/ft_readline_helper.c

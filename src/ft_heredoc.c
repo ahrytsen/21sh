@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/23 21:00:10 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/23 22:19:21 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/24 19:44:58 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,20 @@ int		ft_heredoc_toread(t_token *tok)
 {
 	int		ret;
 	char	*line;
-	char	*key_word;
 
 	line = NULL;
-	key_word = tok->data.redir.right;
+	get_term()->heredoc_key = tok->data.redir.right;
 	tok->data.redir.right = NULL;
 	while ((ret = ft_readline(0, &line)) > 0)
 	{
-		if (!ft_strcmp(line, key_word))
-		{
-			free(line);
+		if (!ft_strcmp(line, get_term()->heredoc_key))
 			break ;
-		}
 		tok->data.redir.right = ft_strextend(tok->data.redir.right, line);
 		line = ft_strjoin(tok->data.redir.right, "\n");
 		free(tok->data.redir.right);
 		tok->data.redir.right = line;
 		line = NULL;
 	}
+	free(line);
 	return (ret == -1 ? 0 : 1);
 }

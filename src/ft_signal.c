@@ -6,11 +6,21 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/28 17:05:37 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/23 22:22:19 by ahrytsen         ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
+
+int			ft_is_interrupted(void)
+{
+	if (get_term()->is_inter)
+	{
+		get_term()->is_inter = 0;
+		return (1);
+	}
+	return (0);
+}
 
 static void	sig_handler(int signo)
 {
@@ -18,19 +28,14 @@ static void	sig_handler(int signo)
 
 	if (signo == SIGINT)
 	{
-/*		clean_hist();
-		hist_init();
-		free(line_tostr(&get_term()->cursor, 1));
-		ft_memdel((void**)&get_term()->res);*/
 		get_term()->st_sel = NULL;
 		get_term()->end_sel = NULL;
 		get_term()->prompt = P_USER;
 		get_term()->is_inter = 1;
 		if (isatty(0) && !get_environ()->pid)
-		{
 			ft_dprintf(2, "\n");
-			//ft_prompt();
-		}
+		if (get_environ()->pid)
+			kill(SIGKILL, get_environ()->pid);
 	}
 	else if (signo == SIGWINCH)
 	{
@@ -53,11 +58,10 @@ void		ft_init_signal(void)
 
 	ft_bzero(&int_handler, sizeof(struct sigaction));
 	int_handler.sa_handler = sig_handler;
-	sigaction(SIGINT,&int_handler,0);
+	sigaction(SIGINT, &int_handler, 0);
 	signal(SIGWINCH, sig_handler);
-	signal(SIGABRT, sig_handler);
-	//signal(SIGINT, sig_handler);
-	signal(SIGCONT, sig_handler);
-	signal(SIGTSTP, sig_handler);
-	signal(SIGQUIT, sig_handler);
+	signal(SIGABRT, SIG_IGN);
+	signal(SIGCONT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }

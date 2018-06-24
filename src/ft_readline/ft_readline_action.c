@@ -6,15 +6,16 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 12:20:20 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/21 16:19:40 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/24 20:13:00 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-int		ft_del(void)
+int		ft_del(uint64_t buf)
 {
-	if (!get_term()->cursor->next && !get_term()->cursor->prev)
+	if (!get_term()->cursor->next && !get_term()->cursor->prev
+		&& buf == K_CTRL_D)
 		return (0);
 	else if (get_term()->cursor->next)
 	{
@@ -79,8 +80,10 @@ void	ft_word_action(uint64_t buf)
 		if (buf == K_ALEFT || buf == K_ARIGHT)
 			ft_move(buf == K_ALEFT ? K_LEFT : K_RIGHT);
 		else
-			buf == K_ABS ? ft_back_space() : ft_del();
+			buf == K_ABS ? ft_back_space() : ft_del(K_DEL);
 	}
+	if (!flag)
+		ft_dprintf(0, "\a");
 }
 
 int		ft_add(uint64_t buf)
