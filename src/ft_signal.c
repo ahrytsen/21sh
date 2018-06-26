@@ -33,7 +33,7 @@ static void	sig_handler(int signo)
 		get_term()->prompt = P_USER;
 		get_term()->is_inter = 1;
 		if (isatty(0) && !get_environ()->pid)
-			ft_dprintf(2, "\n");
+			ft_readline_ret();
 		if (get_environ()->pid)
 			kill(SIGKILL, get_environ()->pid);
 	}

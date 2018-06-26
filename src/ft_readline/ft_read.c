@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/26 17:28:37 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/26 18:11:07 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/26 21:44:21 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ ssize_t	ft_read(int fd, uint64_t *buf)
 	if (ret != 1 || (*buf <= 0x7F && *buf != 0x1B))
 		return (ret);
 	else if (*buf == 0x1B)
-		ret = read(fd, (uint8_t*)buf + 1, 7);
+		ret = read(fd, (uint8_t*)buf + 1, 6);
 	else if (*buf >= 0xC2 && *buf <= 0xDF)
 		ret = read(fd, (uint8_t*)buf + 1, 1);
 	else if (*buf >= 0xE0 && *buf <= 0xEF)
