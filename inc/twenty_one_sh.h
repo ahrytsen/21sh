@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/24 19:54:49 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/26 19:39:35 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,7 +382,10 @@ t_term			*get_term(void);
 void			ft_readline_ret(void);
 void			ft_print_tail(t_line *cursor);
 void			ft_redraw_line(void);
-
+/*
+**				ft_readline/ft_read.c
+*/
+ssize_t			ft_read(int fd, uint64_t *buf);
 /*
 **				ft_readline/ft_cursor.c
 */

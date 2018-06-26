@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 12:37:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/24 22:23:28 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/26 19:40:27 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 static int	ft_getcurx(void)
 {
-	char	buf[12];
+	char	buf[21];
 	char	*st;
 
 	ft_bzero(buf, sizeof(buf));
 	ft_dprintf(0, "\033[6n");
-	if (read(0, buf, 9) == -1)
+	if (read(0, buf, 20) == -1)
 		return (-1);
 	if ((st = ft_strchr(buf, ';')))
 		return (ft_atoi(++st));
@@ -73,7 +73,7 @@ static void	ft_user_prompt(void)
 	tmp = 3;
 	ft_dprintf(2, "\r%s\033[3%cm", tgetstr("cd", NULL),
 				get_environ()->st ? '1' : '2');
-	tmp += ft_dprintf(2, "[%d] ", get_environ()->st);
+	tmp += ft_dprintf(2, "[%hhd] ", (char)get_environ()->st);
 	ft_dprintf(2, "\033[33m");
 	tmp += ft_dprintf(2, "%s ", pwd);
 	ft_dprintf(2, "\033[32m$>\033[0m ");

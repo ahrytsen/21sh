@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:45:16 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/24 19:52:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/26 19:39:15 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,11 @@ static int	ft_readline_helper(const int fd, char **line)
 		hist_init();
 		ft_terminal(T_INIT);
 		ft_prompt();
-		while (!(buf = 0)
-				&& (ret = read(fd, &buf, 8)) > 0)
+		while ((ret = ft_read(fd, &buf)) > 0)
 			if ((ret = ft_action(buf)) <= 0 || buf == K_RET)
 				break ;
 		ft_terminal(T_RESTORE);
-		*line = line_tostr(&get_term()->cursor, ret == -1 ? 2 : 0);
+		*line = line_tostr(&get_term()->cursor, ret <= 0 ? 2 : 0);
 		hist_commit(ret);
 	}
 	return (ret);

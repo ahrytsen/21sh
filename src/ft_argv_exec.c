@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/21 20:14:23 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/26 15:34:45 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	ft_exec_bypath(char **cmd, char *path)
 {
 	struct stat	tmp;
 
-	if (path && !access(path, X_OK))
+	if (path && !access(path, F_OK) && !access(path, X_OK))
 	{
 		if (!get_environ()->pid && (get_environ()->pid = fork()))
 		{
@@ -49,8 +49,13 @@ static int	ft_exec_bypath(char **cmd, char *path)
 		else
 			return (main_loop());
 	}
-	ft_dprintf(2, "%s: command not found or permission denied\n", *cmd);
-	return (-1);
+	if (access(path, F_OK))
+	{
+		ft_dprintf(2, "%s: No such file or directory\n", *cmd);
+		return (127);
+	}
+	ft_dprintf(2, "%s: permission denied\n", *cmd);
+	return (126);
 }
 
 static char	**ft_get_path(const char *altpath)
@@ -83,7 +88,7 @@ static char	*ft_search_bin(char *bin_name, const char *altpath)
 		ft_strcpy(exec_path, path[i]);
 		ft_strcat(exec_path, "/");
 		ft_strcat(exec_path, bin_name);
-		if (!access(exec_path, X_OK))
+		if (!access(exec_path, F_OK))
 			break ;
 		ft_memdel((void**)&exec_path);
 		free(path[i++]);
@@ -106,8 +111,10 @@ int			ft_argv_exec(char **cmd, char *altpath)
 		st = ft_exec_bypath(cmd, *cmd);
 	else if ((st = ft_exec_builtin(cmd)) == -1)
 	{
-		bin_path = ft_search_bin(*cmd, altpath);
-		st = ft_exec_bypath(cmd, bin_path);
+		if ((bin_path = ft_search_bin(*cmd, altpath)))
+			st = ft_exec_bypath(cmd, bin_path);
+		else if ((st = 127))
+			ft_dprintf(2, "%s: command not found\n", *cmd);
 	}
 	free(bin_path);
 	return (st);

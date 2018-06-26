@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/14 19:05:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/23 20:33:37 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/26 15:00:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	hist_move(uint64_t buf)
 	t_hist	*tmp;
 
 	tmp = (buf == K_UP ? get_term()->hist->prev : get_term()->hist->next);
-	if (tmp)
+	if (tmp && get_term()->prompt == P_USER)
 	{
 		get_term()->hist = tmp;
 		if (!get_term()->hist->tmp)
@@ -75,8 +75,10 @@ void	hist_commit(int st)
 	to_save = get_term()->hist->tmp;
 	get_term()->hist->tmp = NULL;
 	clean_hist();
-	if (to_save->prev && st != -1)
+	if (to_save->prev && st > 0 && get_term()->prompt == P_USER)
 		get_term()->hist->line = to_save;
-	else if (st != -1)
+	else if (st > 0 && get_term()->prompt == P_USER)
 		get_term()->hist->tmp = to_save;
+	else if (st > 0)
+		line_tostr(&get_term()->cursor, 2);
 }

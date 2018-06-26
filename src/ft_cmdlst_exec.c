@@ -39,7 +39,7 @@ static int	ft_cmd_exec(t_cmd *cmd)
 	{
 		cmd->pid != -1
 			? (get_environ()->pid = cmd->pid)
-			: ft_dprintf(2, "21sh: fork error\n");
+			: ft_dprintf(2, "21sh: fork() error\n");
 		return (cmd->pid == -1 ? 1 : 0);
 	}
 	else
