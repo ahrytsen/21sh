@@ -6,7 +6,7 @@
 #    By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/30 18:43:03 by ahrytsen          #+#    #+#              #
-#    Updated: 2018/06/26 17:53:50 by ahrytsen         ###   ########.fr        #
+#    Updated: 2018/06/28 18:49:26 by ahrytsen         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -26,6 +26,7 @@ SRC			=	main.c init.c env_utils.c ft_buffer.c ft_signal.c			\
 				ft_wait.c													\
 				\
 				builtins/builtins.c builtins/env_builtin.c builtins/ft_cd.c	\
+				builtins/ft_fg.c											\
 				\
 				ft_readline/ft_autocomplit.c ft_readline/ft_readline.c		\
 				ft_readline/ft_readline_action.c ft_readline/line.c			\

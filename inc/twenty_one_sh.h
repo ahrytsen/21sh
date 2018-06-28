@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/26 19:39:35 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 19:30:13 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,15 +124,9 @@ typedef struct	s_term
 	char	*curmov;
 	char	*cm_left;
 	char	*cm_right;
-//	char	*undln_on;
-//	char	*undln_off;
 	char	*iv_on;
 	char	*iv_off;
-//	char	*im_on;
-//	char	*im_off;
 	char	*del_ch;
-//	char	*dm_on;
-//	char	*dm_off;
 	int		height;
 	int		width;
 	char	*heredoc_key;
@@ -153,6 +147,7 @@ typedef struct	s_env
 	char		**env;
 	int			st;
 	pid_t		pid;
+	t_list		*proc;
 	int			bkp_fd[3];
 }				t_env;
 
@@ -197,7 +192,7 @@ typedef struct	s_redir
 	int		cls;
 	int		left;
 	int		nbr;
-	int		fd[2];
+	char	*hd;
 	char	*right;
 }				t_redir;
 typedef union	u_data
@@ -276,7 +271,6 @@ int				ft_skip_qoutes(char **s);
 **				ft_heredoc.c
 */
 int				ft_heredoc(t_list *toks);
-int				ft_heredoc_toread(t_token *tok);
 /*
 **				ft_cmdlst.c
 */
@@ -311,6 +305,8 @@ char			**ft_argv_make(t_list *toks);
 /*
 **				ft_argv_utils.c
 */
+void			parse_dollar(t_buf **cur, char **line);
+void			ft_quote(t_buf **cur, char **line);
 void			ft_bquote(t_buf **cur, char **line, uint8_t q);
 char			*parse_argv(char *line);
 /*
@@ -344,10 +340,15 @@ int				ft_exit(char **av);
 */
 int				ft_cd(char **av);
 /*
+**				builtins/ft_fg.c
+*/
+int				ft_count_fg(t_list *proc);
+int				ft_fg(char **av);
+/*
 **				builtins/env_builtin.c
 */
 int				ft_env(char **av);
-void			ft_env_op(int p);
+int				ft_env_op(int p);
 /*
 **				env_utils.c
 */

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 12:37:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/26 19:40:27 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 18:56:45 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,20 @@ static void	ft_toread_prompt(int mod)
 static void	ft_user_prompt(void)
 {
 	int		tmp;
+	int		proc;
 	char	pwd[MAXPATHLEN];
 
 	getcwd(pwd, MAXPATHLEN);
+	proc = ft_count_fg(get_environ()->proc);
 	tmp = 3;
 	ft_dprintf(2, "\r%s\033[3%cm", tgetstr("cd", NULL),
 				get_environ()->st ? '1' : '2');
 	tmp += ft_dprintf(2, "[%hhd] ", (char)get_environ()->st);
+	if (proc)
+	{
+		ft_dprintf(2, "\033[34m");
+		tmp += ft_dprintf(2, "(bg: %d) ", proc);
+	}
 	ft_dprintf(2, "\033[33m");
 	tmp += ft_dprintf(2, "%s ", pwd);
 	ft_dprintf(2, "\033[32m$>\033[0m ");

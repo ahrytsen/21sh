@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 14:27:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/15 14:19:15 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 19:31:05 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	ft_env_usage(char c)
 	exit(1);
 }
 
-void		ft_env_op(int p)
+int		ft_env_op(int p)
 {
 	char **env;
 
@@ -31,6 +31,7 @@ void		ft_env_op(int p)
 			ft_memdel((void*)env++);
 		else if (p == ENV_PRINT)
 			ft_printf("%s\n", *env++);
+	return (0);
 }
 
 static int	ft_env_flags(char ***av, t_op *options)
@@ -78,7 +79,7 @@ int			ft_env(char **av)
 	t_op	options;
 
 	if ((get_environ()->pid = fork()))
-		return (waitpid(get_environ()->pid, &st, 0) ? WEXITSTATUS(st) : 1);
+		return (ft_waitpid(get_environ()->pid, &st, 0) ? WEXITSTATUS(st) : 1);
 	ft_options_init(&options);
 	while (*av && **av == '-' && !ft_env_flags(&av, &options))
 		av++;
@@ -95,7 +96,7 @@ int			ft_env(char **av)
 		ft_printf("#env executing: %s\n", options.exec[0]);
 	while (options.v && options.exec && options.exec[(++st)])
 		ft_printf("#env\targ[%d]= '%s'\n", st, options.exec[st]);
-	!(options.exec && (get_environ()->pid = 1)) ? ft_env_op(ENV_PRINT)
-		: (st = ft_argv_exec(options.exec, options.ap));
+	st = !(options.exec && (get_environ()->pid = 1)) ? ft_env_op(ENV_PRINT)
+		: ft_argv_exec(options.exec, options.ap);
 	exit(st);
 }

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/05 16:19:38 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:16:54 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 18:52:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*ft_search_builtin(char *line)
 {
 	int					i;
 	int					len;
-	const static char	*builtins[] = {"echo", "cd", "setenv", "unsetenv",
+	const static char	*builtins[] = {"echo", "cd", "fg", "setenv", "unsetenv",
 									"env", "exit", NULL};
 
 	i = 0;
@@ -93,10 +93,12 @@ void		ft_autocomplit(t_line *cursor)
 	char	*res;
 	char	*tmp;
 
-	line = line_tostr(&cursor, 0);
-	res = ft_search_builtin(line);
-	(!res) ? res = ft_searchcmd(line) : 0;
-	if (res)
+	res = NULL;
+	line = NULL;
+	if (get_term()->prompt == P_USER
+		&& (line = line_tostr(&cursor, 0))
+		&& ((res = ft_search_builtin(line))
+			|| (res = ft_searchcmd(line))))
 	{
 		tmp = res + ft_strlen(line);
 		while (*tmp && ft_printf("%c", *tmp))

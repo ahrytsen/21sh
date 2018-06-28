@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/15 13:25:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/15 13:31:42 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 16:24:09 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-static void	parse_dollar(t_buf **cur, char **line)
+void		parse_dollar(t_buf **cur, char **line)
 {
 	char	*st;
 	char	*tmp;
@@ -35,7 +35,7 @@ static void	parse_dollar(t_buf **cur, char **line)
 	free(tmp);
 }
 
-static void	ft_quote(t_buf **cur, char **line)
+void		ft_quote(t_buf **cur, char **line)
 {
 	char	*st;
 
@@ -43,11 +43,11 @@ static void	ft_quote(t_buf **cur, char **line)
 	while (**line != '\'')
 	{
 		if (!**line)
-			ft_fatal(1, exit, "21sh: unmatched \'\n");
+			break ;
 		(*line)++;
 	}
 	ft_putstr_mshbuf(cur, st, *line - st);
-	(*line)++;
+	**line ? (*line)++ : 0;
 }
 
 void		ft_bquote(t_buf **cur, char **line, uint8_t q)
@@ -57,11 +57,11 @@ void		ft_bquote(t_buf **cur, char **line, uint8_t q)
 	char	*str;
 
 	if (!(head = ft_memalloc(sizeof(t_buf))) || !line)
-		ft_fatal(1, exit, "21sh: malloc error\n");
+		return ;
 	tmp = head;
 	while (**line != '`')
 		if (!**line)
-			ft_fatal(1, exit, "21sh: unmatched `\n");
+			break ;
 		else if (**line == '\\' && (*line)++)
 			(q ? ft_dquote_slash : ft_slash)(&tmp, line);
 		else
@@ -70,14 +70,14 @@ void		ft_bquote(t_buf **cur, char **line, uint8_t q)
 	if (*str)
 		ft_bquote_helper(cur, str);
 	free(str);
-	(*line)++;
+	**line ? (*line)++ : 0;
 }
 
 static void	ft_dquote(t_buf **cur, char **line)
 {
 	while (**line != '"')
 		if (!**line)
-			ft_fatal(1, exit, "21sh: unmatched \"\n");
+			break ;
 		else if (**line == '\\' && (*line)++)
 			ft_dquote_slash(cur, line);
 		else if (**line == '$' && (*line)++)
@@ -86,7 +86,7 @@ static void	ft_dquote(t_buf **cur, char **line)
 			ft_bquote(cur, line, 1);
 		else
 			ft_putchar_mshbuf(cur, *(*line)++);
-	(*line)++;
+	**line ? (*line)++ : 0;
 }
 
 char		*parse_argv(char *line)
@@ -96,7 +96,8 @@ char		*parse_argv(char *line)
 	t_buf	*cur;
 
 	tmp = line;
-	!(head = ft_memalloc(sizeof(t_buf))) ? ft_fatal(1, exit, "mall err\n") : 0;
+	if (!(head = ft_memalloc(sizeof(t_buf))))
+		return (NULL);
 	cur = head;
 	while (*line)
 		if (*line == '\\' && line++)
@@ -108,10 +109,9 @@ char		*parse_argv(char *line)
 			ft_putstr_mshbuf(&cur, ft_getenv("HOME"), -1);
 		else if (*line == '\'' && line++)
 			ft_quote(&cur, &line);
-		else if (*line == '"' && line++)
-			ft_dquote(&cur, &line);
-		else if (*line == '`' && line++)
-			ft_bquote(&cur, &line, 0);
+		else if (*line == '\'' || *line == '"')
+			(*line++ == '"') ? ft_dquote(&cur, &line)
+				: ft_bquote(&cur, &line, 0);
 		else
 			ft_putchar_mshbuf(&cur, *line++);
 	return (ft_buftostr(head));

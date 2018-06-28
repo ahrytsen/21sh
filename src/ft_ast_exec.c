@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:55:11 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/22 18:40:30 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 17:55:18 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,22 @@ static int	ft_ast_or_exec(t_ast *ast)
 		return (ft_ast_exec(ast->left));
 }
 
-static int	ft_ast_bg_exec(t_ast *ast)
-{
-	if ((ast->pid = fork()))
-	{
-		ast->pid > 0
-			? kill(ast->pid, SIGSTOP)
-			: ft_dprintf(2, "21sh: fork() error\n");
-		return (ast->left ? ft_ast_exec(ast->left) : 0);
-	}
-	else
-	{
-		//signal(SIGTSTP, SIG_DFL);
-		//get_environ()->pid = 1;
-		exit(ft_ast_exec(ast->right));
-	}
-}
+/*
+**static int	ft_ast_bg_exec(t_ast *ast)
+**{
+**	if ((ast->pid = fork()))
+**	{
+**		ast->pid > 0
+**			? kill(ast->pid, SIGSTOP)
+**			: ft_dprintf(2, "21sh: fork() error\n");
+**		return (ast->left ? ft_ast_exec(ast->left) : 0);
+**	}
+**	else
+**	{
+**		exit(ft_ast_exec(ast->right));
+**	}
+**}
+*/
 
 static int	ft_ast_smcln_exec(t_ast *ast)
 {
@@ -68,7 +68,7 @@ int			ft_ast_exec(t_ast *ast)
 	else if (ast->type == ast_or)
 		return (ft_ast_or_exec(ast));
 	else if (ast->type == ast_bg)
-		return (ft_ast_bg_exec(ast));
+		return (ft_ast_smcln_exec(ast));
 	else if (ast->type == ast_smcln)
 		return (ft_ast_smcln_exec(ast));
 	else

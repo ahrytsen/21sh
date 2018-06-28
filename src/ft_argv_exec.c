@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/26 15:34:45 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 18:47:38 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	ft_exec_builtin(char **cmd)
 	const static t_builtins	builtins[] = {
 		{"echo", &ft_echo},
 		{"cd", &ft_cd},
+		{"fg", &ft_fg},
 		{"setenv", &ft_setenv_builtin},
 		{"unsetenv", &ft_unsetenv_builtin},
 		{"env", &ft_env},

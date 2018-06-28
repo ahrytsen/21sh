@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/28 17:05:37 by ahrytsen          #+#    #+#             */
-
+/*   Created: 2018/06/28 17:41:23 by ahrytsen          #+#    #+#             */
+/*   Updated: 2018/06/28 18:38:51 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,23 @@ int			ft_is_interrupted(void)
 	return (0);
 }
 
+static void	sigtstp_handler(int signo)
+{
+	t_list		*proc;
+
+	if (signo == SIGTSTP)
+	{
+		if (get_environ()->pid > 1 && (proc = ft_memalloc(sizeof(t_list))))
+		{
+			kill(SIGSTOP, get_environ()->pid);
+			proc->content_size = get_environ()->pid;
+			ft_lstadd(&get_environ()->proc, proc);
+		}
+		else
+			ft_dprintf(2, "\a");
+	}
+}
+
 static void	sig_handler(int signo)
 {
 	struct winsize	w;
@@ -34,8 +51,6 @@ static void	sig_handler(int signo)
 		get_term()->is_inter = 1;
 		if (isatty(0) && !get_environ()->pid)
 			ft_readline_ret();
-		if (get_environ()->pid)
-			kill(SIGKILL, get_environ()->pid);
 	}
 	else if (signo == SIGWINCH)
 	{
@@ -44,11 +59,6 @@ static void	sig_handler(int signo)
 		get_term()->height = w.ws_row;
 		get_term()->width = w.ws_col;
 		ft_redraw_line();
-	}
-	else if (signo == SIGTSTP)
-	{
-		if (get_environ()->pid)
-			kill(SIGSTOP, get_environ()->pid);
 	}
 }
 
@@ -60,8 +70,8 @@ void		ft_init_signal(void)
 	int_handler.sa_handler = sig_handler;
 	sigaction(SIGINT, &int_handler, 0);
 	signal(SIGWINCH, sig_handler);
+	signal(SIGTSTP, sigtstp_handler);
 	signal(SIGABRT, SIG_IGN);
 	signal(SIGCONT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
