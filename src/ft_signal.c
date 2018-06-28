@@ -6,7 +6,6 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:23 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 18:38:51 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +30,7 @@ static void	sigtstp_handler(int signo)
 		if (get_environ()->pid > 1 && (proc = ft_memalloc(sizeof(t_list))))
 		{
 			kill(SIGSTOP, get_environ()->pid);
+			setpgid(get_environ()->pid, get_environ()->pid);
 			proc->content_size = get_environ()->pid;
 			ft_lstadd(&get_environ()->proc, proc);
 		}
@@ -62,6 +62,19 @@ static void	sig_handler(int signo)
 	}
 }
 
+void		ft_init_signal_chld(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGWINCH, SIG_DFL);
+	signal(SIGTSTP, SIG_DFL);
+	signal(SIGCONT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	get_environ()->sh_pid = getpid();
+	setpgid(get_environ()->sh_pid, get_environ()->sh_pid);
+	tcsetpgrp(1, get_environ()->sh_pid);
+}
+
+
 void		ft_init_signal(void)
 {
 	struct sigaction int_handler;
@@ -71,7 +84,9 @@ void		ft_init_signal(void)
 	sigaction(SIGINT, &int_handler, 0);
 	signal(SIGWINCH, sig_handler);
 	signal(SIGTSTP, sigtstp_handler);
-	signal(SIGABRT, SIG_IGN);
-	signal(SIGCONT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGCONT, sig_handler);
+	signal(SIGQUIT, sig_handler);
+	get_environ()->sh_pid = getpid();
+	setpgid(get_environ()->sh_pid, get_environ()->sh_pid);
+	tcsetpgrp(1, get_environ()->sh_pid);
 }

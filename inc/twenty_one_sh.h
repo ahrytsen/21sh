@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 19:30:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 21:52:42 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ typedef struct	s_env
 {
 	char		**env;
 	int			st;
+	pid_t		sh_pid;
 	pid_t		pid;
 	t_list		*proc;
 	int			bkp_fd[3];

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 17:41:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 22:55:59 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int			ft_cmdlst_exec(t_cmd *cmd)
 	}
 	ret = cmd->ret;
 	get_environ()->pid = 0;
+	tcsetpgrp(1, get_environ()->sh_pid);
 	while ((cmd = cmd->prev))
 		if (cmd->pid > 0 && !kill(cmd->pid, SIGKILL))
 		{

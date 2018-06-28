@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 17:38:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 22:06:31 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void		ft_terminal(int mod)
 		tcgetattr(0, savetty);
 		tty = *savetty;
 		tty.c_lflag &= ~(ICANON | ECHO);
+		tty.c_lflag |= TOSTOP;
 		tty.c_cc[VMIN] = 1;
 		tty.c_cc[VTIME] = 0;
 	}

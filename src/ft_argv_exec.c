@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 18:47:38 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/28 23:29:33 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	ft_exec_builtin(char **cmd)
 		i++;
 	return (builtins[i].cmd ? builtins[i].ft_builtin(cmd + 1) : -1);
 }
-
+void		ft_init_signal_chld(void);
 static int	ft_exec_bypath(char **cmd, char *path)
 {
 	struct stat	tmp;
@@ -43,6 +43,7 @@ static int	ft_exec_bypath(char **cmd, char *path)
 			return (get_environ()->pid > 0 ? 0
 					: ft_dprintf(2, "21sh: fork error\n"));
 		}
+		ft_init_signal_chld();
 		execve(path, cmd, get_environ()->env);
 		if (stat(path, &tmp) || !S_ISREG(tmp.st_mode)
 			|| dup2(open(path, O_RDONLY), 0) == -1)
