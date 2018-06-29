@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 21:52:42 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 22:48:17 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,13 @@
 */
 # define T_INIT 1
 # define T_RESTORE 0
+
+/*
+**	SIGNAL MODS
+*/
+# define S_SH 0b001
+# define S_CHLD 0b100
+# define S_CHLD_FG 0b110
 
 /*
 **	PROMPT
@@ -144,12 +151,17 @@ typedef struct	s_op
 
 typedef struct	s_env
 {
-	char		**env;
-	int			st;
-	pid_t		sh_pid;
-	pid_t		pid;
-	t_list		*proc;
-	int			bkp_fd[3];
+	char			**env;
+	int				st;
+	pid_t			sh_pid;
+	pid_t			sh_pgid;
+	pid_t			pid;
+	t_list			*jobs;
+	int				bkp_fd[3];
+	struct termios	savetty;
+	struct termios	work_tty;
+	int				sh_terminal;
+	int				is_interactive;
 }				t_env;
 
 typedef struct	s_builtins
@@ -217,6 +229,12 @@ typedef struct	s_cmd
 	struct s_cmd	*prev;
 }				t_cmd;
 
+typedef struct	s_job
+{
+	pid_t	pgid;
+	t_cmd	*cmd;
+}				t_job;
+
 typedef enum	e_ast_node_type
 {
 	cmd = word,
@@ -231,6 +249,7 @@ typedef struct	s_ast
 	t_list			*toks;
 	t_ast_type		type;
 	pid_t			pid;
+	int				fg;
 	t_cmd			*cmd;
 	struct s_ast	*left;
 	struct s_ast	*right;
@@ -244,18 +263,9 @@ int				main_loop(void);
 /*
 **				init.c
 */
-void			ft_init(void);
 void			ft_fildes(int mod);
-void			ft_terminal(int mod);
-/*
-**				ft_signal.c
-*/
-void			ft_init_signal(void);
-int				ft_is_interrupted(void);
-/*
-**				ft_wait.c
-*/
-pid_t			ft_waitpid(pid_t pid, int *stat_loc, int options);
+void			ft_set_sh_signal(int mod);
+void			ft_init(void);
 /*
 **				ft_tokenize.c
 */
@@ -284,7 +294,7 @@ t_cmd			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
 /*
 **				ft_cmdlst_exec.c
 */
-int				ft_cmdlst_exec(t_cmd *cmd);
+int				ft_cmdlst_exec(t_cmd *cmd, int fg);
 /*
 **				ft_ast.c
 */
@@ -319,7 +329,7 @@ void			ft_bquote_helper(t_buf **cur, char *str);
 /*
 **				ft_argv_exec.c
 */
-int				ft_argv_exec(char **cmd, char *altpath);
+int				ft_argv_exec(char **cmd, char *altpath, int fg);
 /*
 **				ft_redirection.c
 */
@@ -329,6 +339,13 @@ void			ft_redirection_close(t_list *toks);
 **				ft_redirection_utils.c
 */
 int				ft_redir_right_param(t_token *tok);
+/*
+**				ft_jobs_utils.c
+*/
+void			ft_stop_job(void);
+int				ft_control_job_fg(void);
+int				ft_control_job(t_cmd *cmd, int fg);
+int				ft_status_job(int st);
 /*
 **				builtins/builtins.c
 */
@@ -368,6 +385,11 @@ void			*ft_free_mshbuf(t_buf *buf);
 **				ft_readline/ft_readline.c
 */
 int				ft_readline(const int fd, char **line);
+/*
+**				ft_readline/rl_init.c
+*/
+void			ft_terminal(int mod);
+int				ft_is_interrupted(void);
 /*
 **				ft_readline/ft_readline_action.c
 */

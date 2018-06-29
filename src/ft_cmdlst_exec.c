@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 22:55:59 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 22:20:15 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,27 @@ static int	ft_pl_make(int pl[2], t_cmd *cmd)
 	return (0);
 }
 
-static int	ft_cmd_exec(t_cmd *cmd)
+static int	ft_cmd_exec_chld(t_cmd *cmd, int fg)
+{
+	(cmd->next || cmd->prev || !fg) ? get_environ()->pid = getpid() : 0;
+	ft_redirection(cmd->toks);
+	(cmd->av = ft_argv_make(cmd->toks))
+		? cmd->ret = ft_argv_exec(cmd->av, NULL, fg)
+		: ft_dprintf(2, "21sh: malloc error\n");
+	cmd->pid = get_environ()->pid;
+	ft_redirection_close(cmd->toks);
+	if (cmd->next || cmd->prev || !fg)
+		exit(cmd->av ? cmd->ret : 1);
+	return (cmd->av ? cmd->ret : 1);
+}
+
+static int	ft_cmd_exec(t_cmd *cmd, int fg)
 {
 	static int	pl[2];
 
 	if (ft_pl_make(pl, cmd))
 		return (1);
-	if ((cmd->next || cmd->prev) && (cmd->pid = fork()))
+	if ((cmd->next || cmd->prev || !fg) && (cmd->pid = fork()))
 	{
 		cmd->pid != -1
 			? (get_environ()->pid = cmd->pid)
@@ -43,44 +57,18 @@ static int	ft_cmd_exec(t_cmd *cmd)
 		return (cmd->pid == -1 ? 1 : 0);
 	}
 	else
-	{
-		(cmd->next || cmd->prev) ? get_environ()->pid = 1 : 0;
-		ft_redirection(cmd->toks);
-		(cmd->av = ft_argv_make(cmd->toks))
-			? cmd->ret = ft_argv_exec(cmd->av, NULL)
-			: ft_dprintf(2, "21sh: malloc error\n");
-		ft_redirection_close(cmd->toks);
-		if (cmd->next || cmd->prev)
-			exit(cmd->av ? cmd->ret : 1);
-		return (cmd->av ? cmd->ret : 1);
-	}
+		return (ft_cmd_exec_chld(cmd, fg));
 }
 
-int			ft_cmdlst_exec(t_cmd *cmd)
+int			ft_cmdlst_exec(t_cmd *cmd, int fg)
 {
-	int	ret;
-
 	while (1)
 	{
-		cmd->ret = ft_cmd_exec(cmd);
+		cmd->ret = ft_cmd_exec(cmd, fg);
 		ft_fildes(FD_RESTORE);
 		if (cmd->ret || !cmd->next)
 			break ;
 		cmd = cmd->next;
 	}
-	if (!cmd->ret && get_environ()->pid)
-	{
-		ft_waitpid(get_environ()->pid, &cmd->ret, WUNTRACED);
-		cmd->ret = WEXITSTATUS(cmd->ret);
-	}
-	ret = cmd->ret;
-	get_environ()->pid = 0;
-	tcsetpgrp(1, get_environ()->sh_pid);
-	while ((cmd = cmd->prev))
-		if (cmd->pid > 0 && !kill(cmd->pid, SIGKILL))
-		{
-			ft_waitpid(cmd->pid, &cmd->ret, WUNTRACED);
-			cmd->ret = WEXITSTATUS(cmd->ret);
-		}
-	return (ret);
+	return (ft_control_job(cmd, fg));
 }

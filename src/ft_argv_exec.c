@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 23:29:33 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 20:52:58 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static int	ft_exec_builtin(char **cmd)
 		i++;
 	return (builtins[i].cmd ? builtins[i].ft_builtin(cmd + 1) : -1);
 }
-void		ft_init_signal_chld(void);
-static int	ft_exec_bypath(char **cmd, char *path)
+
+static int	ft_exec_bypath(char **cmd, char *path, int fg)
 {
 	struct stat	tmp;
 
@@ -43,13 +43,12 @@ static int	ft_exec_bypath(char **cmd, char *path)
 			return (get_environ()->pid > 0 ? 0
 					: ft_dprintf(2, "21sh: fork error\n"));
 		}
-		ft_init_signal_chld();
+		ft_set_sh_signal(fg ? S_CHLD_FG : S_CHLD);
 		execve(path, cmd, get_environ()->env);
-		if (stat(path, &tmp) || !S_ISREG(tmp.st_mode)
-			|| dup2(open(path, O_RDONLY), 0) == -1)
-			exit(ft_dprintf(2, "%s: permission denied\n", *cmd) ? -2 : 0);
-		else
+		if (!stat(path, &tmp) && S_ISREG(tmp.st_mode)
+			&& dup2(open(path, O_RDONLY), 0) != -1)
 			return (main_loop());
+		exit(ft_dprintf(2, "%s: permission denied\n", *cmd) ? -2 : 0);
 	}
 	if (access(path, F_OK))
 	{
@@ -101,7 +100,7 @@ static char	*ft_search_bin(char *bin_name, const char *altpath)
 	return (exec_path);
 }
 
-int			ft_argv_exec(char **cmd, char *altpath)
+int			ft_argv_exec(char **cmd, char *altpath, int fg)
 {
 	char	*bin_path;
 	int		st;
@@ -110,11 +109,11 @@ int			ft_argv_exec(char **cmd, char *altpath)
 	if (!cmd || !*cmd)
 		return (0);
 	if (ft_strchr(*cmd, '/'))
-		st = ft_exec_bypath(cmd, *cmd);
+		st = ft_exec_bypath(cmd, *cmd, fg);
 	else if ((st = ft_exec_builtin(cmd)) == -1)
 	{
 		if ((bin_path = ft_search_bin(*cmd, altpath)))
-			st = ft_exec_bypath(cmd, bin_path);
+			st = ft_exec_bypath(cmd, bin_path, fg);
 		else if ((st = 127))
 			ft_dprintf(2, "%s: command not found\n", *cmd);
 	}

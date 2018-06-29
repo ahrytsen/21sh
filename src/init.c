@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 22:06:31 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 22:46:10 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,18 @@ static void	ft_init_termcap(void)
 	get_term()->width = tgetnum("co");
 }
 
+static void	ft_if_interactive(void)
+{
+	while (tcgetpgrp(get_environ()->sh_terminal) !=
+			(get_environ()->sh_pgid = getpgrp()))
+		kill(-get_environ()->sh_pgid, SIGTTIN);
+	ft_set_sh_signal(S_SH);
+	ft_init_termcap();
+	get_environ()->sh_pid = getpid();
+	setpgid(get_environ()->sh_pid, get_environ()->sh_pid);
+	tcsetpgrp(1, get_environ()->sh_pid);
+}
+
 void		ft_fildes(int mod)
 {
 	if (mod == FD_BACKUP)
@@ -51,25 +63,32 @@ void		ft_fildes(int mod)
 	}
 }
 
-void		ft_terminal(int mod)
+void		ft_set_sh_signal(int mod)
 {
-	static struct termios	*savetty = NULL;
-	static struct termios	tty;
-
-	if (!isatty(0))
-		ft_fatal(1, exit, "21sh: fd isn't valid terminal type device.\n");
-	else if (mod && !savetty)
+	if (mod & S_SH)
 	{
-		if (!(savetty = malloc(sizeof(struct termios))))
-			ft_fatal(1, exit, "21sh: malloc fail!\n");
-		tcgetattr(0, savetty);
-		tty = *savetty;
-		tty.c_lflag &= ~(ICANON | ECHO);
-		tty.c_lflag |= TOSTOP;
-		tty.c_cc[VMIN] = 1;
-		tty.c_cc[VTIME] = 0;
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
+		signal(SIGTTIN, SIG_IGN);
+		signal(SIGTTOU, SIG_IGN);
 	}
-	tcsetattr(0, mod ? TCSAFLUSH : TCSANOW, mod ? &tty : savetty);
+	else if ((mod & S_CHLD) && get_environ()->is_interactive)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGTSTP, SIG_DFL);
+		signal(SIGTTIN, SIG_DFL);
+		signal(SIGTTOU, SIG_DFL);
+		signal(SIGCHLD, SIG_DFL);
+		signal(SIGWINCH, SIG_DFL);
+		get_environ()->sh_pid = getpid();
+		if (get_environ()->is_interactive)
+		{
+			setpgid(get_environ()->sh_pid, get_environ()->sh_pid);
+			(mod & S_CHLD_FG) ? tcsetpgrp(1, get_environ()->sh_pid) : 0;
+		}
+	}
 }
 
 void		ft_init(void)
@@ -78,10 +97,9 @@ void		ft_init(void)
 	int			shlvl;
 	char		*tmp;
 
-	ft_init_signal();
 	ft_bzero(get_term(), sizeof(t_term));
+	ft_bzero(get_environ(), sizeof(t_env));
 	ft_fildes(FD_BACKUP);
-	ft_init_termcap();
 	get_environ()->env = ft_strdup_arr(environ);
 	tmp = ft_getenv("SHLVL");
 	shlvl = tmp ? ft_atoi(tmp) : 0;
@@ -89,4 +107,7 @@ void		ft_init(void)
 	ft_setenv("SHLVL", tmp, 1);
 	free(tmp);
 	ft_setenv("PATH", "/usr/bin:/bin", 0);
+	get_environ()->sh_terminal = STDIN_FILENO;
+	if ((get_environ()->is_interactive = isatty(get_environ()->sh_terminal)))
+		ft_if_interactive();
 }

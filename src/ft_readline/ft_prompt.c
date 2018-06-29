@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 12:37:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 18:56:45 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 22:38:36 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	ft_user_prompt(void)
 	char	pwd[MAXPATHLEN];
 
 	getcwd(pwd, MAXPATHLEN);
-	proc = ft_count_fg(get_environ()->proc);
+	proc = ft_count_fg(get_environ()->jobs);
 	tmp = 3;
 	ft_dprintf(2, "\r%s\033[3%cm", tgetstr("cd", NULL),
 				get_environ()->st ? '1' : '2');

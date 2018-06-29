@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/15 13:36:50 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/26 16:42:45 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 15:19:03 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void		ft_bquote_helper(t_buf **cur, char *str)
 			free(line);
 		}
 		close(fd_get[0]);
-		ft_waitpid(get_environ()->pid, &get_environ()->st, WUNTRACED);
+		waitpid(get_environ()->pid, &get_environ()->st, WUNTRACED);
 		get_environ()->st = WEXITSTATUS(get_environ()->st);
 		get_environ()->pid = 0;
 	}
