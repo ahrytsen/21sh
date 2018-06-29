@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 18:37:54 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 22:45:40 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/06/29 22:51:42 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		ft_control_job(t_cmd *cmd, int fg)
 		get_environ()->pid = 0;
 	}
 	ret = cmd->ret;
-	while ((cmd = cmd->prev))
+	while (!WIFSTOPPED(ret) && fg && (cmd = cmd->prev))
 		if (cmd->pid > 0 && !kill(cmd->pid, SIGKILL))
 		{
 			waitpid(cmd->pid, &cmd->ret, WUNTRACED);
