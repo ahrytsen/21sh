@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 14:27:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 20:20:22 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 13:45:13 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,6 @@ int			ft_env(char **av)
 	while (options.v && options.exec && options.exec[(++st)])
 		ft_printf("#env\targ[%d]= '%s'\n", st, options.exec[st]);
 	st = !(options.exec && (++get_environ()->pid)) ? ft_env_op(ENV_PRINT)
-		: ft_argv_exec(options.exec, options.ap, 0);
+		: ft_argv_exec(options.exec, options.ap, -1);
 	exit(st);
 }

@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 22:20:15 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 23:21:06 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,46 +29,62 @@ static int	ft_pl_make(int pl[2], t_cmd *cmd)
 	return (0);
 }
 
-static int	ft_cmd_exec_chld(t_cmd *cmd, int fg)
+static int	ft_cmd_exec_chld(t_cmd *cmd, int bg)
 {
-	(cmd->next || cmd->prev || !fg) ? get_environ()->pid = getpid() : 0;
+	if (cmd->next || cmd->prev || bg)
+	{
+		ft_set_sh_signal(bg ? S_CHLD : S_CHLD_FG);
+		bg = -1;
+	}
 	ft_redirection(cmd->toks);
-	(cmd->av = ft_argv_make(cmd->toks))
-		? cmd->ret = ft_argv_exec(cmd->av, NULL, fg)
-		: ft_dprintf(2, "21sh: malloc error\n");
+	if (!(cmd->av = ft_argv_make(cmd->toks))
+		&& ft_dprintf(2, "21sh: malloc error\n"))
+		cmd->ret = 1;
+	else
+		cmd->ret = ft_argv_exec(cmd->av, NULL, bg);
 	cmd->pid = get_environ()->pid;
 	ft_redirection_close(cmd->toks);
-	if (cmd->next || cmd->prev || !fg)
+	if (cmd->next || cmd->prev || bg)
 		exit(cmd->av ? cmd->ret : 1);
 	return (cmd->av ? cmd->ret : 1);
 }
 
-static int	ft_cmd_exec(t_cmd *cmd, int fg)
+static int	ft_cmd_exec(t_cmd *cmd, int bg)
 {
 	static int	pl[2];
 
 	if (ft_pl_make(pl, cmd))
 		return (1);
-	if ((cmd->next || cmd->prev || !fg) && (cmd->pid = fork()))
+	if ((cmd->next || cmd->prev || bg) && (cmd->pid = fork()))
 	{
-		cmd->pid != -1
-			? (get_environ()->pid = cmd->pid)
-			: ft_dprintf(2, "21sh: fork() error\n");
-		return (cmd->pid == -1 ? 1 : 0);
+		if (cmd->pid == -1 && ft_dprintf(2, "21sh: fork() error\n"))
+			return (1);
+		get_environ()->pid = cmd->pid;
+		cmd->av = ft_argv_make(cmd->toks);
+		!get_environ()->pgid ? get_environ()->pgid = cmd->pid : 0;
+		setpgid(get_environ()->pid, get_environ()->pgid);
+		return (0);
 	}
 	else
-		return (ft_cmd_exec_chld(cmd, fg));
+		return (ft_cmd_exec_chld(cmd, bg));
 }
 
-int			ft_cmdlst_exec(t_cmd *cmd, int fg)
+int			ft_cmdlst_exec(t_cmd *cmd, int bg)
 {
+	int	ret;
+	int	ret2;
+
 	while (1)
 	{
-		cmd->ret = ft_cmd_exec(cmd, fg);
+		cmd->ret = ft_cmd_exec(cmd, bg);
 		ft_fildes(FD_RESTORE);
 		if (cmd->ret || !cmd->next)
 			break ;
 		cmd = cmd->next;
 	}
-	return (ft_control_job(cmd, fg));
+	ret = cmd->ret;
+	ret2 = ft_control_job(cmd, bg, 0);
+	if (WIFSTOPPED(ret) || !WIFSTOPPED(ret2))
+		ft_cmdlst_del(cmd);
+	return (ret2);
 }

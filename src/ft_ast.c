@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/08 15:16:07 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 19:45:56 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 13:34:42 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ static void	ft_get_cmd(t_list **toks, t_ast *ast_node)
 		tmp = *toks;
 		*toks = (*toks)->next;
 	}
-	ast_node->fg = *toks && ((t_token*)(*toks)->content)->type == bg_op ? 0 : 1;
+	if (*toks && ((t_token*)(*toks)->content)->type == bg_op)
+		ast_node->bg = 1;
 	tmp->next = NULL;
 }
 

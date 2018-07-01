@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 22:48:17 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 22:37:16 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ typedef struct	s_env
 	int				st;
 	pid_t			sh_pid;
 	pid_t			sh_pgid;
+	pid_t			pgid;
 	pid_t			pid;
 	t_list			*jobs;
 	int				bkp_fd[3];
@@ -231,8 +232,8 @@ typedef struct	s_cmd
 
 typedef struct	s_job
 {
-	pid_t	pgid;
-	t_cmd	*cmd;
+	pid_t			pgid;
+	t_cmd			*cmd;
 }				t_job;
 
 typedef enum	e_ast_node_type
@@ -249,7 +250,7 @@ typedef struct	s_ast
 	t_list			*toks;
 	t_ast_type		type;
 	pid_t			pid;
-	int				fg;
+	int				bg;
 	t_cmd			*cmd;
 	struct s_ast	*left;
 	struct s_ast	*right;
@@ -289,12 +290,13 @@ t_cmd			*ft_cmdlst_make(t_list **toks);
 /*
 **				ft_cmdlst_utils.c
 */
+void			ft_cmdlst_print(t_cmd *cmdlst);
 t_cmd			*ft_cmdlst_del(t_cmd *cmdlst);
 t_cmd			*ft_cmdlst_push(t_cmd *cmdlst, t_cmd *node);
 /*
 **				ft_cmdlst_exec.c
 */
-int				ft_cmdlst_exec(t_cmd *cmd, int fg);
+int				ft_cmdlst_exec(t_cmd *cmd, int bg);
 /*
 **				ft_ast.c
 */
@@ -329,7 +331,7 @@ void			ft_bquote_helper(t_buf **cur, char *str);
 /*
 **				ft_argv_exec.c
 */
-int				ft_argv_exec(char **cmd, char *altpath, int fg);
+int				ft_argv_exec(char **cmd, char *altpath, int bg);
 /*
 **				ft_redirection.c
 */
@@ -342,9 +344,8 @@ int				ft_redir_right_param(t_token *tok);
 /*
 **				ft_jobs_utils.c
 */
-void			ft_stop_job(void);
-int				ft_control_job_fg(void);
-int				ft_control_job(t_cmd *cmd, int fg);
+void			ft_stop_job(t_cmd *cmd, int mod);
+int				ft_control_job(t_cmd *cmd, int bg, int cont);
 int				ft_status_job(int st);
 /*
 **				builtins/builtins.c

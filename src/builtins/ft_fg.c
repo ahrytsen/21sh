@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 18:46:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 22:37:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 23:15:18 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int			ft_count_fg(t_list *proc)
 int			ft_fg(char **av)
 {
 	t_list	*tmp;
+	t_job	*job;
 	int		ret;
 
 	(void)av;
@@ -31,11 +32,17 @@ int			ft_fg(char **av)
 		return (1);
 	}
 	tmp = get_environ()->jobs->next;
-	get_environ()->pid = get_environ()->jobs->content_size;
+	job = get_environ()->jobs->content;
 	free(get_environ()->jobs);
 	get_environ()->jobs = tmp;
-	kill(get_environ()->pid, SIGCONT);
-	ret = ft_control_job_fg();
-	get_environ()->pid = 0;
-	return (ft_status_job(ret));
+	get_environ()->pgid = job->pgid;
+	get_environ()->pid = job->cmd->pid;
+	ft_dprintf(2, "[%d] - %d continued\t", ft_count_fg(get_environ()->jobs),
+				job->cmd->pid);
+	ft_cmdlst_print(job->cmd);
+	ret = ft_control_job(job->cmd, 0, 1);
+	if (!WIFSTOPPED(ret))
+		job->cmd = ft_cmdlst_del(job->cmd);
+	free(job);
+	return (ret);
 }

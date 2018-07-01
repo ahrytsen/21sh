@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 22:46:10 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 15:00:12 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,11 @@ void		ft_set_sh_signal(int mod)
 		signal(SIGTTOU, SIG_DFL);
 		signal(SIGCHLD, SIG_DFL);
 		signal(SIGWINCH, SIG_DFL);
-		get_environ()->sh_pid = getpid();
-		if (get_environ()->is_interactive)
-		{
-			setpgid(get_environ()->sh_pid, get_environ()->sh_pid);
-			(mod & S_CHLD_FG) ? tcsetpgrp(1, get_environ()->sh_pid) : 0;
-		}
+		get_environ()->pid = getpid();
+		if (!get_environ()->pgid)
+			get_environ()->pgid = get_environ()->pid;
+		setpgid(get_environ()->pid, get_environ()->pgid);
+		(mod & S_CHLD_FG) ? tcsetpgrp(1, get_environ()->pgid) : 0;
 	}
 }
 

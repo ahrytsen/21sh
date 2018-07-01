@@ -6,16 +6,35 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/12 17:35:56 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/14 17:17:12 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 23:20:42 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
+void			ft_cmdlst_print(t_cmd *cmdlst)
+{
+	char	**av;
+
+	while (cmdlst && cmdlst->prev)
+		cmdlst = cmdlst->prev;
+	while (cmdlst)
+	{
+		cmdlst->prev ? ft_dprintf(2, " | ") : 0;
+		av = cmdlst->av;
+		while (av && *av)
+			ft_dprintf(2, "%s ", *av++);
+		cmdlst = cmdlst->next;
+	}
+	ft_dprintf(2, "\n");
+}
+
 t_cmd			*ft_cmdlst_del(t_cmd *cmdlst)
 {
 	t_cmd	*tmp;
 
+	while (cmdlst && cmdlst->prev)
+		cmdlst = cmdlst->prev;
 	while (cmdlst)
 	{
 		tmp = cmdlst;

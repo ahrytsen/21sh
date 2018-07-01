@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/15 13:25:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 16:24:09 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 22:57:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char		*parse_argv(char *line)
 			ft_putstr_mshbuf(&cur, ft_getenv("HOME"), -1);
 		else if (*line == '\'' && line++)
 			ft_quote(&cur, &line);
-		else if (*line == '\'' || *line == '"')
+		else if (*line == '`' || *line == '"')
 			(*line++ == '"') ? ft_dquote(&cur, &line)
 				: ft_bquote(&cur, &line, 0);
 		else

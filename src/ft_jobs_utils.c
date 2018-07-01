@@ -6,68 +6,91 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 18:37:54 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/29 22:51:42 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/01 23:21:39 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-void	ft_stop_job(void)
+void		ft_stop_job(t_cmd *cmd, int mod)
 {
-	t_list	*proc;
+	t_list	*jobs_tmp;
+	t_job	*job;
 
-	if (get_environ()->pid > 1 && (proc = ft_memalloc(sizeof(t_list))))
+	job = NULL;
+	jobs_tmp = NULL;
+	if ((jobs_tmp = ft_memalloc(sizeof(t_list)))
+		&& (job = ft_memalloc(sizeof(t_job))))
 	{
-		proc->content_size = get_environ()->pid;
-		ft_lstadd(&get_environ()->jobs, proc);
+		jobs_tmp->content = job;
+		ft_lstadd(&get_environ()->jobs, jobs_tmp);
+		job->cmd = cmd;
+		job->pgid = get_environ()->pgid;
+		if (mod)
+		{
+			ft_dprintf(2, "\n[%d] + %d suspended\t",
+						ft_count_fg(get_environ()->jobs), job->cmd->pid);
+			ft_cmdlst_print(job->cmd);
+		}
+	}
+	else
+	{
+		free(job);
+		free(jobs_tmp);
 	}
 }
 
-int		ft_control_job_fg(void)
+static void	ft_bg_job(t_cmd *cmd)
 {
 	int	ret;
 
-	ret = 0;
-	if (get_environ()->pid)
+	ft_dprintf(2, "[%d] %d\n", ft_count_fg(get_environ()->jobs),
+				get_environ()->pid);
+	if (waitpid(cmd->pid, &ret, WUNTRACED | WNOHANG))
 	{
-		setpgid(get_environ()->pid, get_environ()->pid);
-		tcsetpgrp(1, get_environ()->pid);
-		waitpid(get_environ()->pid, &ret, WUNTRACED);
-		tcsetpgrp(1, get_environ()->sh_pid);
-		WIFSTOPPED(ret) ? ft_stop_job() : 0;
-		get_environ()->pid = 0;
+		WIFSTOPPED(ret) ? ft_stop_job(cmd, 0) : 0;
+		WIFEXITED(ret) ? ft_fg(NULL) : 0;
 	}
-	return (ret);
+	else
+		ft_stop_job(cmd, 0);
 }
 
-int		ft_control_job(t_cmd *cmd, int fg)
+int			ft_control_job(t_cmd *cmd, int bg, int cont)
 {
 	int	ret;
 
 	if (!cmd->ret && cmd->pid)
 	{
-		setpgid(cmd->pid, cmd->pid);
-		tcsetpgrp(1, cmd->pid);
-		fg ? waitpid(cmd->pid, &cmd->ret, WUNTRACED) : ft_stop_job();
+		setpgid(cmd->pid, get_environ()->pgid);
+		!bg ? tcsetpgrp(1, get_environ()->pgid) : 0;
+		cont ? kill(-get_environ()->pgid, SIGCONT) : 0;
+		!bg ? waitpid(cmd->pid, &cmd->ret, WUNTRACED) : ft_bg_job(cmd);
 		tcsetpgrp(1, get_environ()->sh_pid);
-		WIFSTOPPED(cmd->ret) ? ft_stop_job() : 0;
-		get_environ()->pid = 0;
+		WIFSTOPPED(cmd->ret) ? ft_stop_job(cmd, 1) : 0;
 	}
 	ret = cmd->ret;
-	while (!WIFSTOPPED(ret) && fg && (cmd = cmd->prev))
-		if (cmd->pid > 0 && !kill(cmd->pid, SIGKILL))
+	cmd->ret = 0;
+	if (ret || (!WIFSTOPPED(ret) && !bg))
+		while ((cmd = cmd->prev) && !kill(cmd->pid, SIGKILL))
 		{
 			waitpid(cmd->pid, &cmd->ret, WUNTRACED);
-			cmd->ret = WEXITSTATUS(cmd->ret);
+			cmd->ret = ft_status_job(cmd->ret);
 		}
+	get_environ()->pgid = 0;
+	get_environ()->pid = 0;
 	return (ret);
 }
 
-int		ft_status_job(int st)
+int			ft_status_job(int st)
 {
-	if (WIFSTOPPED(st))
-		st = -WEXITSTATUS(st);
-	else
-		st = WIFSIGNALED(st) ? -WTERMSIG(st) : WEXITSTATUS(st);
+	if (st != 126 && st != 127)
+	{
+		if (WIFEXITED(st))
+			st = WEXITSTATUS(st);
+		else if (WIFSTOPPED(st))
+			st = -WSTOPSIG(st);
+		else if (WIFSIGNALED(st))
+			st = -WTERMSIG(st);
+	}
 	return (st);
 }
