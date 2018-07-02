@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 18:37:54 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 13:57:32 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 14:30:42 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,9 @@ int			ft_control_job(t_cmd *cmd, int bg, int cont)
 		tcsetpgrp(1, get_environ()->sh_pid);
 		WIFSTOPPED(cmd->ret) ? ft_stop_job(cmd, 1) : 0;
 	}
-	if (ret || (!WIFSTOPPED(cmd->ret) && !bg))
+	if (cmd->pid && !WIFSTOPPED(cmd->ret) && !bg)
 	{
+		ft_kill_all(cmd);
 		ret = cmd->ret;
 		cmd->ret = 0;
 	}
