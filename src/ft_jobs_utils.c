@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 18:37:54 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 23:21:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 13:57:32 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,20 @@ static void	ft_bg_job(t_cmd *cmd)
 		ft_stop_job(cmd, 0);
 }
 
+static void	ft_kill_all(t_cmd *cmd)
+{
+	while ((cmd = cmd->prev) && !kill(cmd->pid, SIGKILL))
+	{
+		waitpid(cmd->pid, &cmd->ret, WUNTRACED);
+		cmd->ret = ft_status_job(cmd->ret);
+	}
+}
+
 int			ft_control_job(t_cmd *cmd, int bg, int cont)
 {
 	int	ret;
 
+	ret = cmd->ret;
 	if (!cmd->ret && cmd->pid)
 	{
 		setpgid(cmd->pid, get_environ()->pgid);
@@ -68,14 +78,11 @@ int			ft_control_job(t_cmd *cmd, int bg, int cont)
 		tcsetpgrp(1, get_environ()->sh_pid);
 		WIFSTOPPED(cmd->ret) ? ft_stop_job(cmd, 1) : 0;
 	}
-	ret = cmd->ret;
-	cmd->ret = 0;
-	if (ret || (!WIFSTOPPED(ret) && !bg))
-		while ((cmd = cmd->prev) && !kill(cmd->pid, SIGKILL))
-		{
-			waitpid(cmd->pid, &cmd->ret, WUNTRACED);
-			cmd->ret = ft_status_job(cmd->ret);
-		}
+	if (ret || (!WIFSTOPPED(cmd->ret) && !bg))
+	{
+		ret = cmd->ret;
+		cmd->ret = 0;
+	}
 	get_environ()->pgid = 0;
 	get_environ()->pid = 0;
 	return (ret);
