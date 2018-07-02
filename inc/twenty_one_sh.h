@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 18:45:33 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 20:15:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ typedef struct	s_ast
 /*
 **				main.c
 */
+int				main(void);
 int				main_loop(void);
 /*
 **				init.c

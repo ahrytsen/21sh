@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 16:27:15 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 23:20:08 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 20:23:25 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,17 @@ static int	ft_exec_bypath(char **cmd, char *path, int bg)
 			return (0);
 		else if (get_environ()->pid < 0)
 			return (ft_dprintf(2, "21sh: fork error\n"));
-		if (bg != -1)
+		if (bg != -1 || get_environ()->is_interactive)
 			ft_set_sh_signal(bg ? S_CHLD : S_CHLD_FG);
 		execve(path, cmd, get_environ()->env);
 		if (!stat(path, &tmp) && S_ISREG(tmp.st_mode)
 			&& dup2(open(path, O_RDONLY), 0) != -1)
-			return (main_loop());
+			return (main());
 		exit(ft_dprintf(2, "%s: permission denied\n", *cmd) ? -2 : 0);
 	}
-	if (access(path, F_OK))
-	{
-		ft_dprintf(2, "%s: No such file or directory\n", *cmd);
+	if (access(path, F_OK)
+		&& ft_dprintf(2, "%s: No such file or directory\n", *cmd))
 		return (127);
-	}
 	ft_dprintf(2, "%s: permission denied\n", *cmd);
 	return (126);
 }
