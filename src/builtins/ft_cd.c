@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/17 15:13:47 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/05/11 20:19:39 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 19:44:58 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,23 @@ static char	**ft_cd_flags(char **av, char *fl)
 
 int			ft_cd(char **av)
 {
-	char	fl;
-	char	*next_path;
-	char	curent_path[MAXPATHLEN];
+	char		fl;
+	char		*next_path;
+	char		curent_path[MAXPATHLEN];
+	struct stat	tmp;
 
 	fl = 'L';
 	if (!(av = ft_cd_flags(av, &fl)))
-		return (1);
+		return (256);
 	if (!(next_path = ft_cd_getpath(av)))
-		return (1);
-	if (chdir(next_path) == -1)
-		return (ft_dprintf(2, "cd: some error\n") ? 1 : 0);
+		return (256);
+	if ((next_path && access(next_path, F_OK)
+		&& ft_dprintf(2, "cd: no such file or directory: %s\n", next_path))
+		|| (next_path && !stat(next_path, &tmp) && !S_ISDIR(tmp.st_mode)
+			&& ft_dprintf(2, "cd: not a directory: %s\n", next_path))
+		|| (((next_path && access(next_path, X_OK)) || chdir(next_path) == -1)
+			&& ft_dprintf(2, "cd: permission denied: %s\n", next_path)))
+		return (256);
 	if (*av && ft_strequ(*av, "-"))
 		ft_printf("%s\n", next_path);
 	ft_setenv("OLDPWD", ft_getenv("PWD"), 1);

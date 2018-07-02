@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 18:46:30 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 23:15:18 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 15:13:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int			ft_fg(char **av)
 	if (!get_environ()->jobs)
 	{
 		ft_dprintf(2, "fg: no current job\n");
-		return (1);
+		return (256);
 	}
 	tmp = get_environ()->jobs->next;
 	job = get_environ()->jobs->content;

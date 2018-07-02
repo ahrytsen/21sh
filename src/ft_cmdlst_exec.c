@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 23:21:06 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 15:13:56 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int			ft_cmdlst_exec(t_cmd *cmd, int bg)
 	}
 	ret = cmd->ret;
 	ret2 = ft_control_job(cmd, bg, 0);
-	if (WIFSTOPPED(ret) || !WIFSTOPPED(ret2))
+	if (ret || !WIFSTOPPED(ret2))
 		ft_cmdlst_del(cmd);
 	return (ret2);
 }
