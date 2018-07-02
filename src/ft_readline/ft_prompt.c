@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/22 12:37:06 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 23:36:38 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 22:07:23 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ static void	ft_user_prompt(void)
 	tmp += ft_dprintf(2, "[%hhd] ", (char)get_environ()->st);
 	if (proc)
 	{
-		ft_dprintf(2, "\033[34m");
-		tmp += ft_dprintf(2, "(bg: %d) ", proc);
+		ft_dprintf(2, "\033[36m");
+		tmp += ft_dprintf(2, proc == 1 ? "{⚙} " : "{⚙: %d} ", proc) - 2;
 	}
 	ft_dprintf(2, "\033[33m");
 	tmp += ft_dprintf(2, "%s ", pwd);

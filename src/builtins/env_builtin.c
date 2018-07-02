@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/26 14:27:36 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 13:45:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 21:40:07 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ int			ft_env(char **av)
 	int		st;
 	t_op	options;
 
-	if ((get_environ()->pid = fork()))
-		return (waitpid(get_environ()->pid, &st, 0) ? WEXITSTATUS(st) : 1);
+	if (!get_environ()->pid && (get_environ()->pid = fork()))
+		return (get_environ()->pid == -1 ? 256 : 0);
 	ft_options_init(&options);
 	while (*av && **av == '-' && !ft_env_flags(&av, &options))
 		av++;

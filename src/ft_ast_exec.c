@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/13 18:55:11 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/01 22:30:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 21:23:41 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	ft_ast_cmd_exec(t_ast *ast)
 {
 	int	ret;
 
-	ret = ft_cmdlst_exec(ast->cmd, 0);
+	ret = ft_cmdlst_exec(ast->cmd, ast->bg);
 	ast->cmd = NULL;
 	return (ft_status_job(ret));
 }

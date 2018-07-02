@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 20:29:17 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/02 21:50:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	ft_cmd_exec_chld(t_cmd *cmd, int bg)
 	{
 		if (get_environ()->is_interactive)
 			ft_set_sh_signal(bg ? S_CHLD : S_CHLD_FG);
+		get_environ()->pid = 1;
 		bg = -1;
 	}
 	ft_redirection(cmd->toks);
@@ -44,6 +45,7 @@ static int	ft_cmd_exec_chld(t_cmd *cmd, int bg)
 	else
 		cmd->ret = ft_argv_exec(cmd->av, NULL, bg);
 	cmd->pid = get_environ()->pid;
+	get_environ()->pgid = cmd->pid;
 	ft_redirection_close(cmd->toks);
 	if (cmd->next || cmd->prev || bg)
 		exit(cmd->av ? cmd->ret : 1);
@@ -85,7 +87,7 @@ int			ft_cmdlst_exec(t_cmd *cmd, int bg)
 	}
 	ret = cmd->ret;
 	ret2 = ft_control_job(cmd, bg, 0);
-	if (ret || !WIFSTOPPED(ret2))
+	if (ret || (!WIFSTOPPED(ret2) && !bg))
 		ft_cmdlst_del(cmd);
 	return (ret2);
 }
