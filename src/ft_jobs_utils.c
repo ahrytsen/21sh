@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 18:37:54 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 22:00:48 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 14:55:56 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,16 @@ void		ft_stop_job(t_cmd *cmd, int mod)
 
 static void	ft_bg_job(t_cmd *cmd)
 {
-	int	ret;
-
 	ft_dprintf(2, "[%d] %d\n", ft_count_fg(get_environ()->jobs),
 				get_environ()->pid);
-	if (waitpid(cmd->pid, &ret, WUNTRACED | WNOHANG))
-	{
-		WIFSTOPPED(ret) ? ft_stop_job(cmd, 0) : 0;
-		WIFEXITED(ret) ? ft_fg(NULL) : 0;
-	}
-	else
-		ft_stop_job(cmd, 0);
+	ft_stop_job(cmd, 0);
 }
 
 static void	ft_kill_all(t_cmd *cmd)
 {
-	while ((cmd = cmd->prev) && !kill(cmd->pid, SIGKILL))
+	while ((cmd = cmd->prev))
 	{
-		waitpid(cmd->pid, &cmd->ret, WUNTRACED);
+		!kill(cmd->pid, SIGKILL) ? waitpid(cmd->pid, &cmd->ret, WUNTRACED) : 0;
 		cmd->ret = ft_status_job(cmd->ret);
 	}
 }

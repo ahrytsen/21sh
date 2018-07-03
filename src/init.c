@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/04 13:59:58 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 21:22:54 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 14:59:55 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void		ft_set_sh_signal(int mod)
 		signal(SIGTTIN, SIG_IGN);
 		signal(SIGTTOU, SIG_IGN);
 	}
-	else if ((mod & S_CHLD) && get_environ()->is_interactive)
+	else if ((mod & (S_CHLD | S_CHLD_FG)) && get_environ()->is_interactive)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);

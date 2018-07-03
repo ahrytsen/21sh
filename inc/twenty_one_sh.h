@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 20:15:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 14:41:57 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@
 **	SIGNAL MODS
 */
 # define S_SH 0b001
-# define S_CHLD 0b100
-# define S_CHLD_FG 0b110
+# define S_CHLD 0b010
+# define S_CHLD_FG 0b100
 
 /*
 **	PROMPT

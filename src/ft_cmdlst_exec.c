@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/02 21:50:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 14:44:13 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ static int	ft_cmd_exec_chld(t_cmd *cmd, int bg)
 {
 	if (cmd->next || cmd->prev || bg)
 	{
-		if (get_environ()->is_interactive)
-			ft_set_sh_signal(bg ? S_CHLD : S_CHLD_FG);
-		get_environ()->pid = 1;
+		ft_set_sh_signal(bg ? S_CHLD : S_CHLD_FG);
 		bg = -1;
 	}
 	ft_redirection(cmd->toks);
