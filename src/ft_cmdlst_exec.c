@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 17:41:55 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/03 14:44:13 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 17:56:00 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,8 @@ static int	ft_cmd_exec_chld(t_cmd *cmd, int bg)
 		ft_set_sh_signal(bg ? S_CHLD : S_CHLD_FG);
 		bg = -1;
 	}
-	ft_redirection(cmd->toks);
-	if (!(cmd->av = ft_argv_make(cmd->toks))
-		&& ft_dprintf(2, "21sh: malloc error\n"))
+	if (ft_redirection(cmd->toks) || (!(cmd->av = ft_argv_make(cmd->toks))
+								&& ft_dprintf(2, "21sh: malloc error\n")))
 		cmd->ret = 1;
 	else
 		cmd->ret = ft_argv_exec(cmd->av, NULL, bg);

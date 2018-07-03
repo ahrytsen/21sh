@@ -6,13 +6,13 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/18 14:04:03 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/06/28 17:40:47 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 17:53:04 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <twenty_one_sh.h>
 
-static void	ft_redir_fd(t_token *tok)
+static int	ft_redir_fd(t_token *tok)
 {
 	int	fd;
 	int	flg;
@@ -23,32 +23,40 @@ static void	ft_redir_fd(t_token *tok)
 	{
 		fd = open(tok->data.redir.right, O_WRONLY | O_CREAT | O_TRUNC,
 				S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if (fd < 0)
+			return (256);
 		dup2(fd, 1);
 		dup2(fd, 2);
 	}
 	else
 	{
-		tok->data.redir.nbr != -1
-			? dup2(tok->data.redir.nbr, tok->data.redir.left) : 0;
+		if (tok->data.redir.nbr != -1
+			&& dup2(tok->data.redir.nbr, tok->data.redir.left) == -1
+			&& ft_dprintf(2, "21sh: duplicate error\n"))
+			return (256);
 		if (tok->data.redir.cls)
 			close(tok->data.redir.nbr != -1
 				? tok->data.redir.nbr : tok->data.redir.left);
 	}
+	return (0);
 }
 
-static void	ft_redir_heredoc(t_token *tok)
+static int	ft_redir_heredoc(t_token *tok)
 {
 	int	pl[2];
 
-	if (pipe(pl) && ft_printf("21sh: pipe error\n"))
-		return ;
-	dup2(pl[0], tok->data.redir.left);
+	if (pipe(pl) && ft_dprintf(2, "21sh: pipe error\n"))
+		return (256);
+	if (dup2(pl[0], tok->data.redir.left) == -1
+		&& ft_dprintf(2, "21sh: duplicate error\n"))
+		return (256);
 	close(pl[0]);
 	ft_dprintf(pl[1], tok->type == herestr ? "%s\n" : "%s", tok->data.redir.hd);
 	close(pl[1]);
+	return (0);
 }
 
-static void	ft_redir_file(t_token *tok)
+static int	ft_redir_file(t_token *tok)
 {
 	int	oflag;
 	int	fd;
@@ -69,9 +77,11 @@ static void	ft_redir_file(t_token *tok)
 	{
 		dup2(fd, tok->data.redir.left);
 		close(fd);
+		return (0);
 	}
 	else if (fd < 0)
 		ft_dprintf(2, "21sh: open() error\n");
+	return (256);
 }
 
 void		ft_redirection_close(t_list *toks)
@@ -87,19 +97,22 @@ void		ft_redirection_close(t_list *toks)
 	}
 }
 
-void		ft_redirection(t_list *toks)
+int			ft_redirection(t_list *toks)
 {
 	t_token	*token;
+	int		ret;
 
-	while (toks)
+	ret = 0;
+	while (toks && !ret)
 	{
 		token = toks->content;
 		if (token->type > or && token->type < open_file)
-			ft_redir_heredoc(token);
+			ret = ft_redir_heredoc(token);
 		else if (token->type >= open_file && token->type <= read_in)
-			ft_redir_file(token);
+			ret = ft_redir_file(token);
 		else if (token->type > read_in)
-			ft_redir_fd(token);
+			ret = ft_redir_fd(token);
 		toks = toks->next;
 	}
+	return (ret);
 }

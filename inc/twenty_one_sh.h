@@ -6,7 +6,7 @@
 /*   By: ahrytsen <ahrytsen@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 20:22:12 by ahrytsen          #+#    #+#             */
-/*   Updated: 2018/07/03 14:41:57 by ahrytsen         ###   ########.fr       */
+/*   Updated: 2018/07/03 17:45:20 by ahrytsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,7 +336,7 @@ int				ft_argv_exec(char **cmd, char *altpath, int bg);
 /*
 **				ft_redirection.c
 */
-void			ft_redirection(t_list *toks);
+int				ft_redirection(t_list *toks);
 void			ft_redirection_close(t_list *toks);
 /*
 **				ft_redirection_utils.c
